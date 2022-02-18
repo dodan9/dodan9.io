@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/dodan9.io/static/css/main.073c9b0a.css",
+    "main.js": "/dodan9.io/static/js/main.12e92158.js",
+    "static/js/787.6237723d.chunk.js": "/dodan9.io/static/js/787.6237723d.chunk.js",
+    "static/media/logo.svg": "/dodan9.io/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/dodan9.io/index.html",
+    "main.073c9b0a.css.map": "/dodan9.io/static/css/main.073c9b0a.css.map",
+    "main.12e92158.js.map": "/dodan9.io/static/js/main.12e92158.js.map",
+    "787.6237723d.chunk.js.map": "/dodan9.io/static/js/787.6237723d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.073c9b0a.css",
+    "static/js/main.12e92158.js"
+  ]
+}
