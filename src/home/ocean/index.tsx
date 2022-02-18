@@ -1,5 +1,9 @@
 const Ocean = () => {
-  return <div>ocean</div>;
+  return (
+    <div>
+      <h1>ocean</h1>
+    </div>
+  );
 };
 
 export default Ocean;
