@@ -4,9 +4,7 @@ import { Link } from "react-router-dom";
 function Home() {
   return (
     <Container>
-      <div>
-        <Link to="/dodan9.io/room">room</Link>
-      </div>
+      <div>{/* <Link to="/dodan9.io/room">room</Link> */}</div>
       <div>
         <Link to="/dodan9.io/drop">drop</Link>
       </div>
