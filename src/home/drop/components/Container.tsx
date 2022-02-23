@@ -1,5 +1,5 @@
-import { CSSProperties, FC, useCallback, useState } from "react";
-import { useDrop, XYCoord } from "react-dnd";
+import { useCallback, useState } from "react";
+import { useDrop } from "react-dnd";
 import { ItemTypes } from "./ItemTypes";
 import { Box } from "./Box";
 import update from "react-addons-update";
@@ -52,10 +52,10 @@ export const Container = () => {
         const { left, top, src } = boxes[key];
         return (
           <>
-            {key == "blaburm" && (
+            {key === "blaburm" && (
               <Box key={key} id={key} left={left} top={top} src={src} />
             )}
-            {key == "diaruga" && (
+            {key === "diaruga" && (
               <Box key={key} id={key} left={left} top={top} src={src} />
             )}
           </>

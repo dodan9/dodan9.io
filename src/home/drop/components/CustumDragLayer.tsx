@@ -1,4 +1,3 @@
-import type { CSSProperties, FC } from "react";
 import { XYCoord, useDragLayer } from "react-dnd";
 import { ItemTypes } from "./ItemTypes";
 import { Box } from "./Box";

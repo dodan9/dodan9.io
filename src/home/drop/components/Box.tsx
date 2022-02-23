@@ -1,4 +1,4 @@
-import type { CSSProperties, FC, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "./ItemTypes";
 import styled from "styled-components";

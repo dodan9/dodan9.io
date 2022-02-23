@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<style>
+    @font-face {
+        font-family: 'Dunggeunmo';
+        src: url('DungGeunMo.ttf');
+    }
+    *{
+        box-sizing: border-box;
+    }
+    body{
+        background-color: #F7A223FF;
+        overflow: hidden;
+    }
+    input{
+        display: none;
+    }
+    label{
+        text-align: center;
+        display: block;
+        cursor: pointer;
+    }
+    #container{
+        width: 1335px;
+        margin: 0 auto;
+    }
+    #door{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px;
+        height: 300px;
+        background-image: url('back_stars.gif');
+        background-size: 500px;
+        transition: 1s;
+    }
+    #door .room_div label{
+        cursor: default;
+    }
+    #door:target label{
+        cursor: pointer;
+    }
+    #door:target{
+        width: 100%;
+        height: 100%;
+    }
+
+    .room_div{
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 600px;
+        height: 600px;
+        transform: translate(-50%, -50%);
+        transition: 1s;
+    }
+    #door:target .room_div{
+        opacity: 1;
+    }
+    .room_div img{
+        position: absolute;
+    }
+    #room_img{
+        opacity: 0;
+        width: 600px;
+        transition: 1s;
+        transition-delay: 0.5s;
+    }
+    #door:target .room_div #room_img{
+        opacity: 1;
+    }
+    #container:target #door .room_div img{
+        transition: 0.5s;
+        transition-delay: 0s;
+    }
+
+    #bookjang{
+        top: 0px;
+        left: 237px;
+        opacity: 0;
+        transition: 1s;
+        transition-delay: 1s;
+    }
+    #door:target .room_div #bookjang{
+        opacity: 1;
+        top: 99px;
+    }
+    #books{
+        left: 200px;
+        top: 156px;
+        opacity: 0;
+        transition: 1s;
+        transition-delay: 1.5s;
+    }
+    #door:target .room_div #books{
+        opacity: 1;
+        left: 246px;
+    }
+    #sarang{
+        top: 255px;
+        left: 250px;
+        opacity: 0;
+        transition: 1s;
+        transition-delay: 1.8s;
+    }
+    #door:target .room_div #sarang{
+        opacity: 1;
+        left: 294px;
+    }
+    #yeongsoo{
+        top: 0px;
+        left: 27px;
+        opacity: 0;
+        transition: 1s;
+        transition-delay: 1.3s;
+    }
+    #door:target .room_div #yeongsoo{
+        opacity: 1;
+        top: 183px;
+    }
+    #brown{
+        top: 100px;
+        left: 138px;
+        opacity: 0;
+        transition: 1s;
+        transition-delay: 1.6s;
+    }
+    #door:target .room_div #brown{
+        opacity: 1;
+        top: 243px;
+    }
+    #safebox{
+        top: 200px;
+        left: 360px;
+        opacity: 0;
+        transition: 1s;
+        transition-delay: 2s;
+    }
+    #door:target .room_div #safebox{
+        opacity: 1;
+        top: 300px;
+    }
+    #sunflower{
+        top: 110px;
+        left: 390px;
+        opacity: 0;
+        transition: 1s;
+        transition-delay: 2.2s;
+    }
+    #door:target .room_div #sunflower{
+        opacity: 1;
+        top: 210px;
+    }
+
+
+
+    .toggle{
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+    }
+    #door:target .toggle{
+        z-index: -1;
+    }
+
+
+    #exit + label{
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
+    }
+    #exit + label img{
+        width: 100%;
+    }
+    #exit:checked + label{
+        display: none;
+    }
+
+    #open + label{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('back_stars.gif');
+        background-size: 500px;
+    }
+
+    #open:checked + label{
+        display: none;
+    }
+
+    #brown:hover{
+        content: url('brown_h.png');
+    }
+    #yeongsoo:hover{
+        content: url('yeongsoo_h.png');
+    }
+    #books:hover{
+        content: url('books_h.png');
+    }
+    #sarang:hover{
+        content: url('sarang_h.png');
+    }
+    #sunflower:hover{
+        content: url('sunflower_h.png');
+    }
+    #safebox:hover{
+        content: url('safebox_h.png');
+    }
+
+    p{
+        font-family: "Dunggeunmo";
+        padding: 15px;
+        width: 600px;
+        height: 200px;
+        position: absolute;
+        top: 385px;
+        z-index: 100;
+        display: none;
+        border-radius: 5px;
+        line-height: 22px;
+        font-size: 18px;
+        transition: 1s;
+    }
+    .close{
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        font-weight: bold;
+        color: white;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        font-size: 18px;
+        line-height: 20px;
+        background-color: red;
+        border-radius: 2px;
+    }
+    #books_radio:checked + label p{
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: default;
+        color: white;
+        border: 5px ridge gainsboro;
+        display: block;
+    }
+    #sarang_radio:checked + label p{
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: default;
+        color: white;
+        border: 5px ridge gainsboro;
+        display: block;
+    }
+    #yeongsoo_radio:checked + label p{
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: default;
+        color: white;
+        border: 5px ridge gainsboro;
+        display: block;
+    }
+    #brown_radio:checked + label p{
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: default;
+        color: white;
+        border: 5px ridge gainsboro;
+        display: block;
+    }
+    #safebox_radio:checked + label p{
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: default;
+        color: white;
+        border: 5px ridge gainsboro;
+        display: block;
+    }
+    #sunflower_radio:checked + label p{
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: default;
+        color: white;
+        border: 5px ridge gainsboro;
+        display: block;
+    }
+    #sea{
+        display: none;
+        background: url('sky.png') skyblue;
+        background-size: 600px;
+    }
+    #sea:target{
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: 1s;
+    }
+    .oceanview{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-image: url('oceanview.png');
+        height: 300px;
+        background-size: 600px;
+    }
+    #sea img{
+        position: absolute;
+    }
+    .rock{
+        width: 600px;
+        bottom: 370px;
+        right: 0;
+    }
+    #ocean{
+        width: 100%;
+        height: 300px;
+        background-image: url('sea.gif');
+        background-size: 600px;
+        bottom: 130px;
+        position: absolute;
+        transition: 1s;
+    }
+    .sangeo{
+        width: 55px;
+        right: 400px;
+        bottom: 390px;
+        transform: rotate(20deg);
+    }
+    .akeo{
+        width: 50px;
+        right: 300px;
+        bottom: 390px;
+    }
+
+    #bottle{
+        width: 0;
+        height: 0;
+        transform: rotate(-10deg);
+    }
+    #sea p{
+        bottom: 300px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    #bottle_radio:checked + label p{
+        background-color: rgba(0, 0, 0, 0.3);
+        cursor: default;
+        color: white;
+        border: 5px ridge gainsboro;
+        display: block;
+    }
+    #sea span label{
+        display: inline-block;
+    }
+    #sea span label:hover{
+        color: silver;
+    }
+
+    .letter_div{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    .letter{
+        width: 27%;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .letter_div{
+        display: none;
+    }
+    #letter_radio:checked + div{
+        display: block;
+    }
+    #letter_radio:checked + div p{
+        height: 350px;
+        width: 500px;
+        padding: 25px;
+        line-height: 27px;
+        background-color: rgba(0, 0, 0, 0.5);
+        cursor: default;
+        color: white;
+        border: 5px ridge gainsboro;
+        display: block;
+        top: 45%;
+        text-align: center;
+        transition: 1s;
+    }
+
+
+
+    .hedgehog{
+        animation-duration: 4s;
+        animation-name: walking;
+        width: 80px;
+        bottom: 190px;
+        animation-iteration-count: infinite;
+    }
+
+    .rabbit{
+        left: 200px;
+        width: 50px;
+        bottom: 190px;
+    }
+
+    #room2{
+        opacity: 0;
+        background-color: blue;
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    #room2:target{
+        opacity: 1;
+        width: 600px;
+        height: 600px;
+        transition: 1s;
+    }
+
+    @keyframes letter_arrived{
+        from{
+            width: 10px;
+            height: auto;
+            bottom: 400px;
+            right: 800px;
+        }
+        to{
+            width: 100px;
+            height: auto;
+            bottom: 390px;
+            right: 530px;
+        }
+
+    }
+    
+    @keyframes walking{
+        from {
+            transform: scaleX(1);
+            left: 20px;
+        }
+        40%{
+            transform: scaleX(1);
+            left: 70px;  
+        }
+        41%{
+            transform: scaleX(-1);
+            left: 70px;  
+        }
+        60%{  
+            transform: scaleX(-1);
+            left: 20px;
+        }
+        80%{
+            transform: scaleX(-1);
+            left: 20px;
+        }
+        81%{
+            transform: scaleX(1);
+            left: 20px;
+        }
+        to {
+            transform: scaleX(1);
+            left: 20px;
+            
+        }
+    }
+    @media screen and (min-width: 1000px) {
+        html{
+            zoom: 100%;
+        }
+    }
+    @media screen and (min-width: 1600px) {
+        html{
+            zoom: 115%;
+        }
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+    function time_dinner(){
+        if (document.getElementById("dinner").checked){
+            document.getElementById("ocean").style.backgroundImage = "url('sea_dinner.gif')";
+            document.getElementById("sea").style.background = "url('sky_dinner.png') #CF4CC0FF";
+            document.getElementById("sea").style.backgroundSize = "600px";
+        } else {
+            document.getElementById("ocean").style.backgroundImage = "url('sea.gif')";
+            document.getElementById("sea").style.background = "url('sky.png') skyblue";
+            document.getElementById("sea").style.backgroundSize = "600px";
+        }
+    }
+
+    function time_mid(){
+        if (document.getElementById("mid").checked){
+            document.getElementById("ocean").style.backgroundImage = "url('sea_mid.gif')";
+            document.getElementById("sea").style.background = "url('sky_mid.gif')  #211E5CFF";
+            document.getElementById("sea").style.backgroundSize = "600px";
+            document.getElementById("bottle").style.animation = "letter_arrived 4s forwards";
+        }
+        else{
+            document.getElementById("ocean").style.backgroundImage = "url('sea.gif')";
+            document.getElementById("sea").style.background = "url('sky.png') skyblue";
+            document.getElementById("sea").style.backgroundSize = "600px";
+        }
+    }
+
+</script>
+    </head>
+    <body>
+        <div id="container">
+            <div id="door">
+                <div class="room_div">
+                    <input type="radio" id="close" name="obj" value="x">
+                    <img id="room_img" src="room1.png">
+                    <img id="bookjang" src="책장.png">
+
+                    <input type="radio" id="books_radio" name="obj">
+                    <label for="books_radio">
+                        <p>
+                            <span style="line-height: 25px; font-size: 20px;">"책들"</span>
+                            <span style="display: block; height: 10px;"></span>
+                            시집과 소설들이 정갈하게 꽂혀 있다. 
+                            <br>'코러스크로노스'</a><br>'일기시대'<br>.<br>.
+                            <label class="close" for="close">X</label>
+                        </p>
+                        <img id="books" src="books.png">
+                    </label>
+
+                    <input type="radio" id="sarang_radio" name="obj">
+                    <label for="sarang_radio">
+                        <p>
+                            <span style="line-height: 25px; font-size: 20px;">"사랑"</span>
+                            <span style="display: block; height: 10px;"></span>
+                            안녕. 내 이름은 사랑.<br>나는 늘 사랑이야.
+                            <label class="close" for="close">X</label>
+                        </p>
+                        <img id="sarang" src="sarang.png">
+                    </label>
+
+                    <input type="radio" id="yeongsoo_radio" name="obj">
+                    <label for="yeongsoo_radio">
+                        <p>
+                            <span style="line-height: 25px; font-size: 20px;">"기타"</span>
+                            <span style="display: block; height: 10px;"></span>
+                            당신은 책을 읽고 나는 기타를 치고
+                            <br>유독 빛이 나는 눈동자
+                            <br>바다에 함께했을 때가 떠오른다.
+                            <label class="close" for="close">X</label>
+                        </p>
+                        <img id="yeongsoo" src="yeongsoo.png">
+                    </label>
+                    
+                    <input type="radio" id="brown_radio" name="obj">
+                    <label for="brown_radio">
+                        <p>
+                            <span style="line-height: 25px; font-size: 20px;">"브라운"</span>
+                            <span style="display: block; height: 10px;"></span>
+                            사랑스러운 여자친구가 있다는 일은
+                            <br>매일 기념초를 몸에 꽂아 마땅한 일인걸.
+                            <span style="display: block; height: 10px;">
+                            <br>더 특별한 기념을 원한다면 이 인형을 찾자.
+                            <label class="close" for="close">X</label>
+                        </p>
+                        <img id="brown" src="brown.png">
+                    </label>
+                    
+                    <input type="radio" id="safebox_radio" name="obj">
+                    <label for="safebox_radio">
+                        <p>
+                            <span style="line-height: 25px; font-size: 20px;">"금고"</span>
+                            <span style="display: block; height: 10px;"></span>
+                            금고와 이 방은 유사하다.
+                            <br>받는 이에게 내던져지는 순수하게 추출된 마음.
+                            <br>사랑한다는 말이 매번 부끄러워지게 만드는 원인이다.
+                            <label class="close" for="close">X</label>
+                        </p>
+                        <img id="safebox" src="safebox.png">
+                    </label>
+
+                    <input type="radio" id="sunflower_radio" name="obj">
+                    <label for="sunflower_radio">
+                        <p>
+                            <span style="line-height: 25px; font-size: 20px;">"해바라기"</span>
+                            <span style="display: block; height: 10px;"></span>
+                            해바라기라는 꽃이 그렇게 잘 어울리는 사람이 또 있을까?
+                            <br>꽃과 햇빛과 <a href='#sea' style="text-decoration: none; color: rgb(144, 169, 218);">바다</a>와 책, 모두 한 사람을 가리킨다.
+                            <label class="close" for="close">X</label>
+                        </p>
+                        <img id="sunflower" src="sunflower.png">
+                    </label>
+
+                </div>
+                <div class="toggle">
+                    <input type="radio"id="exit" onclick="location.href='#container'" name="inout" checked><label for="exit"><img src="exit.png"></label>
+                    <input type="radio"id="open" onclick="location.href='#door'" name="inout"><label for="open"></label>
+                </div>
+            </div>
+            <div id="sea">
+                <div id="ocean"></div>
+                
+                <img class="rock" src="rock.png">
+                <input id="dinner" type="checkbox" onclick="time_dinner()">
+                <label for="dinner"><img class="sangeo" src="sangeo.png"></label>
+
+                <input id="mid" type="checkbox" onclick="time_mid()">
+                <label for="mid"><img class="akeo" src="ak-eo.png"></label>
+
+                <input type="radio" id="close_2" name="bottle_letter">
+                <input type="radio" id="bottle_radio" name="bottle_letter">
+                <label for="bottle_radio">
+                    <p style="padding: 40px;">
+                        <label class="close" for="close_2">X</label>
+                        누군가의 일기인 듯 하다. 열어볼까?<br><br><br>
+                        <span><label for="letter_radio">예</label> / <label for="close_2">아니오</label></span>
+                    </p>
+                    <img id="bottle" src="bottle.png">
+                </label>
+                <div class="oceanview"></div>
+                <a href="#door"><img class="hedgehog" src="hedgehog.png"></a>
+                <img class="rabbit" src="rabbit.png">
+
+                <input type="radio" id="letter_radio" name="bottle_letter">
+                <div class="letter_div">
+                    
+                    <p>
+                        <label class="close" for="close_2">X</label>
+                        <span style="line-height: 25px; font-size: 20px;">"누군가의 일기"</span><br><br>
+                        "질병 같은 상상에서 긴 기침을 하고<br>
+                        숨을 참는 공간은 곧 단말마의 찰나를<br>
+                        사진처럼 하나 둘 찍어내어 그것을<br>
+                        기준으로 공간이 쪼개지고 참던 것을 죽인다<br>
+                        일련의 과정을 거쳐 조금씩 줄어드는 몸통을<br>
+                        견만하려는 시도가 기침소리보다 커서<br>
+                        겹겹의 공간을 에돌다 끝내 나를 뚫고<br>
+                        실제의 공기를 불어넣는<br>
+                        그런 행운이 있을 수 있다니 - D"
+                    </p>
+                    <img class="letter" src="letter.png">
+                </div>
+            </div>
+
+            <div id="room2">
+
+            </div>
+        </div>
+        
+    </body>
+</html>

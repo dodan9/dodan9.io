@@ -1,5 +1,3 @@
-import React from "react";
-import Room from "./room";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
