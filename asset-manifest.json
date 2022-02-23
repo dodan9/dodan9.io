@@ -1,15 +1,16 @@
 {
   "files": {
     "main.css": "/dodan9.io/static/css/main.e6c13ad2.css",
-    "main.js": "/dodan9.io/static/js/main.87d95589.js",
+    "main.js": "/dodan9.io/static/js/main.cb3c99ce.js",
     "static/media/blaburm.png": "/dodan9.io/static/media/blaburm.ffe310e5bb1f0f3fbf80.png",
     "static/media/diaruga.png": "/dodan9.io/static/media/diaruga.ab6b45374b3e00765a2c.png",
+    "static/media/room1.png": "/dodan9.io/static/media/room1.8f27a2976f1569993f56.png",
     "index.html": "/dodan9.io/index.html",
     "main.e6c13ad2.css.map": "/dodan9.io/static/css/main.e6c13ad2.css.map",
-    "main.87d95589.js.map": "/dodan9.io/static/js/main.87d95589.js.map"
+    "main.cb3c99ce.js.map": "/dodan9.io/static/js/main.cb3c99ce.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.87d95589.js"
+    "static/js/main.cb3c99ce.js"
   ]
 }
