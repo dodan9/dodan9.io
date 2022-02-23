@@ -141,6 +141,7 @@ const Bookshell = styled.img`
   top: 0;
   left: 237px;
   animation: ${BookshellAni} 1s 1s;
+  cursor: default;
 `;
 
 const BooksAni = keyframes`
