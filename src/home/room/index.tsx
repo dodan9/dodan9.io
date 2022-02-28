@@ -16,19 +16,22 @@ const safebox = require("./images/safebox.png");
 const safebox_h = require("./images/safebox_h.png");
 const sunflower = require("./images/sunflower.png");
 const sunflower_h = require("./images/sunflower_h.png");
+const closeImg = require("./images/close.png");
+const rabbit = require("./images/rabbit.png");
 
 const Room = () => {
   const [xPosition, setXPosition] = useState<number>(0);
   const [yPosition, setYPosition] = useState<number>(0);
-
   const [isDoorOpen, setIsDoorOpen] = useState<boolean>(false);
+  const [clickTarget, setClickTarget] = useState<string | null>(null);
+  const [cursorSrc, setCursorSrc] = useState<string>(rabbit);
 
   const ref = useRef(null);
   const mouse = useMouse(ref, { enterDelay: 0, leaveDelay: 0 });
 
   useEffect(() => {
-    if (mouse.x) setXPosition(mouse.x + 30);
-    if (mouse.y) setYPosition(mouse.y + 30);
+    if (mouse.x) setXPosition(mouse.x + 10);
+    if (mouse.y) setYPosition(mouse.y + 10);
   }, [mouse.x, mouse.y]);
   return (
     <>
@@ -44,20 +47,65 @@ const Room = () => {
           {isDoorOpen && (
             <RoomContainer>
               <Bookshell src={bookShell} />
-              <Books src={books} />
-              <Robot src={robot} />
-              <Yeoungsoo src={yeongsoo} />
-              <Brown src={brown} />
-              <SafeBox src={safebox} />
-              <Sunflower src={sunflower} />
+              <Books
+                src={books}
+                onClick={() => {
+                  setClickTarget("books");
+                }}
+              />
+              <Robot
+                src={robot}
+                onClick={() => {
+                  setClickTarget("robot");
+                }}
+              />
+              <Yeoungsoo
+                src={yeongsoo}
+                onClick={() => {
+                  setClickTarget("yeongsoo");
+                }}
+              />
+              <Brown
+                src={brown}
+                onClick={() => {
+                  setClickTarget("brown");
+                }}
+              />
+              <SafeBox
+                src={safebox}
+                onClick={() => {
+                  setClickTarget("safebox");
+                }}
+              />
+              <Sunflower
+                src={sunflower}
+                onClick={() => {
+                  setClickTarget("sunflower");
+                }}
+              />
+              {clickTarget && (
+                <TextContainer>
+                  {clickTarget === "books" && <span>book.</span>}
+                  {clickTarget === "robot" && <span>robot.</span>}
+                  {clickTarget === "yeongsoo" && <span>yeongsoo.</span>}
+                  {clickTarget === "brown" && <span>brown.</span>}
+                  {clickTarget === "safebox" && <span>safebox.</span>}
+                  {clickTarget === "sunflower" && <span>sunflower.</span>}
+                  <Close
+                    onClick={() => {
+                      setClickTarget(null);
+                    }}
+                  />
+                </TextContainer>
+              )}
             </RoomContainer>
           )}
         </Door>
-        {mouse.x && mouse.y && (
+        {mouse.x && mouse.y ? (
           <FollowCursor x={xPosition} y={yPosition}>
-            room?
+            <CursorImg src={cursorSrc} />
           </FollowCursor>
-        )}
+        ) : null}
       </Container>
     </>
   );
@@ -67,8 +115,6 @@ export default Room;
 
 const GlobalStyle = createGlobalStyle`
 box-sizing: border-box;
-font-family: 'Dunggeunmo';
-src: url('DungGeunMo.ttf');
 input{
   display: none;
 }
@@ -99,6 +145,7 @@ const Door = styled.div<{ isDoorOpen: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: ${(props) => (props.isDoorOpen ? "default" : "pointer")};
 `;
 
 const RoomContainerOpen = keyframes`
@@ -141,7 +188,9 @@ const Bookshell = styled.img`
   top: 0;
   left: 237px;
   animation: ${BookshellAni} 1s 1s;
-  cursor: default;
+  && {
+    cursor: default;
+  }
 `;
 
 const BooksAni = keyframes`
@@ -251,10 +300,46 @@ const Sunflower = styled.img`
     content: url(${sunflower_h});
   }
 `;
+
+const TextContainer = styled.div`
+  padding: 15px;
+  width: 600px;
+  height: 200px;
+  position: absolute;
+  bottom: -20px;
+  left: -20px;
+  z-index: 100;
+  border-radius: 5px;
+  line-height: 22px;
+  font-size: 18px;
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: default;
+  color: white;
+  border: 5px ridge gainsboro;
+  display: block;
+`;
+const Close = styled.img`
+  && {
+    position: absolute;
+    display: block;
+    right: 5px;
+    top: 5px;
+    width: 20px;
+    height: 20px;
+    content: url(${closeImg});
+    opacity: 1;
+  }
+`;
+
 const FollowCursor = styled.div<{ x: number; y: number }>`
   position: fixed;
   top: ${(props) => props.y}px;
   left: ${(props) => props.x}px;
   transition: 0.1s ease-out;
   color: aqua;
+  z-index: 100;
+  pointer-events: none;
+`;
+const CursorImg = styled.img`
+  width: 30px;
 `;

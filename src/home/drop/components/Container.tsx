@@ -5,17 +5,24 @@ import { Box } from "./Box";
 import update from "react-addons-update";
 import type { DragItem } from "./interfaces";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 const blaburm = require("../images/blaburm.png");
 const diaruga = require("../images/diaruga.png");
 
 interface StateProps {
-  [key: string]: { top: number; left: number; src: string };
+  [key: string]: {
+    top: number;
+    left: number;
+    src?: string;
+    backgroundColor?: string;
+  };
 }
 
 export const Container = () => {
   const [boxes, setBoxes] = useState<StateProps>({
-    blaburm: { top: 40, left: 40, src: blaburm },
-    diaruga: { top: 140, left: 40, src: diaruga },
+    blaburm: { top: 150, left: 30, src: blaburm, backgroundColor: "#fea" },
+    diaruga: { top: 360, left: 70, src: diaruga },
+    testText: { top: 50, left: 200, backgroundColor: "#6BAA6A" },
   });
 
   const moveBox = useCallback(
@@ -48,15 +55,29 @@ export const Container = () => {
 
   return (
     <Wrap ref={drop}>
+      <h1>Drag & Drop Test</h1>
+      <Link to="/dodan9.io">to home</Link>
       {Object.keys(boxes).map((key) => {
-        const { left, top, src } = boxes[key];
+        const { left, top, src, backgroundColor } = boxes[key];
         return (
           <>
-            {key === "blaburm" && (
-              <Box key={key} id={key} left={left} top={top} src={src} />
-            )}
-            {key === "diaruga" && (
-              <Box key={key} id={key} left={left} top={top} src={src} />
+            {src ? (
+              <Box
+                key={key}
+                id={key}
+                left={left}
+                top={top}
+                src={src}
+                backgroundColor={backgroundColor}
+              />
+            ) : (
+              <Box
+                key={key}
+                id={key}
+                left={left}
+                top={top}
+                backgroundColor={backgroundColor}
+              />
             )}
           </>
         );
@@ -66,9 +87,11 @@ export const Container = () => {
 };
 
 const Wrap = styled.div`
-  width: 300px;
-  height: 300px;
-  border: 1px solid black;
+  width: 100vw;
+  height: 100vh;
   position: "relative";
-  background-color: black;
+  background-color: #ababab;
+  & h1 {
+    margin-top: 0;
+  }
 `;
