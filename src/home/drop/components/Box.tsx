@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Children, ReactNode } from "react";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "./ItemTypes";
 import styled from "styled-components";
@@ -12,7 +12,14 @@ interface BoxProps {
   children?: ReactNode;
 }
 
-export const Box = ({ id, left, top, backgroundColor, src }: BoxProps) => {
+export const Box = ({
+  id,
+  left,
+  top,
+  backgroundColor,
+  children,
+  src,
+}: BoxProps) => {
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.BOX,
@@ -28,7 +35,7 @@ export const Box = ({ id, left, top, backgroundColor, src }: BoxProps) => {
     <DragBox ref={drag} style={{ left, top }} isDragging={isDragging}>
       <BoxContent backgroundColor={backgroundColor}>
         {src && <img src={src} />}
-        {id === "testText" && <>하이</>}
+        {children}
       </BoxContent>
     </DragBox>
   );
@@ -47,7 +54,7 @@ const DragBox = styled.div<{ isDragging: boolean }>`
   opacity: ${(props) => (props.isDragging ? 0 : 1)};
   z-index: 30;
   box-shadow: 5px 5px 8px 4px rgb(0 0 0 / 30%);
-  padding: 20px;
+  padding: 12px;
 `;
 
 const BoxContent = styled.div<{ backgroundColor?: string }>`
@@ -57,7 +64,7 @@ const BoxContent = styled.div<{ backgroundColor?: string }>`
   padding: 10px;
   min-width: 50px;
   text-align: center;
-  color: #fff;
   font-weight: 900;
   font-size: 20px;
+  border-radius: 3px;
 `;

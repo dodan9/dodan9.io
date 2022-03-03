@@ -20,9 +20,11 @@ interface StateProps {
 
 export const Container = () => {
   const [boxes, setBoxes] = useState<StateProps>({
+    title: { top: 20, left: 20, backgroundColor: "#2faa2f" },
+    link: { top: 100, left: 380, backgroundColor: "yellow" },
     blaburm: { top: 150, left: 30, src: blaburm, backgroundColor: "#fea" },
     diaruga: { top: 360, left: 70, src: diaruga },
-    testText: { top: 50, left: 200, backgroundColor: "#6BAA6A" },
+    hi: { top: 180, left: 220, backgroundColor: "#6BAA6A" },
   });
 
   const moveBox = useCallback(
@@ -55,13 +57,11 @@ export const Container = () => {
 
   return (
     <Wrap ref={drop}>
-      <h1>Drag & Drop Test</h1>
-      <Link to="/dodan9.io">to home</Link>
       {Object.keys(boxes).map((key) => {
         const { left, top, src, backgroundColor } = boxes[key];
         return (
           <>
-            {src ? (
+            {src && (
               <Box
                 key={key}
                 id={key}
@@ -70,14 +70,19 @@ export const Container = () => {
                 src={src}
                 backgroundColor={backgroundColor}
               />
-            ) : (
+            )}
+            {!src && (
               <Box
                 key={key}
                 id={key}
                 left={left}
                 top={top}
                 backgroundColor={backgroundColor}
-              />
+              >
+                {key === "title" && <h1>Drag & Drop Test</h1>}
+                {key === "link" && <Link to="/dodan9.io">to home</Link>}
+                {key === "hi" && <>하이</>}
+              </Box>
             )}
           </>
         );
@@ -87,11 +92,21 @@ export const Container = () => {
 };
 
 const Wrap = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: calc(100vw - 40px);
+  height: calc(100vh - 40px);
+  padding: 20px;
   position: "relative";
   background-color: #ababab;
+  color: #fff;
   & h1 {
-    margin-top: 0;
+    width: fit-content;
+    padding: 10px;
+    margin: 0;
+  }
+  & a {
+    color: black;
+  }
+  & a:hover {
+    color: #ababab;
   }
 `;
