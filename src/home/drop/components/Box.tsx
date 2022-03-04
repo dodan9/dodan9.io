@@ -1,7 +1,8 @@
-import { Children, ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "./ItemTypes";
 import styled from "styled-components";
+import { getEmptyImage } from "react-dnd-html5-backend";
 
 interface BoxProps {
   id?: any;
@@ -20,16 +21,20 @@ export const Box = ({
   children,
   src,
 }: BoxProps) => {
-  const [{ isDragging }, drag] = useDrag(
+  const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: ItemTypes.BOX,
-      item: { id, left, top },
+      item: { id, left, top, src, backgroundColor, children },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
     }),
     [id, left, top]
   );
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: true });
+  }, []);
 
   return (
     <DragBox ref={drag} style={{ left, top }} isDragging={isDragging}>

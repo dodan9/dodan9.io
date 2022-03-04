@@ -95,7 +95,7 @@ const Wrap = styled.div`
   width: calc(100vw - 40px);
   height: calc(100vh - 40px);
   padding: 20px;
-  position: "relative";
+  position: relative;
   background-color: #ababab;
   color: #fff;
   & h1 {
