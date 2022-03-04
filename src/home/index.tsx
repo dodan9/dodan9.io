@@ -8,10 +8,10 @@ function Home() {
         <h1>&lt;Dodan9&gt;</h1>
         <div>
           <h2>
-            <Link to="/room">&lt;room /&gt;</Link>
+            <Link to="/dodan9.io/room">&lt;room /&gt;</Link>
           </h2>
           <h2>
-            <Link to="/drag_n_drop">&lt;drag & drop /&gt;</Link>
+            <Link to="/dodan9.io/drag_n_drop">&lt;drag & drop /&gt;</Link>
           </h2>
         </div>
         <h1>&lt;/Dodan9&gt;</h1>

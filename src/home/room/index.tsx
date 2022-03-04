@@ -90,7 +90,7 @@ const Room = () => {
                   setCursorSrc((prev) => (prev ? "" : rabbit));
                 }}
               />
-              <Link to="/">
+              <Link to="/dodan9.io">
                 <Exit src={exit} />
               </Link>
               {clickTarget && (

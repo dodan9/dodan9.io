@@ -80,7 +80,7 @@ export const Container = () => {
                 backgroundColor={backgroundColor}
               >
                 {key === "title" && <h1>Drag & Drop</h1>}
-                {key === "link" && <Link to="/">to home</Link>}
+                {key === "link" && <Link to="/dodan9.io">to home</Link>}
                 {key === "hi" && <>하이</>}
               </Box>
             )}
