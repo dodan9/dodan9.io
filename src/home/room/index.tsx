@@ -1,5 +1,6 @@
 import useMouse from "@react-hook/mouse-position";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import styled, { keyframes, createGlobalStyle } from "styled-components";
 const stars = require("./images/back_stars.gif");
 const roomImg = require("./images/room1.png");
@@ -18,13 +19,14 @@ const sunflower = require("./images/sunflower.png");
 const sunflower_h = require("./images/sunflower_h.png");
 const closeImg = require("./images/close.png");
 const rabbit = require("./images/rabbit.png");
+const exit = require("./images/exit.png");
 
 const Room = () => {
   const [xPosition, setXPosition] = useState<number>(0);
   const [yPosition, setYPosition] = useState<number>(0);
   const [isDoorOpen, setIsDoorOpen] = useState<boolean>(false);
   const [clickTarget, setClickTarget] = useState<string | null>(null);
-  const [cursorSrc, setCursorSrc] = useState<string>(rabbit);
+  const [cursorSrc, setCursorSrc] = useState<string>("");
 
   const ref = useRef(null);
   const mouse = useMouse(ref, { enterDelay: 0, leaveDelay: 0 });
@@ -37,7 +39,6 @@ const Room = () => {
     <>
       <GlobalStyle />
       <Container ref={ref}>
-        {/* <Link to="/dodan9.io/ocean">to ocean</Link>  */}
         <Door
           onClick={() => {
             setIsDoorOpen(true);
@@ -83,6 +84,15 @@ const Room = () => {
                   setClickTarget("sunflower");
                 }}
               />
+              <Rabbit
+                src={rabbit}
+                onClick={() => {
+                  setCursorSrc((prev) => (prev ? "" : rabbit));
+                }}
+              />
+              <Link to="/">
+                <Exit src={exit} />
+              </Link>
               {clickTarget && (
                 <TextContainer>
                   {clickTarget === "books" && <span>book.</span>}
@@ -101,7 +111,7 @@ const Room = () => {
             </RoomContainer>
           )}
         </Door>
-        {mouse.x && mouse.y ? (
+        {mouse.x && mouse.y && cursorSrc ? (
           <FollowCursor x={xPosition} y={yPosition}>
             <CursorImg src={cursorSrc} />
           </FollowCursor>
@@ -298,6 +308,32 @@ const Sunflower = styled.img`
   animation: ${SunflowerAni} 1s 2.2s;
   &:hover {
     content: url(${sunflower_h});
+  }
+`;
+
+const RabbitAni = keyframes`
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+    top: 60px;
+  }
+`;
+const Rabbit = styled.img`
+  top: 0;
+  left: 280px;
+  width: 40px;
+  animation: ${RabbitAni} 1s 2.5s;
+`;
+
+const Exit = styled.img`
+  && {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    opacity: 1;
   }
 `;
 

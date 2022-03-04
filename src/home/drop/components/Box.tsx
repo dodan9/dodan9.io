@@ -39,7 +39,7 @@ export const Box = ({
   return (
     <DragBox ref={drag} style={{ left, top }} isDragging={isDragging}>
       <BoxContent backgroundColor={backgroundColor}>
-        {src && <img src={src} />}
+        {src && <img src={src} alt={src} />}
         {children}
       </BoxContent>
     </DragBox>

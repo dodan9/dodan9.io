@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { XYCoord, useDragLayer } from "react-dnd";
 import { Box } from "./Box";
 import styled from "styled-components";
