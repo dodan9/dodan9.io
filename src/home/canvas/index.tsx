@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 interface DrawProps {
@@ -11,6 +11,8 @@ interface DrawProps {
 
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [treeCount, setTreeCount] = useState<number>(1);
+  const ctx = canvasRef.current?.getContext("2d");
 
   const random = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -22,7 +24,6 @@ const Canvas = () => {
     angle: number,
     branchWidth: number
   ) => {
-    const ctx = canvasRef.current?.getContext("2d");
     const depth = 11;
     if (ctx) {
       if (startDepth === depth) {
@@ -31,7 +32,12 @@ const Canvas = () => {
 
       ctx.beginPath();
 
-      let len = startDepth === 0 ? random(6, 12) : random(0, 9);
+      let len =
+        startDepth === 0
+          ? random(4, 12)
+          : startDepth < 2
+          ? random(4, 9)
+          : random(0, 8);
       const endX =
         startDepth === 0
           ? startX +
@@ -54,6 +60,20 @@ const Canvas = () => {
           150,
           200
         )})`;
+        draw(
+          endX,
+          endY,
+          startDepth + 1,
+          angle - random(27, 29) * 2,
+          branchWidth * 0.75
+        );
+        draw(
+          endX,
+          endY,
+          startDepth + 1,
+          angle + random(27, 29) * 2,
+          branchWidth * 0.75
+        );
       } else {
         const alpha =
           (depth - startDepth) / 5 > 1 ? 1 : (depth - startDepth) / 5;
@@ -65,51 +85,119 @@ const Canvas = () => {
       ctx.lineWidth = branchWidth;
       ctx.stroke();
 
-      const nextAngleL = depth - startDepth < 8 ? angle : angle - 5;
-      const nextAngleR = depth - startDepth < 8 ? angle : angle + 5;
       // 재귀 함수 호출
       draw(
         endX,
         endY,
         startDepth + 1,
-        nextAngleR - random(27, 30),
+        angle - random(27, 29),
         branchWidth * 0.75
       );
       draw(
         endX,
         endY,
         startDepth + 1,
-        nextAngleL + random(27, 30),
+        angle + random(27, 29),
         branchWidth * 0.75
       );
     }
   };
   const handleClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const { clientX } = event;
-    if (canvasRef.current)
-      draw(
-        clientX,
-        canvasRef.current.height,
-        0,
-        random(-88, -92),
-        random(11, 14)
-      );
+    let randomNumber = clientX;
+    if (canvasRef.current) {
+      for (let i = 0; i < treeCount; i++) {
+        if (treeCount === 4) randomNumber = clientX + random(-200, 200);
+        if (treeCount === 100)
+          randomNumber = random(0, canvasRef.current.width);
+        draw(
+          randomNumber,
+          canvasRef.current.height,
+          0,
+          random(-85, -95),
+          random(11, 14)
+        );
+      }
+    }
   };
+
   useEffect(() => {
     if (canvasRef.current) {
       canvasRef.current.width = window.innerWidth;
       canvasRef.current.height = window.innerHeight;
     }
-  });
+    window.addEventListener("resize", () => {
+      if (canvasRef.current) {
+        ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+        canvasRef.current.width = window.innerWidth;
+        canvasRef.current.height = window.innerHeight;
+      }
+    });
+  }, []);
   return (
     <div>
+      <Title>Click to Grow</Title>
+      <Selects>
+        <Select
+          onClick={() => {
+            setTreeCount(1);
+          }}
+        >
+          1 tree
+        </Select>
+        <Select
+          onClick={() => {
+            setTreeCount(4);
+          }}
+        >
+          4 tree
+        </Select>
+        <Select
+          onClick={() => {
+            setTreeCount(100);
+          }}
+        >
+          100 tree
+        </Select>
+      </Selects>
       <StyledCanvas ref={canvasRef} onClick={handleClick}></StyledCanvas>
     </div>
   );
 };
 
 export default Canvas;
-
+const Title = styled.div`
+  position: absolute;
+  text-align: center;
+  font-size: 60px;
+  width: 100%;
+  margin-top: 50px;
+  background-image: linear-gradient(-20deg, #6e45e2 0%, #88d3ce 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
+const Selects = styled.div`
+  position: absolute;
+  top: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+const Select = styled.div`
+  width: 200px;
+  padding: 10px;
+  text-align: center;
+  background-image: linear-gradient(20deg, #6e45e2 0%, #88d3ce 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+  &:hover {
+    -webkit-text-fill-color: #fff;
+    background-image: linear-gradient(-20deg, #6e45e2 0%, #88d3ce 100%);
+    -webkit-background-clip: unset;
+  }
+`;
 const StyledCanvas = styled.canvas`
   background-image: linear-gradient(to Bottom, #a1c4fd 0%, #c2e9fb 100%);
 `;
