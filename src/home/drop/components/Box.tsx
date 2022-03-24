@@ -47,19 +47,21 @@ export const Box = ({
 };
 
 const DragBox = styled.div<{ isDragging: boolean }>`
-  position: absolute;
-  border-radius: 10px;
-  background-color: #fff;
-  cursor: move;
-  & img {
-    width: 100px;
-    height: 100px;
+  && {
+    position: absolute;
     border-radius: 10px;
+    background-color: #fff;
+    cursor: move;
+    & img {
+      width: 100px;
+      height: 100px;
+      border-radius: 3px;
+    }
+    opacity: ${(props) => (props.isDragging ? 0 : 1)};
+    z-index: 30;
+    box-shadow: 5px 5px 8px 4px rgb(0 0 0 / 30%);
+    padding: 12px;
   }
-  opacity: ${(props) => (props.isDragging ? 0 : 1)};
-  z-index: 30;
-  box-shadow: 5px 5px 8px 4px rgb(0 0 0 / 30%);
-  padding: 12px;
 `;
 
 const BoxContent = styled.div<{ backgroundColor?: string }>`

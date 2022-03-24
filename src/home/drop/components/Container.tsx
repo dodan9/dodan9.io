@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 const blaburm = require("../images/blaburm.png");
 const diaruga = require("../images/diaruga.png");
+const coinbox = require("../images/zoom.gif");
 
 interface StateProps {
   [key: string]: {
@@ -25,6 +26,7 @@ export const Container = () => {
     blaburm: { top: 150, left: 30, src: blaburm, backgroundColor: "#fea" },
     diaruga: { top: 360, left: 70, src: diaruga },
     hi: { top: 180, left: 220, backgroundColor: "#6BAA6A" },
+    coinbox: { top: 270, left: 270, src: coinbox },
   });
 
   const moveBox = useCallback(

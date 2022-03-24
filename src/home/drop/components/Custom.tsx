@@ -45,7 +45,7 @@ export const Custom = () => {
             left={0}
             top={0}
             src={item.src}
-            backgroundColor={item.backgroundColor}
+            backgroundColor="#7e7e7e"
           />
         )}
         {!item.src && (
@@ -54,7 +54,7 @@ export const Custom = () => {
             id={item.key}
             left={0}
             top={0}
-            backgroundColor={item.backgroundColor}
+            backgroundColor="#7e7e7e"
           >
             {item.children}
           </Box>
