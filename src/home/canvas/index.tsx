@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 interface DrawProps {
@@ -60,20 +61,6 @@ const Canvas = () => {
           150,
           200
         )})`;
-        draw(
-          endX,
-          endY,
-          startDepth + 1,
-          angle - random(27, 29) * 2,
-          branchWidth * 0.75
-        );
-        draw(
-          endX,
-          endY,
-          startDepth + 1,
-          angle + random(27, 29) * 2,
-          branchWidth * 0.75
-        );
       } else {
         const alpha =
           (depth - startDepth) / 5 > 1 ? 1 : (depth - startDepth) / 5;
@@ -121,24 +108,29 @@ const Canvas = () => {
     }
   };
 
+  const refresh = () => {
+    if (canvasRef.current) {
+      ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      canvasRef.current.width = window.innerWidth;
+      canvasRef.current.height = window.innerHeight;
+    }
+  };
+
   useEffect(() => {
     if (canvasRef.current) {
       canvasRef.current.width = window.innerWidth;
       canvasRef.current.height = window.innerHeight;
     }
-    window.addEventListener("resize", () => {
-      if (canvasRef.current) {
-        ctx?.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-        canvasRef.current.width = window.innerWidth;
-        canvasRef.current.height = window.innerHeight;
-      }
-    });
+
+    window.addEventListener("resize", refresh);
   }, []);
+
   return (
     <div>
       <Title>Click to Grow</Title>
       <Selects>
         <Select
+          treeCount={treeCount === 1 ? true : false}
           onClick={() => {
             setTreeCount(1);
           }}
@@ -146,6 +138,7 @@ const Canvas = () => {
           1 tree
         </Select>
         <Select
+          treeCount={treeCount === 4 ? true : false}
           onClick={() => {
             setTreeCount(4);
           }}
@@ -153,6 +146,7 @@ const Canvas = () => {
           4 tree
         </Select>
         <Select
+          treeCount={treeCount === 100 ? true : false}
           onClick={() => {
             setTreeCount(100);
           }}
@@ -160,6 +154,9 @@ const Canvas = () => {
           100 tree
         </Select>
       </Selects>
+      <Refresh treeCount={false} onClick={refresh}>
+        refresh
+      </Refresh>
       <StyledCanvas ref={canvasRef} onClick={handleClick}></StyledCanvas>
     </div>
   );
@@ -184,19 +181,25 @@ const Selects = styled.div`
   align-items: center;
   justify-content: center;
 `;
-const Select = styled.div`
+const Select = styled.div<{ treeCount: Boolean }>`
   width: 200px;
   padding: 10px;
+  margin: 10px;
   text-align: center;
-  background-image: linear-gradient(20deg, #6e45e2 0%, #88d3ce 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  border-radius: 5px;
+  border: ${(props) => (props.treeCount ? "3px solid transparent" : "none")};
+  background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
+  color: ${(props) => (props.treeCount ? "white" : "whitesmoke")};
   cursor: pointer;
   &:hover {
-    -webkit-text-fill-color: #fff;
-    background-image: linear-gradient(-20deg, #6e45e2 0%, #88d3ce 100%);
-    -webkit-background-clip: unset;
+    color: yellow;
+    background-image: linear-gradient(-45deg, #93a5cf 0%, #e4efe9 100%);
   }
+`;
+const Refresh = styled(Select)`
+  position: absolute;
+  left: calc(50% - 120px);
+  top: 300px;
 `;
 const StyledCanvas = styled.canvas`
   background-image: linear-gradient(to Bottom, #a1c4fd 0%, #c2e9fb 100%);
