@@ -12,7 +12,7 @@ interface DrawProps {
 
 const Canvas = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [treeCount, setTreeCount] = useState<number>(1);
+  const [treeCount, setTreeCount] = useState<number>(0);
   const ctx = canvasRef.current?.getContext("2d");
 
   const random = (min: number, max: number) => {
@@ -126,7 +126,7 @@ const Canvas = () => {
   }, []);
 
   return (
-    <div>
+    <Container>
       <Title>Click to Grow</Title>
       <Selects>
         <Select
@@ -158,11 +158,14 @@ const Canvas = () => {
         refresh
       </Refresh>
       <StyledCanvas ref={canvasRef} onClick={handleClick}></StyledCanvas>
-    </div>
+    </Container>
   );
 };
 
 export default Canvas;
+const Container = styled.div`
+  overflow: hidden;
+`
 const Title = styled.div`
   position: absolute;
   text-align: center;

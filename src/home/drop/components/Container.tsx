@@ -6,9 +6,10 @@ import update from "react-addons-update";
 import type { DragItem } from "./interfaces";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-const blaburm = require("../images/blaburm.png");
-const diaruga = require("../images/diaruga.png");
-const coinbox = require("../images/zoom.gif");
+
+const brown = require("../images/brown_h.png")
+const sunflower = require("../images/sunflower.png");
+const bear_chair = require("../images/bear_chair.png");
 
 interface StateProps {
   [key: string]: {
@@ -23,10 +24,10 @@ export const Container = () => {
   const [boxes, setBoxes] = useState<StateProps>({
     title: { top: 20, left: 20, backgroundColor: "#2faa2f" },
     link: { top: 100, left: 380, backgroundColor: "yellow" },
-    blaburm: { top: 150, left: 30, src: blaburm, backgroundColor: "#fea" },
-    diaruga: { top: 360, left: 70, src: diaruga },
+    brown: { top: 150, left: 30, src: brown, backgroundColor: "#fea" },
+    sunflower: { top: 360, left: 70, src: sunflower },
     hi: { top: 180, left: 220, backgroundColor: "#6BAA6A" },
-    coinbox: { top: 270, left: 270, src: coinbox },
+    bear_chair: { top: 270, left: 270, src: bear_chair },
   });
 
   const moveBox = useCallback(

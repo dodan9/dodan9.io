@@ -53,8 +53,7 @@ const DragBox = styled.div<{ isDragging: boolean }>`
     background-color: #fff;
     cursor: move;
     & img {
-      width: 100px;
-      height: 100px;
+      height: 200px;
       border-radius: 3px;
     }
     opacity: ${(props) => (props.isDragging ? 0 : 1)};
