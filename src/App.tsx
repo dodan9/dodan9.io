@@ -5,6 +5,7 @@ import Drop from "./home/drop";
 import Room from "./home/room";
 import Mix from "./home/mix";
 import Canvas from "./home/canvas";
+import Todo from "./home/todo";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/dodan9.io/room" element={<Room />} />
         <Route path="/dodan9.io/mix" element={<Mix />} />
         <Route path="/dodan9.io/canvas" element={<Canvas />} />
+        <Route path="/dodan9.io/todo" element={<Todo />} />
       </Routes>
     </BrowserRouter>
   );

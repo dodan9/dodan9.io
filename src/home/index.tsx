@@ -19,6 +19,9 @@ function Home() {
           <h2>
             <Link to="/dodan9.io/canvas">&lt;Canvas /&gt;</Link>
           </h2>
+          <h2>
+            <Link to="/dodan9.io/todo">&lt;Todo /&gt;</Link>
+          </h2>
         </div>
         <h1>&lt;/Dodan9&gt;</h1>
       </Container>

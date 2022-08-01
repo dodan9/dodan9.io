@@ -19,11 +19,11 @@ const Canvas = () => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
   const draw = (
-    startX: number,
-    startY: number,
-    startDepth: number,
-    angle: number,
-    branchWidth: number
+    {startX,
+    startY,
+    startDepth,
+    angle,
+    branchWidth}:DrawProps
   ) => {
     const depth = 11;
     if (ctx) {
@@ -72,20 +72,21 @@ const Canvas = () => {
       ctx.lineWidth = branchWidth;
       ctx.stroke();
 
+      
       // 재귀 함수 호출
       draw(
-        endX,
-        endY,
-        startDepth + 1,
-        angle - random(27, 29),
-        branchWidth * 0.75
+        {startX:endX,
+          startY:endY,
+          startDepth:(startDepth + 1),
+          angle:(angle - random(27, 29)),
+          branchWidth:(branchWidth * 0.75)}
       );
       draw(
-        endX,
-        endY,
-        startDepth + 1,
-        angle + random(27, 29),
-        branchWidth * 0.75
+        {startX:endX,
+          startY:endY,
+          startDepth:(startDepth + 1),
+          angle:(angle + random(27, 29)),
+          branchWidth:(branchWidth * 0.75)}
       );
     }
   };
@@ -98,11 +99,11 @@ const Canvas = () => {
         if (treeCount === 100)
           randomNumber = random(0, canvasRef.current.width);
         draw(
-          randomNumber,
-          canvasRef.current.height,
-          0,
-          random(-85, -95),
-          random(11, 14)
+          {startX:randomNumber,
+          startY:canvasRef.current.height,
+          startDepth:0,
+          angle:random(-85, -95),
+          branchWidth:random(11, 14)}
         );
       }
     }
