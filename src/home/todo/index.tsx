@@ -2,9 +2,13 @@ import { useState } from "react"
 
 const Todo = () => {
     const [count, setCount] = useState<number>(0)
+    const Button = ()=>{
+        return <button onClick={()=>{setCount((count)=> count + 1)}}>click</button>
+    }
  return(
     <div>
-        <button onClick={()=>{setCount((count)=> count + 1)}}>click</button>
+        <Button/>
+        <Button/>
         <span>{count}</span>
     </div>
  )
