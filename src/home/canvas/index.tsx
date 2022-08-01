@@ -18,13 +18,13 @@ const Canvas = () => {
   const random = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
-  const draw = (
-    {startX,
+  const draw = ({
+    startX,
     startY,
     startDepth,
     angle,
-    branchWidth}:DrawProps
-  ) => {
+    branchWidth,
+  }: DrawProps) => {
     const depth = 11;
     if (ctx) {
       if (startDepth === depth) {
@@ -72,22 +72,21 @@ const Canvas = () => {
       ctx.lineWidth = branchWidth;
       ctx.stroke();
 
-      
       // 재귀 함수 호출
-      draw(
-        {startX:endX,
-          startY:endY,
-          startDepth:(startDepth + 1),
-          angle:(angle - random(27, 29)),
-          branchWidth:(branchWidth * 0.75)}
-      );
-      draw(
-        {startX:endX,
-          startY:endY,
-          startDepth:(startDepth + 1),
-          angle:(angle + random(27, 29)),
-          branchWidth:(branchWidth * 0.75)}
-      );
+      draw({
+        startX: endX,
+        startY: endY,
+        startDepth: startDepth + 1,
+        angle: angle - random(27, 29),
+        branchWidth: branchWidth * 0.75,
+      });
+      draw({
+        startX: endX,
+        startY: endY,
+        startDepth: startDepth + 1,
+        angle: angle + random(27, 29),
+        branchWidth: branchWidth * 0.75,
+      });
     }
   };
   const handleClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
@@ -98,13 +97,13 @@ const Canvas = () => {
         if (treeCount === 4) randomNumber = clientX + random(-200, 200);
         if (treeCount === 100)
           randomNumber = random(0, canvasRef.current.width);
-        draw(
-          {startX:randomNumber,
-          startY:canvasRef.current.height,
-          startDepth:0,
-          angle:random(-85, -95),
-          branchWidth:random(11, 14)}
-        );
+        draw({
+          startX: randomNumber,
+          startY: canvasRef.current.height,
+          startDepth: 0,
+          angle: random(-85, -95),
+          branchWidth: random(11, 14),
+        });
       }
     }
   };
@@ -166,7 +165,7 @@ const Canvas = () => {
 export default Canvas;
 const Container = styled.div`
   overflow: hidden;
-`
+`;
 const Title = styled.div`
   position: absolute;
   text-align: center;

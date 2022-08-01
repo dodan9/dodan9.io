@@ -13,9 +13,7 @@ function Home() {
           <h2>
             <Link to="/dodan9.io/drag_n_drop">&lt;Drag & drop /&gt;</Link>
           </h2>
-          <h2>
-            {/* <Link to="/dodan9.io/mix">&lt;Mix /&gt;</Link> */}
-          </h2>
+          <h2>{/* <Link to="/dodan9.io/mix">&lt;Mix /&gt;</Link> */}</h2>
           <h2>
             <Link to="/dodan9.io/canvas">&lt;Canvas /&gt;</Link>
           </h2>

@@ -7,7 +7,7 @@ import type { DragItem } from "./interfaces";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const brown = require("../images/brown_h.png")
+const brown = require("../images/brown_h.png");
 const sunflower = require("../images/sunflower.png");
 const bear_chair = require("../images/bear_chair.png");
 
