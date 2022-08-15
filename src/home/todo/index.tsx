@@ -25,12 +25,18 @@ const Todo = () => {
   const [flipped, setFlipped] = useState<boolean>(false);
   const onFlip = () => {
     setFlipped((flipped) => (flipped = !flipped));
-    reset();
   };
 
-  // useEffect(()=>{
-  //   if (flipped) setAmount((amount) => amount = amount/60)
-  // },[flipped])
+  useEffect(() => {
+    if (amount) {
+      if (flipped) {
+        setAmount((amount) => (amount ? (amount = amount / 60) : 0));
+      } else {
+        setAmount((amount) => (amount ? (amount = amount * 60) : 0));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flipped]);
 
   return (
     <div>
