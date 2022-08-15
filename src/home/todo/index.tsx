@@ -10,36 +10,27 @@ const Todo = () => {
     setCount((count) => count - 1);
   };
 
-  const [minutes, setMinutes] = useState<number | "">("");
-  const [hours, setHours] = useState<number | "">("");
+  const [amount, setAmount] = useState<number | "">("");
 
   const reset = () => {
-    setMinutes("");
-    setHours("");
+    setAmount("");
   };
 
-  const onMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value)
-      setMinutes((minutes) => (minutes = parseFloat(e.target.value)));
+      setAmount((amounts) => (amounts = parseFloat(e.target.value)));
     else reset();
   };
-  const onHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value)
-      setHours((minutes) => (minutes = parseFloat(e.target.value)));
-    else reset();
-  };
-  useEffect(() => {
-    if (minutes) setHours((hours) => (hours = minutes / 60));
-  }, [minutes]);
-  useEffect(() => {
-    if (hours) setMinutes((minutes) => (minutes = hours * 60));
-  }, [hours]);
 
   const [flipped, setFlipped] = useState<boolean>(false);
   const onFlip = () => {
     setFlipped((flipped) => (flipped = !flipped));
-    console.log(flipped);
+    reset();
   };
+
+  // useEffect(()=>{
+  //   if (flipped) setAmount((amount) => amount = amount/60)
+  // },[flipped])
 
   return (
     <div>
@@ -58,8 +49,8 @@ const Todo = () => {
           id="minutes"
           placeholder="minutes"
           type="number"
-          value={minutes}
-          onChange={onMinuteChange}
+          value={flipped ? (amount ? amount * 60 : "") : amount}
+          onChange={onAmountChange}
           disabled={flipped}
         />
         <br />
@@ -68,8 +59,8 @@ const Todo = () => {
           id="hours"
           placeholder="hours"
           type="number"
-          value={hours}
-          onChange={onHourChange}
+          value={flipped ? amount : amount ? amount / 60 : ""}
+          onChange={onAmountChange}
           disabled={!flipped}
         />
         <br />
