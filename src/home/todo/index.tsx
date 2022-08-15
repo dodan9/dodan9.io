@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createGlobalStyle } from "styled-components";
 
 const Todo = () => {
@@ -11,10 +11,34 @@ const Todo = () => {
   };
 
   const [minutes, setMinutes] = useState<number | "">("");
+  const [hours, setHours] = useState<number | "">("");
+
+  const reset = () => {
+    setMinutes("");
+    setHours("");
+  };
+
   const onMinuteChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value)
       setMinutes((minutes) => (minutes = parseFloat(e.target.value)));
-    else setMinutes("");
+    else reset();
+  };
+  const onHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value)
+      setHours((minutes) => (minutes = parseFloat(e.target.value)));
+    else reset();
+  };
+  useEffect(() => {
+    if (minutes) setHours((hours) => (hours = minutes / 60));
+  }, [minutes]);
+  useEffect(() => {
+    if (hours) setMinutes((minutes) => (minutes = hours * 60));
+  }, [hours]);
+
+  const [flipped, setFlipped] = useState<boolean>(false);
+  const onFlip = () => {
+    setFlipped((flipped) => (flipped = !flipped));
+    console.log(flipped);
   };
 
   return (
@@ -36,6 +60,7 @@ const Todo = () => {
           type="number"
           value={minutes}
           onChange={onMinuteChange}
+          disabled={flipped}
         />
         <br />
         <label htmlFor="hours">Hours</label>
@@ -43,9 +68,13 @@ const Todo = () => {
           id="hours"
           placeholder="hours"
           type="number"
-          value={minutes ? minutes / 60 : ""}
-          readOnly
+          value={hours}
+          onChange={onHourChange}
+          disabled={!flipped}
         />
+        <br />
+        <button onClick={reset}>reset</button>
+        <button onClick={onFlip}>flip</button>
       </section>
     </div>
   );
