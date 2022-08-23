@@ -1,87 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { createGlobalStyle } from "styled-components";
+import React, { ChangeEvent, useState } from "react";
+import styled, { createGlobalStyle } from "styled-components";
+import Counter from "./Counter";
+import KmToMiles from "./KmToMiles";
+import MinutesToHours from "./MinutesToHours";
 
 const Todo = () => {
-  const [count, setCount] = useState<number>(0);
-  const upCount = () => {
-    setCount((count) => count + 1);
+  const [selection, setSelection] = React.useState<string>("Counter");
+  const onSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelection((selection) => (selection = e.target.value));
   };
-  const downCount = () => {
-    setCount((count) => count - 1);
-  };
-
-  const [amount, setAmount] = useState<number | "">("");
-
-  const reset = () => {
-    setAmount("");
-  };
-
-  const onAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value)
-      setAmount((amounts) => (amounts = parseFloat(e.target.value)));
-    else reset();
-  };
-
-  const [flipped, setFlipped] = useState<boolean>(false);
-  const onFlip = () => {
-    setFlipped((flipped) => (flipped = !flipped));
-  };
-
-  useEffect(() => {
-    if (amount) {
-      if (flipped) {
-        setAmount((amount) => (amount ? (amount = amount / 60) : 0));
-      } else {
-        setAmount((amount) => (amount ? (amount = amount * 60) : 0));
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [flipped]);
-
   return (
-    <div>
+    <Container>
       <GlobalStyle />
 
-      <section>
-        <button onClick={upCount}>count up</button>
-        <button onClick={downCount}>count down</button>
-        <span>{count}</span>
-      </section>
+      <select onChange={onSelect}>
+        <option value='Counter'>Counter</option>
+        <option value='MinutesToHours'>Minutes & Hours</option>
+        <option value='KmToMiles'>Km & Miles</option>
+      </select>
 
-      <section>
-        <h3>Converter</h3>
-        <label htmlFor="minutes">Minutes</label>
-        <input
-          id="minutes"
-          placeholder="minutes"
-          type="number"
-          value={flipped ? (amount ? amount * 60 : "") : amount}
-          onChange={onAmountChange}
-          disabled={flipped}
-        />
-        <br />
-        <label htmlFor="hours">Hours</label>
-        <input
-          id="hours"
-          placeholder="hours"
-          type="number"
-          value={flipped ? amount : amount ? amount / 60 : ""}
-          onChange={onAmountChange}
-          disabled={!flipped}
-        />
-        <br />
-        <button onClick={reset}>reset</button>
-        <button onClick={onFlip}>flip</button>
-      </section>
-    </div>
+      <hr />
+
+      {selection === "Counter" ? <Counter /> : null}
+      {selection === "MinutesToHours" ? <MinutesToHours /> : null}
+      {selection === "KmToMiles" ? <KmToMiles /> : null}
+    </Container>
   );
 };
 
 export default Todo;
 
 const GlobalStyle = createGlobalStyle`
-box-sizing: border-box;
-section{
-  padding: 40px;
-}
+  box-sizing: border-box;
+  section{
+    padding: 20px;
+  }
+  button{
+    margin: 5px 5px 5px 0;
+  }
+`;
+
+const Container = styled.div`
+  padding: 20px;
+`;
+
+export const InputBox = styled.div`
+  margin-bottom: 5px;
+  & label {
+    display: inline-block;
+    width: 70px;
+  }
 `;
