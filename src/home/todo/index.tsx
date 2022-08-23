@@ -3,24 +3,29 @@ import styled, { createGlobalStyle } from "styled-components";
 import Counter from "./Counter";
 import KmToMiles from "./KmToMiles";
 import MinutesToHours from "./MinutesToHours";
+import PropExample from "./PropExample";
 
 const Todo = () => {
-  const [selection, setSelection] = React.useState<string>("Counter");
+  const [selection, setSelection] = React.useState<string>("props");
   const onSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelection((selection) => (selection = e.target.value));
   };
   return (
     <Container>
       <GlobalStyle />
-
       <select onChange={onSelect}>
+        <option value='props'>props</option>
         <option value='Counter'>Counter</option>
         <option value='MinutesToHours'>Minutes & Hours</option>
         <option value='KmToMiles'>Km & Miles</option>
       </select>
-
       <hr />
-
+      {selection === "props" ? (
+        <>
+          <PropExample text='hi' />
+          <PropExample text='hello' />
+        </>
+      ) : null}
       {selection === "Counter" ? <Counter /> : null}
       {selection === "MinutesToHours" ? <MinutesToHours /> : null}
       {selection === "KmToMiles" ? <KmToMiles /> : null}
