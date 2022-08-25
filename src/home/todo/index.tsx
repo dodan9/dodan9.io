@@ -3,13 +3,19 @@ import styled, { createGlobalStyle } from "styled-components";
 import Counter from "./Counter";
 import KmToMiles from "./KmToMiles";
 import MinutesToHours from "./MinutesToHours";
-import PropExample from "./PropExample";
+import PropBtn from "./PropBtn";
 
 const Todo = () => {
   const [selection, setSelection] = React.useState<string>("props");
   const onSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelection((selection) => (selection = e.target.value));
   };
+
+  const [text, setText] = useState<string>("hi");
+  const textChange = () => {
+    setText((text) => (text = "bye"));
+  };
+  const MemoBtn = React.memo(PropBtn);
   return (
     <Container>
       <GlobalStyle />
@@ -22,8 +28,8 @@ const Todo = () => {
       <hr />
       {selection === "props" ? (
         <>
-          <PropExample text='hi' />
-          <PropExample text='hello' />
+          <PropBtn textChange={textChange} text={text} />
+          <MemoBtn text='hello' />
         </>
       ) : null}
       {selection === "Counter" ? <Counter /> : null}
