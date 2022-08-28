@@ -6,7 +6,7 @@ import MinutesToHours from "./MinutesToHours";
 import PropBtn from "./PropBtn";
 
 const Todo = () => {
-  // const [isRender, setIsRender] = useState<boolean>(false);
+  const [isRender, setIsRender] = useState<boolean>(false);
   const [selection, setSelection] = useState<string>("props");
   const onSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelection((selection) => (selection = e.target.value));
@@ -36,12 +36,23 @@ const Todo = () => {
         <option value='KmToMiles'>Km & Miles</option>
       </select>
       <hr />
+
+      <button
+        onClick={() => {
+          setIsRender((isRender) => !isRender);
+        }}
+      >
+        {isRender ? "show" : "hide"}
+      </button>
+
       {selection === "props" ? (
         <>
           <PropBtn textChange={textChange} text={text} />
-          <PropBtn text='hello' />
+
+          {isRender ? <PropBtn text='hello' /> : null}
         </>
       ) : null}
+      <br />
       <input
         value={keyword}
         onChange={onChangeKeyword}

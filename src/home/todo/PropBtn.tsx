@@ -9,6 +9,9 @@ interface PropBtnProp {
 const PropBtn = ({ text, textChange }: PropBtnProp) => {
   useEffect(() => {
     console.log(`${text} render`);
+    return () => {
+      console.log("component unmount");
+    };
   }, [text]);
 
   return (
