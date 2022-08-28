@@ -23,7 +23,7 @@ const Todo = () => {
   };
 
   useEffect(() => {
-    console.log(`search ${keyword}`);
+    if (keyword.length >= 1) console.log(`search ${keyword}`);
   }, [keyword]);
 
   return (

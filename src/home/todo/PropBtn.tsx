@@ -9,7 +9,7 @@ interface PropBtnProp {
 const PropBtn = ({ text, textChange }: PropBtnProp) => {
   useEffect(() => {
     console.log(`${text} render`);
-  }, []);
+  }, [text]);
 
   return (
     <>
