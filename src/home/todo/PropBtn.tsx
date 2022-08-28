@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 
 interface PropBtnProp {
@@ -6,7 +7,10 @@ interface PropBtnProp {
 }
 
 const PropBtn = ({ text, textChange }: PropBtnProp) => {
-  console.log(`${text} render`);
+  useEffect(() => {
+    console.log(`${text} render`);
+  }, []);
+
   return (
     <>
       <Text onClick={textChange}>{text}</Text>

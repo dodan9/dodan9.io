@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import Counter from "./Counter";
 import KmToMiles from "./KmToMiles";
@@ -6,7 +6,8 @@ import MinutesToHours from "./MinutesToHours";
 import PropBtn from "./PropBtn";
 
 const Todo = () => {
-  const [selection, setSelection] = React.useState<string>("props");
+  // const [isRender, setIsRender] = useState<boolean>(false);
+  const [selection, setSelection] = useState<string>("props");
   const onSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelection((selection) => (selection = e.target.value));
   };
@@ -15,7 +16,16 @@ const Todo = () => {
   const textChange = () => {
     setText((text) => (text = "bye"));
   };
-  const MemoBtn = React.memo(PropBtn);
+
+  const [keyword, setKeyword] = useState<string>("");
+  const onChangeKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword((keyword) => (keyword = e.target.value));
+  };
+
+  useEffect(() => {
+    console.log(`search ${keyword}`);
+  }, [keyword]);
+
   return (
     <Container>
       <GlobalStyle />
@@ -29,9 +39,15 @@ const Todo = () => {
       {selection === "props" ? (
         <>
           <PropBtn textChange={textChange} text={text} />
-          <MemoBtn text='hello' />
+          <PropBtn text='hello' />
         </>
       ) : null}
+      <input
+        value={keyword}
+        onChange={onChangeKeyword}
+        type='text'
+        placeholder='search here'
+      />
       {selection === "Counter" ? <Counter /> : null}
       {selection === "MinutesToHours" ? <MinutesToHours /> : null}
       {selection === "KmToMiles" ? <KmToMiles /> : null}
