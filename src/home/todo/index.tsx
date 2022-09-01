@@ -1,64 +1,63 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import Counter from "./Counter";
 import KmToMiles from "./KmToMiles";
 import MinutesToHours from "./MinutesToHours";
-import PropBtn from "./PropBtn";
+import Props from "./Props";
 
 const Todo = () => {
-  const [isRender, setIsRender] = useState<boolean>(false);
-  const [selection, setSelection] = useState<string>("props");
+  const [selection, setSelection] = useState<string>("todo");
   const onSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelection((selection) => (selection = e.target.value));
   };
 
-  const [text, setText] = useState<string>("hi");
-  const textChange = () => {
-    setText((text) => (text = "bye"));
+  const [todo, setTodo] = useState<string>("");
+  const [todoList, setTodoList] = useState<Array<string>>([]);
+  const onChangeTodoInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setTodo((todo) => (todo = e.target.value));
   };
-
-  const [keyword, setKeyword] = useState<string>("");
-  const onChangeKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeyword((keyword) => (keyword = e.target.value));
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (todo === "") {
+      return;
+    }
+    setTodoList((currentList) => [...currentList, todo]);
+    setTodo("");
   };
-
-  useEffect(() => {
-    if (keyword.length >= 1) console.log(`search ${keyword}`);
-  }, [keyword]);
 
   return (
     <Container>
       <GlobalStyle />
       <select onChange={onSelect}>
+        <option value='todo'>To Do</option>
         <option value='props'>props</option>
         <option value='Counter'>Counter</option>
         <option value='MinutesToHours'>Minutes & Hours</option>
         <option value='KmToMiles'>Km & Miles</option>
       </select>
       <hr />
-
-      <button
-        onClick={() => {
-          setIsRender((isRender) => !isRender);
-        }}
-      >
-        {isRender ? "show" : "hide"}
-      </button>
-
-      {selection === "props" ? (
+      {selection === "todo" ? (
         <>
-          <PropBtn textChange={textChange} text={text} />
-
-          {isRender ? <PropBtn text='hello' /> : null}
+          <h3>To Do List</h3>
+          <form onSubmit={onSubmit}>
+            <input
+              value={todo}
+              onChange={onChangeTodoInput}
+              type='text'
+              placeholder='write to do'
+            />
+            <button>Add To Do</button>
+          </form>
+          <ol>
+            {todoList.map((todo) => (
+              <li>{todo}</li>
+            ))}
+          </ol>
         </>
       ) : null}
-      <br />
-      <input
-        value={keyword}
-        onChange={onChangeKeyword}
-        type='text'
-        placeholder='search here'
-      />
+
+      {selection === "props" ? <Props /> : null}
+
       {selection === "Counter" ? <Counter /> : null}
       {selection === "MinutesToHours" ? <MinutesToHours /> : null}
       {selection === "KmToMiles" ? <KmToMiles /> : null}
