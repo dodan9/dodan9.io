@@ -49,8 +49,8 @@ const Todo = () => {
             <button>Add To Do</button>
           </form>
           <ol>
-            {todoList.map((todo) => (
-              <li>{todo}</li>
+            {todoList.map((todo, index) => (
+              <li key={index}>{todo}</li>
             ))}
           </ol>
         </>
