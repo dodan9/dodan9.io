@@ -5,19 +5,19 @@ import Drop from "./home/drop";
 import Room from "./home/room";
 import Mix from "./home/mix";
 import Canvas from "./home/canvas";
-import Todo from "./home/todo";
+import Practice from "./home/practice";
 
 const App = () => {
   return (
     <BrowserRouter>
       <GlobalStyle />
       <Routes>
-        <Route path="/dodan9.io" element={<Home />} />
-        <Route path="/dodan9.io/drag_n_drop" element={<Drop />} />
-        <Route path="/dodan9.io/room" element={<Room />} />
-        <Route path="/dodan9.io/mix" element={<Mix />} />
-        <Route path="/dodan9.io/canvas" element={<Canvas />} />
-        <Route path="/dodan9.io/todo" element={<Todo />} />
+        <Route path='/dodan9.io' element={<Home />} />
+        <Route path='/dodan9.io/drag_n_drop' element={<Drop />} />
+        <Route path='/dodan9.io/room' element={<Room />} />
+        <Route path='/dodan9.io/mix' element={<Mix />} />
+        <Route path='/dodan9.io/canvas' element={<Canvas />} />
+        <Route path='/dodan9.io/practice' element={<Practice />} />
       </Routes>
     </BrowserRouter>
   );

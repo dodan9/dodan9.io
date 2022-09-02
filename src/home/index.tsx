@@ -8,17 +8,17 @@ function Home() {
         <h1>&lt;Dodan9&gt;</h1>
         <div>
           <h2>
-            <Link to="/dodan9.io/room">&lt;Room /&gt;</Link>
+            <Link to='/dodan9.io/room'>&lt;Room /&gt;</Link>
           </h2>
           <h2>
-            <Link to="/dodan9.io/drag_n_drop">&lt;Drag & drop /&gt;</Link>
+            <Link to='/dodan9.io/drag_n_drop'>&lt;Drag & drop /&gt;</Link>
           </h2>
           <h2>{/* <Link to="/dodan9.io/mix">&lt;Mix /&gt;</Link> */}</h2>
           <h2>
-            <Link to="/dodan9.io/canvas">&lt;Canvas /&gt;</Link>
+            <Link to='/dodan9.io/canvas'>&lt;Canvas /&gt;</Link>
           </h2>
           <h2>
-            <Link to="/dodan9.io/todo">&lt;Todo /&gt;</Link>
+            <Link to='/dodan9.io/practice'>&lt;Practice /&gt;</Link>
           </h2>
         </div>
         <h1>&lt;/Dodan9&gt;</h1>
