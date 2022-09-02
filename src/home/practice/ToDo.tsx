@@ -15,7 +15,7 @@ const ToDo = () => {
     setTodo("");
   };
   return (
-    <>
+    <section>
       <h3>To Do List</h3>
       <form onSubmit={onSubmit}>
         <input
@@ -31,7 +31,7 @@ const ToDo = () => {
           <li key={index}>{todo}</li>
         ))}
       </ol>
-    </>
+    </section>
   );
 };
 
