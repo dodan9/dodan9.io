@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 const CoinTracker = () => {
@@ -17,12 +18,13 @@ const CoinTracker = () => {
   const [coinData, setCoinData] = useState<CoinDataType[]>([]);
 
   useEffect(() => {
-    fetch("https://api.coinpaprika.com/v1/tickers?limit=10")
-      .then((response) => response.json())
-      .then((json) => {
-        setCoinData(json);
-        setLoading(false);
-      });
+    axios({
+      url: "https://api.coinpaprika.com/v1/tickers?limit=10",
+      method: "get",
+    }).then((response) => {
+      setCoinData(response.data);
+      setLoading(false);
+    });
   }, []);
   return (
     <section>
