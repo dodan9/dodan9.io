@@ -17,14 +17,24 @@ const CoinTracker = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [coinData, setCoinData] = useState<CoinDataType[]>([]);
 
+  const getApi = axios({
+    url: "https://api.coinpaprika.com/v1/tickers?limit=10",
+    method: "get",
+  }).then((response) => {
+    setCoinData(response.data);
+    setLoading(false);
+  });
+
+  const callApi = async () => {
+    try {
+      await getApi;
+    } catch (err) {
+      console.log(`Error: ${err}`);
+    }
+  };
   useEffect(() => {
-    axios({
-      url: "https://api.coinpaprika.com/v1/tickers?limit=10",
-      method: "get",
-    }).then((response) => {
-      setCoinData(response.data);
-      setLoading(false);
-    });
+    callApi();
+    console.log("call api");
   }, []);
   return (
     <section>
