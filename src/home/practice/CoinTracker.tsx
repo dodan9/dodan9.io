@@ -20,21 +20,20 @@ const CoinTracker = () => {
   const getApi = axios({
     url: "https://api.coinpaprika.com/v1/tickers?limit=10",
     method: "get",
-  }).then((response) => {
-    setCoinData(response.data);
-    setLoading(false);
   });
 
   const callApi = async () => {
     try {
-      await getApi;
+      const response = await getApi;
+      setCoinData(response.data);
+      setLoading(false);
+      console.log("get api");
     } catch (err) {
       console.log(`Error: ${err}`);
     }
   };
   useEffect(() => {
     callApi();
-    console.log("call api");
   }, []);
   return (
     <section>
