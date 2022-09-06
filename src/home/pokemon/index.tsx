@@ -1,10 +1,13 @@
 import axios from "axios";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
+import Alert from "./Alert";
 
 interface pokemonDataType {
   shiny: boolean;
   run: boolean;
+  catch: boolean;
+  catchCount: number;
   id: number;
   name: string;
   sprites: { front_default: string; front_shiny: string };
@@ -18,6 +21,7 @@ const Pokemon = () => {
   const [pokemonData, setPokemonData] = useState<pokemonDataType[]>([]);
   const [pokemonAmount, setPokemonAmount] = useState<number>(0);
   const [myPokemon, setMyPokemon] = useState<pokemonDataType[]>([]);
+  const [showAlert, setShowAlert] = useState<string>("");
   const randomFunction = (max: number, min: number) => {
     const randomNumber = Math.floor(Math.random() * max - min + 1) + min;
     return randomNumber;
@@ -37,6 +41,8 @@ const Pokemon = () => {
     const response = await getApi;
     response.data.shiny = randomFunction(100, 1) > 90 ? true : false;
     response.data.run = false;
+    response.data.catch = false;
+    response.data.catchCount = randomFunction(100, 1);
     setPokemonData((current) => [...current, response.data]);
     setLoading(false);
     console.log(`get api, amount:${pokemonAmount}`);
@@ -47,13 +53,21 @@ const Pokemon = () => {
     pokemon: pokemonDataType,
     index: number
   ) => {
-    if (randomFunction(100, 1) > 50)
-      setMyPokemon((current) => [...current, pokemon]);
-
     let newArr = [...pokemonData];
-    newArr[index].run = true;
+    if (randomFunction(100, 1) <= pokemon.catchCount) {
+      setMyPokemon((current) => [...current, pokemon]);
+      setShowAlert("catch");
+      newArr[index].catch = true;
+    } else {
+      newArr[index].run = true;
+      setShowAlert("run");
+    }
 
-    setPokemonData(newArr.filter((pokemon) => pokemon.run === false));
+    setPokemonData(
+      newArr.filter(
+        (pokemon) => pokemon.run === false && pokemon.catch === false
+      )
+    );
   };
 
   useEffect(() => {
@@ -72,6 +86,12 @@ const Pokemon = () => {
   if (loading) return <h2>Loading...</h2>;
   return (
     <Container>
+      {showAlert === "run" ? (
+        <Alert state='run' setShowAlert={setShowAlert} />
+      ) : null}
+      {showAlert === "catch" ? (
+        <Alert state='catch' setShowAlert={setShowAlert} />
+      ) : null}
       <h2>Pokemon</h2>
       <p>refresh to meet random pokemon</p>
 
@@ -91,12 +111,15 @@ const Pokemon = () => {
                     : pokemon.sprites.front_default
                 }
               />
-              <Catch
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                  onCatch(e, pokemon, index);
-                }}
-              >
-                catch!
+              <Catch>
+                <span>{pokemon.catchCount}%</span>
+                <button
+                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    onCatch(e, pokemon, index);
+                  }}
+                >
+                  catch!
+                </button>
               </Catch>
             </PokemonCard>
           );
@@ -108,7 +131,6 @@ const Pokemon = () => {
         {myPokemon.map((pokemon, index) => (
           <PokemonCard key={index}>
             <Name shiny={pokemon.shiny}>{pokemon.name}</Name>
-
             <img
               src={
                 pokemon.shiny
@@ -126,6 +148,7 @@ const Pokemon = () => {
 export default Pokemon;
 
 const Container = styled.div`
+  position: relative;
   & div {
     position: relative;
   }
@@ -153,10 +176,13 @@ const Name = styled.div<{ shiny: boolean }>`
   color: ${(props) => (props.shiny ? "red" : "black")};
 `;
 
-const Catch = styled.button`
+const Catch = styled.span`
   position: absolute;
   bottom: 10px;
   right: 10px;
+  & button {
+    margin-left: 5px;
+  }
 `;
 
 const MyPokemonBox = styled(PokemonBox)`
