@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/dodan9.io/static/js/main.f5adc719.js",
+    "main.js": "/dodan9.io/static/js/main.ae19ac39.js",
     "static/media/room1.png": "/dodan9.io/static/media/room1.8f27a2976f1569993f56.png",
     "index.html": "/dodan9.io/index.html",
-    "main.f5adc719.js.map": "/dodan9.io/static/js/main.f5adc719.js.map"
+    "main.ae19ac39.js.map": "/dodan9.io/static/js/main.ae19ac39.js.map"
   },
   "entrypoints": [
-    "static/js/main.f5adc719.js"
+    "static/js/main.ae19ac39.js"
   ]
 }
