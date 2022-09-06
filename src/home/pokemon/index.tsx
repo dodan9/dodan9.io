@@ -1,8 +1,10 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 
 interface pokemonDataType {
+  shiny: boolean;
+  run: boolean;
   id: number;
   name: string;
   sprites: { front_default: string; front_shiny: string };
@@ -15,10 +17,15 @@ const Pokemon = () => {
   const [randomId, setRandomId] = useState<number>(1);
   const [pokemonData, setPokemonData] = useState<pokemonDataType[]>([]);
   const [pokemonAmount, setPokemonAmount] = useState<number>(0);
+  const [myPokemon, setMyPokemon] = useState<pokemonDataType[]>([]);
+  const randomFunction = (max: number, min: number) => {
+    const randomNumber = Math.floor(Math.random() * max - min + 1) + min;
+    return randomNumber;
+  };
 
   const makeRandomId = () => {
     if (pokemonAmount > 9) return null;
-    else setRandomId(Math.floor(Math.random() * 905) + 1);
+    else setRandomId(randomFunction(905, 1));
   };
 
   const getApi = axios({
@@ -28,9 +35,25 @@ const Pokemon = () => {
 
   const callApi = async () => {
     const response = await getApi;
+    response.data.shiny = randomFunction(100, 1) > 90 ? true : false;
+    response.data.run = false;
     setPokemonData((current) => [...current, response.data]);
     setLoading(false);
     console.log(`get api, amount:${pokemonAmount}`);
+  };
+
+  const onCatch = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    pokemon: pokemonDataType,
+    index: number
+  ) => {
+    if (randomFunction(100, 1) > 50)
+      setMyPokemon((current) => [...current, pokemon]);
+
+    let newArr = [...pokemonData];
+    newArr[index].run = true;
+
+    setPokemonData(newArr.filter((pokemon) => pokemon.run === false));
   };
 
   useEffect(() => {
@@ -45,30 +68,57 @@ const Pokemon = () => {
     if (isRendered) callApi();
     setPokemonAmount((pokemonAmount) => pokemonAmount + 1);
   }, [randomId]);
+
   if (loading) return <h2>Loading...</h2>;
   return (
     <Container>
       <h2>Pokemon</h2>
       <p>refresh to meet random pokemon</p>
+
+      <h3>Nature</h3>
       <PokemonBox>
         {pokemonData.map((pokemon, index) => {
-          let shiny = Math.floor(Math.random() * 100) + 1 > 90 ? true : false;
-
           return (
             <PokemonCard key={index}>
-              <Name shiny={shiny}>{pokemon.name}</Name>
+              <Name shiny={pokemon.shiny}>
+                {index} {pokemon.name}
+              </Name>
 
               <img
                 src={
-                  shiny
+                  pokemon.shiny
                     ? pokemon.sprites.front_shiny
                     : pokemon.sprites.front_default
                 }
               />
+              <Catch
+                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                  onCatch(e, pokemon, index);
+                }}
+              >
+                catch!
+              </Catch>
             </PokemonCard>
           );
         })}
       </PokemonBox>
+
+      <h3>My Pokemon</h3>
+      <MyPokemonBox>
+        {myPokemon.map((pokemon, index) => (
+          <PokemonCard key={index}>
+            <Name shiny={pokemon.shiny}>{pokemon.name}</Name>
+
+            <img
+              src={
+                pokemon.shiny
+                  ? pokemon.sprites.front_shiny
+                  : pokemon.sprites.front_default
+              }
+            />
+          </PokemonCard>
+        ))}
+      </MyPokemonBox>
     </Container>
   );
 };
@@ -76,19 +126,41 @@ const Pokemon = () => {
 export default Pokemon;
 
 const Container = styled.div`
+  & div {
+    position: relative;
+  }
   box-sizing: border-box;
   padding: 20px;
 `;
 
 const PokemonBox = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 
 const PokemonCard = styled.div`
   margin: 10px;
+  width: 200px;
+  height: 140px;
+  background-color: #b1c5f1;
   text-align: center;
+  border-radius: 5px;
 `;
 
 const Name = styled.div<{ shiny: boolean }>`
+  margin-top: 14px;
   color: ${(props) => (props.shiny ? "red" : "black")};
+`;
+
+const Catch = styled.button`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+`;
+
+const MyPokemonBox = styled(PokemonBox)`
+  & ${PokemonCard} {
+    background-color: #f1e8b1;
+  }
 `;
