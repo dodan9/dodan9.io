@@ -6,6 +6,7 @@ import Room from "./home/room";
 import Mix from "./home/mix";
 import Canvas from "./home/canvas";
 import Practice from "./home/practice";
+import Pokemon from "./home/pokemon";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path='/dodan9.io/mix' element={<Mix />} />
         <Route path='/dodan9.io/canvas' element={<Canvas />} />
         <Route path='/dodan9.io/practice' element={<Practice />} />
+        <Route path='/dodan9.io/pokemon' element={<Pokemon />} />
       </Routes>
     </BrowserRouter>
   );
