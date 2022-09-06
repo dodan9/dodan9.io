@@ -28,7 +28,7 @@ const Pokemon = () => {
   };
 
   const makeRandomId = () => {
-    if (pokemonAmount > 9) return null;
+    if (pokemonAmount > 11) return null;
     else setRandomId(randomFunction(905, 1));
   };
 
@@ -103,9 +103,7 @@ const Pokemon = () => {
         {pokemonData.map((pokemon, index) => {
           return (
             <PokemonCard key={index}>
-              <Name shiny={pokemon.shiny}>
-                {index} {pokemon.name}
-              </Name>
+              <Name shiny={pokemon.shiny}>{pokemon.name}</Name>
 
               <img
                 src={
