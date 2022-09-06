@@ -4,11 +4,12 @@ import CoinTracker from "./CoinTracker";
 import Counter from "./Counter";
 import KmToMiles from "./KmToMiles";
 import MinutesToHours from "./MinutesToHours";
+import Movies from "./Movies";
 import Props from "./Props";
 import ToDo from "./ToDo";
 
 const Practice = () => {
-  const [selection, setSelection] = useState<string>("ToDo");
+  const [selection, setSelection] = useState<string>("Movies");
   const onSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelection((selection) => (selection = e.target.value));
   };
@@ -17,6 +18,7 @@ const Practice = () => {
     <Container>
       <GlobalStyle />
       <select onChange={onSelect}>
+        <option value='movies'>Movie</option>
         <option value='ToDo'>To Do</option>
         <option value='CoinTracker'>Coin Tracker</option>
         <option value='Props'>Props</option>
@@ -25,6 +27,7 @@ const Practice = () => {
         <option value='KmToMiles'>Km & Miles</option>
       </select>
       <hr />
+      {selection === "Movies" ? <Movies /> : null}
       {selection === "ToDo" ? <ToDo /> : null}
       {selection === "CoinTracker" ? <CoinTracker /> : null}
       {selection === "Props" ? <Props /> : null}
