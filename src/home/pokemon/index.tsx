@@ -86,14 +86,17 @@ const Pokemon = () => {
   if (loading) return <h2>Loading...</h2>;
   return (
     <Container>
-      {showAlert === "run" ? (
-        <Alert state='run' setShowAlert={setShowAlert} />
-      ) : null}
-      {showAlert === "catch" ? (
-        <Alert state='catch' setShowAlert={setShowAlert} />
-      ) : null}
       <h2>Pokemon</h2>
-      <p>refresh to meet random pokemon</p>
+      <p>
+        <button
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          refresh
+        </button>{" "}
+        to meet random pokemon
+      </p>
 
       <h3>Nature</h3>
       <PokemonBox>
@@ -141,6 +144,13 @@ const Pokemon = () => {
           </PokemonCard>
         ))}
       </MyPokemonBox>
+
+      {showAlert === "run" ? (
+        <Alert state='run' setShowAlert={setShowAlert} />
+      ) : null}
+      {showAlert === "catch" ? (
+        <Alert state='catch' setShowAlert={setShowAlert} />
+      ) : null}
     </Container>
   );
 };
