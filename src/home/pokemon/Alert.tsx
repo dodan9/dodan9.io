@@ -26,7 +26,7 @@ export default Alert;
 
 const MessageBox = styled.p<{ state: string }>`
   box-sizing: border-box;
-  position: absolute;
+  position: fixed;
   color: white;
   background-color: ${(props) => (props.state === "run" ? "orange" : "green")};
   width: 200px;

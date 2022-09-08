@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Alert from "./Alert";
 
@@ -27,9 +27,12 @@ const Pokemon = () => {
     return randomNumber;
   };
 
-  const makeRandomId = () => {
-    if (pokemonAmount > 11) return null;
-    else setRandomId(randomFunction(905, 1));
+  const makeRandomId = (amount: number) => {
+    if (pokemonAmount > amount) return null;
+    else {
+      setRandomId(randomFunction(905, 1));
+      setPokemonAmount((pokemonAmount) => pokemonAmount + 1);
+    }
   };
 
   const getApi = axios({
@@ -39,7 +42,7 @@ const Pokemon = () => {
 
   const callApi = async () => {
     const response = await getApi;
-    response.data.shiny = randomFunction(100, 1) > 90 ? true : false;
+    response.data.shiny = randomFunction(100, 1) > 95 ? true : false;
     response.data.run = false;
     response.data.catch = false;
     response.data.catchCount = randomFunction(100, 1);
@@ -48,16 +51,12 @@ const Pokemon = () => {
     console.log(`get api, amount:${pokemonAmount}`);
   };
 
-  const onCatch = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    pokemon: pokemonDataType,
-    index: number
-  ) => {
+  const onCatch = (pokemon: pokemonDataType, index: number) => {
     let newArr = [...pokemonData];
     if (randomFunction(100, 1) <= pokemon.catchCount) {
       setMyPokemon((current) => [...current, pokemon]);
-      setShowAlert("catch");
       newArr[index].catch = true;
+      setShowAlert("catch");
     } else {
       newArr[index].run = true;
       setShowAlert("run");
@@ -78,9 +77,8 @@ const Pokemon = () => {
   }, []);
 
   useEffect(() => {
-    makeRandomId();
+    makeRandomId(11);
     if (isRendered) callApi();
-    setPokemonAmount((pokemonAmount) => pokemonAmount + 1);
   }, [randomId]);
 
   if (loading) return <h2>Loading...</h2>;
@@ -90,10 +88,10 @@ const Pokemon = () => {
       <p>
         <button
           onClick={() => {
-            window.location.reload();
+            makeRandomId(pokemonAmount + 1);
           }}
         >
-          refresh
+          walk
         </button>{" "}
         to meet random pokemon
       </p>
@@ -115,8 +113,8 @@ const Pokemon = () => {
               <Catch>
                 <span>{pokemon.catchCount}%</span>
                 <button
-                  onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    onCatch(e, pokemon, index);
+                  onClick={() => {
+                    onCatch(pokemon, index);
                   }}
                 >
                   catch!
@@ -162,6 +160,9 @@ const Container = styled.div`
   }
   box-sizing: border-box;
   padding: 20px;
+  @media screen and (max-width: 500px) {
+    padding: 10px;
+  }
 `;
 
 const PokemonBox = styled.div`
@@ -172,15 +173,27 @@ const PokemonBox = styled.div`
 
 const PokemonCard = styled.div`
   margin: 10px;
+  padding: 14px;
   width: 200px;
   height: 140px;
   background-color: #b1c5f1;
   text-align: center;
   border-radius: 5px;
+  @media screen and (max-width: 500px) {
+    width: 120px;
+    height: 100px;
+    margin: 5px;
+    padding: 8px;
+    & img {
+      width: 70px;
+    }
+  }
+  @media screen and (min-width: 500px) and (max-width: 800px) {
+    width: 160px;
+  }
 `;
 
 const Name = styled.div<{ shiny: boolean }>`
-  margin-top: 14px;
   color: ${(props) => (props.shiny ? "red" : "black")};
 `;
 
