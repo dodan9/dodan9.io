@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Alert from "./Alert";
 
@@ -11,7 +12,6 @@ interface pokemonDataType {
   id: number;
   name: string;
   sprites: { front_default: string; front_shiny: string };
-  stats: [base_stat: number, stat: [name: string]];
 }
 
 const Pokemon = () => {
@@ -114,7 +114,7 @@ const Pokemon = () => {
                     : pokemon.sprites.front_default
                 }
               />
-              <Catch>
+              <Detail>
                 <span>{pokemon.catchCount}%</span>
                 <button
                   onClick={() => {
@@ -123,7 +123,7 @@ const Pokemon = () => {
                 >
                   catch!
                 </button>
-              </Catch>
+              </Detail>
             </PokemonCard>
           );
         })}
@@ -141,6 +141,12 @@ const Pokemon = () => {
                   : pokemon.sprites.front_default
               }
             />
+            <Detail>
+              <Link to={`/dodan9.io/pokemon/${pokemon.id}`}>
+                <span>pokedex</span>
+              </Link>
+              <button>details</button>
+            </Detail>
           </PokemonCard>
         ))}
       </MyPokemonBox>
@@ -201,7 +207,7 @@ const Name = styled.div<{ shiny: boolean }>`
   color: ${(props) => (props.shiny ? "red" : "black")};
 `;
 
-const Catch = styled.span`
+const Detail = styled.span`
   position: absolute;
   bottom: 10px;
   right: 10px;

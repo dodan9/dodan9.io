@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-interface movieDataType {
+export interface movieDataType {
   id: number;
   url: "https://yts.mx/movies/rocketry-the-nambi-effect-2022";
   imdb_code: string;
@@ -58,7 +59,8 @@ const Movies = () => {
           </div>
           <div>
             <h4>
-              {movie.title} ({movie.language})
+              <Link to={`/dodan9.io/practice/${movie.id}`}>{movie.title}</Link>{" "}
+              ({movie.language})
             </h4>
             <h5>
               {movie.genres
