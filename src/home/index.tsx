@@ -11,6 +11,9 @@ function Home() {
             <Link to='/dodan9.io/pokemon'>&lt;Pokemon /&gt;</Link>
           </h2>
           <h2>
+            <Link to='/dodan9.io/pokemon2'>&lt;Pokemon2 /&gt;</Link>
+          </h2>
+          <h2>
             <Link to='/dodan9.io/room'>&lt;Room /&gt;</Link>
           </h2>
           <h2>

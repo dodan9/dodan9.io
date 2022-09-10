@@ -54,34 +54,75 @@ const DetailDex = () => {
   }, []);
   if (loading) return <h2>Loading...</h2>;
   return (
-    <>
+    <Container>
       {dexData ? (
         <>
           <h2>
             No.{dexData.id} {dexData.name}
           </h2>
-          <img src={dexData.sprites.other.home.front_default} />
-          {dexData.abilities.map((ability, index) => {
-            return (
-              <Ability key={index} is_hidden={ability.is_hidden}>
-                {ability.ability.name}
-              </Ability>
-            );
-          })}
-          <img src={dexData.sprites.front_default} />
-          <img src={dexData.sprites.back_default} />
-          <img src={dexData.sprites.front_shiny} />
-          <img src={dexData.sprites.back_shiny} />
+          <DetailContainer>
+            <MainImg src={dexData.sprites.other.home.front_default} />
+            <div>
+              <AbilityList>
+                <h4>Abilities</h4>
+                {dexData.abilities.map((ability, index) => {
+                  return (
+                    <Ability key={index} is_hidden={ability.is_hidden}>
+                      {ability.ability.name}
+                      {ability.is_hidden ? " (hidden)" : null}
+                    </Ability>
+                  );
+                })}
+              </AbilityList>
+              <Sprites>
+                <p>default</p>
+                <img src={dexData.sprites.front_default} />
+                <img src={dexData.sprites.back_default} />
+                <br />
+                <p>shiny</p>
+                <img src={dexData.sprites.front_shiny} />
+                <img src={dexData.sprites.back_shiny} />
+              </Sprites>
+            </div>
+          </DetailContainer>
         </>
       ) : (
         <h2>Loading...</h2>
       )}
-    </>
+    </Container>
   );
 };
 
 export default DetailDex;
 
-const Ability = styled.p<{ is_hidden: boolean }>`
+const Container = styled.div`
+  padding: 20px;
+`;
+
+const DetailContainer = styled.div`
+  display: flex;
+`;
+
+const MainImg = styled.img`
+  display: block;
+`;
+
+const AbilityList = styled.ul`
+  padding: 0;
+  & h4 {
+    margin-bottom: 5px;
+  }
+`;
+const Ability = styled.li<{ is_hidden: boolean }>`
+  margin-left: 15px;
   color: ${(props) => (props.is_hidden ? "red" : "black")};
+`;
+
+const Sprites = styled.div`
+  & img {
+    width: 160px;
+  }
+  & p {
+    margin-bottom: 0;
+  }
 `;
