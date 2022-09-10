@@ -31,7 +31,6 @@ const Pokemon = () => {
     if (pokemonAmount > amount) return null;
     else {
       setRandomId(randomFunction(905, 1));
-      setPokemonAmount((pokemonAmount) => pokemonAmount + 1);
     }
   };
 
@@ -41,14 +40,18 @@ const Pokemon = () => {
   });
 
   const callApi = async () => {
-    const response = await getApi;
-    response.data.shiny = randomFunction(100, 1) > 95 ? true : false;
-    response.data.run = false;
-    response.data.catch = false;
-    response.data.catchCount = randomFunction(100, 1);
-    setPokemonData((current) => [...current, response.data]);
-    setLoading(false);
-    console.log(`get api, amount:${pokemonAmount}`);
+    try {
+      const response = await getApi;
+      response.data.shiny = randomFunction(100, 1) > 95 ? true : false;
+      response.data.run = false;
+      response.data.catch = false;
+      response.data.catchCount = randomFunction(100, 1);
+      setPokemonData((current) => [...current, response.data]);
+      if (pokemonAmount > 11) setLoading(false);
+      console.log(`get api, amount:${pokemonAmount}`);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onCatch = (pokemon: pokemonDataType, index: number) => {
@@ -78,13 +81,14 @@ const Pokemon = () => {
 
   useEffect(() => {
     makeRandomId(11);
+    setPokemonAmount((pokemonAmount) => pokemonAmount + 1);
     if (isRendered) callApi();
   }, [randomId]);
 
-  if (loading) return <h2>Loading...</h2>;
   return (
     <Container>
       <h2>Pokemon</h2>
+      {loading ? <h3>Loading...</h3> : null}
       <p>
         <button
           onClick={() => {
