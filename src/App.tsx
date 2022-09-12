@@ -12,6 +12,7 @@ import MovieDetail from "./home/practice/MovieDetail";
 import Pokemon2 from "./home/pokemon2";
 import Region from "./home/pokemon2/Region";
 import Location from "./home/pokemon2/Location";
+import Country from "./home/pokemon2/Counrty";
 
 const App = () => {
   return (
@@ -27,12 +28,7 @@ const App = () => {
         <Route path='/dodan9.io/practice/:id' element={<MovieDetail />} />
         <Route path='/dodan9.io/pokemon' element={<Pokemon />} />
         <Route path='/dodan9.io/pokemon/:id' element={<DetailDex />} />
-        <Route path='/dodan9.io/pokemon2' element={<Pokemon2 />} />
-        <Route path='/dodan9.io/pokemon2/:region' element={<Region />} />
-        <Route
-          path='/dodan9.io/pokemon2/:region/:location'
-          element={<Location />}
-        />
+        <Route path='/dodan9.io/pokemon2/*' element={<Pokemon2 />} />
       </Routes>
     </BrowserRouter>
   );
