@@ -24,9 +24,11 @@ const Region = () => {
       <h2>{regionData?.name}</h2>
       <ul>
         {regionData?.locations.map((location, index) => (
-          <Link to={`/dodan9.io/pokemon2/${region}/${location.name}`}>
-            <li key={index}>{location.name}</li>
-          </Link>
+          <li key={index}>
+            <Link to={`/dodan9.io/pokemon2/${region}/${location.name}`}>
+              {location.name}
+            </Link>
+          </li>
         ))}
       </ul>
     </>

@@ -40,7 +40,7 @@ interface pokemonDataType {
 const MeetModal = ({ url, closeFunction }: propsType) => {
   const [pokemonEncounterList, setPokemonEncounterList] =
     useState<pokemonEncounterListType>();
-  const [pokemonData, setPokemonData] = useState<pokemonDataType>();
+  const [pokemonData, setPokemonData] = useState<pokemonDataType | null>(null);
 
   const getRandomNumber = (max: number, min: number) => {
     if (max == min) return 0;
@@ -81,6 +81,11 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
     }
   };
 
+  const getWalk = () => {
+    setPokemonData(null);
+    getRandomPokemon();
+  };
+
   useEffect(() => {
     getLocationAreaApi();
   }, []);
@@ -88,24 +93,28 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   return (
     <>
       <div>{pokemonEncounterList?.name}</div>
-      <button onClick={getRandomPokemon}>walk</button>
-      {pokemonData ? (
-        <Pokemon>
-          <Name shiny={pokemonData.shiny}>{pokemonData.name}</Name>
+      <button onClick={getWalk}>walk</button>
+      <Pokemon>
+        {pokemonData ? (
+          <>
+            <Name shiny={pokemonData.shiny}>{pokemonData.name}</Name>
 
-          <img
-            src={
-              pokemonData.shiny
-                ? pokemonData.sprites.front_shiny
-                : pokemonData.sprites.front_default
-            }
-          />
-          <Detail>
-            <span>{pokemonData.chance}%</span>
-            <button>catch!</button>
-          </Detail>
-        </Pokemon>
-      ) : null}
+            <img
+              src={
+                pokemonData.shiny
+                  ? pokemonData.sprites.front_shiny
+                  : pokemonData.sprites.front_default
+              }
+            />
+            <Detail>
+              <span>{pokemonData.chance}%</span>
+              <button>catch!</button>
+            </Detail>
+          </>
+        ) : (
+          <p>walk!</p>
+        )}
+      </Pokemon>
       <button
         onClick={() => {
           closeFunction(false);
