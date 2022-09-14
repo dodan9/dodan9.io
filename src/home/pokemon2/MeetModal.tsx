@@ -26,10 +26,8 @@ interface pokemonEncounterListType {
   name: string;
   pokemon_encounters: pokemonEncounterType[];
 }
-interface pokemonDataType {
+export interface pokemonDataType {
   shiny: boolean;
-  run: boolean;
-  catch: boolean;
   id: number;
   name: string;
   sprites: { front_default: string; front_shiny: string };
@@ -41,6 +39,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   const [pokemonEncounterList, setPokemonEncounterList] =
     useState<pokemonEncounterListType>();
   const [pokemonData, setPokemonData] = useState<pokemonDataType | null>(null);
+  const [catchOrRun, setCatchOrRun] = useState<string>("");
 
   const getRandomNumber = (max: number, min: number) => {
     if (max == min) return 0;
@@ -70,8 +69,6 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
         method: "get",
       });
       response.data.shiny = getRandomNumber(100, 1) > 95 ? true : false;
-      response.data.run = false;
-      response.data.catch = false;
       response.data.chance = randomPkmEncounterDetail.chance;
       response.data.level = getRandomNumber(
         randomPkmEncounterDetail.max_level,
@@ -84,6 +81,16 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   const getWalk = () => {
     setPokemonData(null);
     getRandomPokemon();
+  };
+  const onCatch = (pokemon: pokemonDataType) => {
+    if (getRandomNumber(100, 1) <= pokemon.chance) {
+      // setMyPokemon((current) => [...current, pokemon]);
+      setPokemonData(null);
+      setCatchOrRun("catch");
+    } else {
+      setPokemonData(null);
+      setCatchOrRun("run");
+    }
   };
 
   useEffect(() => {
@@ -108,11 +115,17 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
             />
             <Detail>
               <span>{pokemonData.chance}%</span>
-              <button>catch!</button>
+              <button
+                onClick={() => {
+                  onCatch(pokemonData);
+                }}
+              >
+                catch!
+              </button>
             </Detail>
           </>
         ) : (
-          <p>walk!</p>
+          <p>{catchOrRun ? catchOrRun : "walk!"}</p>
         )}
       </Pokemon>
       <button
