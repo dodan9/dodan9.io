@@ -97,8 +97,6 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
 
   useEffect(() => {
     localStorage.setItem("myPokemonList", JSON.stringify(myPokemonList));
-    const list = localStorage.getItem("myPokemonList");
-    if (list) console.log(JSON.parse(list));
   }, [myPokemonList]);
 
   useEffect(() => {
@@ -106,48 +104,62 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   }, []);
 
   return (
-    <>
-      <div>{pokemonEncounterList?.name}</div>
-      <button onClick={getWalk}>walk</button>
-      <Pokemon>
-        {pokemonData ? (
-          <>
-            <Name shiny={pokemonData.shiny}>{pokemonData.name}</Name>
+    <Modal>
+      <div>
+        <AreaName>{pokemonEncounterList?.name}</AreaName>
+        <Pokemon>
+          {pokemonData ? (
+            <>
+              <Name shiny={pokemonData.shiny}>{pokemonData.name}</Name>
 
-            <img
-              src={
-                pokemonData.shiny
-                  ? pokemonData.sprites.front_shiny
-                  : pokemonData.sprites.front_default
-              }
-            />
-            <Detail>
-              <span>{pokemonData.chance}%</span>
-              <button
-                onClick={() => {
-                  onCatch(pokemonData);
-                }}
-              >
-                catch!
-              </button>
-            </Detail>
-          </>
-        ) : (
-          <p>{catchOrRun ? catchOrRun : "walk!"}</p>
-        )}
-      </Pokemon>
-      <button
-        onClick={() => {
-          closeFunction(false);
-        }}
-      >
-        close
-      </button>
-    </>
+              <img
+                src={
+                  pokemonData.shiny
+                    ? pokemonData.sprites.front_shiny
+                    : pokemonData.sprites.front_default
+                }
+              />
+              <Detail>
+                <span>{pokemonData.chance}%</span>
+                <button
+                  onClick={() => {
+                    onCatch(pokemonData);
+                  }}
+                >
+                  catch!
+                </button>
+              </Detail>
+            </>
+          ) : (
+            <p>{catchOrRun ? catchOrRun : "walk!"}</p>
+          )}
+        </Pokemon>
+        <button onClick={getWalk}>walk</button>
+        <button
+          onClick={() => {
+            closeFunction(false);
+          }}
+        >
+          close
+        </button>
+      </div>
+    </Modal>
   );
 };
 
 export default MeetModal;
+
+const Modal = styled.div`
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Pokemon = styled.div`
   position: relative;
@@ -167,9 +179,11 @@ const Pokemon = styled.div`
       width: 70px;
     }
   }
-  @media screen and (min-width: 500px) and (max-width: 800px) {
-    width: 160px;
-  }
+`;
+
+const AreaName = styled.div`
+  font-size: 20px;
+  color: white;
 `;
 
 const Name = styled.div<{ shiny: boolean }>`
