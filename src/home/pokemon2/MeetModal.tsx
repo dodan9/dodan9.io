@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
+import useMyPokemonState from "./useMyPokemonState";
 
 interface propsType {
   url: string;
@@ -40,9 +41,10 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
     useState<pokemonEncounterListType>();
   const [pokemonData, setPokemonData] = useState<pokemonDataType | null>(null);
   const [catchOrRun, setCatchOrRun] = useState<string>("");
+  const { myPokemonList, setMyPokemonList } = useMyPokemonState();
 
   const getRandomNumber = (max: number, min: number) => {
-    if (max == min) return 0;
+    if (max == min) return max;
     const randomNumber = Math.floor(Math.random() * max - min + 1) + min;
     return randomNumber;
   };
@@ -84,7 +86,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   };
   const onCatch = (pokemon: pokemonDataType) => {
     if (getRandomNumber(100, 1) <= pokemon.chance) {
-      // setMyPokemon((current) => [...current, pokemon]);
+      setMyPokemonList((current) => [...current, pokemon]);
       setPokemonData(null);
       setCatchOrRun("catch");
     } else {
@@ -92,6 +94,12 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
       setCatchOrRun("run");
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem("myPokemonList", JSON.stringify(myPokemonList));
+    const list = localStorage.getItem("myPokemonList");
+    if (list) console.log(JSON.parse(list));
+  }, [myPokemonList]);
 
   useEffect(() => {
     getLocationAreaApi();
