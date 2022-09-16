@@ -1,37 +1,34 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getRegionApi } from "./api";
 
-interface RegionType {
-  id: number;
-  locations: [{ name: string; url: string }];
+interface regionsType {
   name: string;
+  url: string;
 }
 
 const Region = () => {
-  const { region } = useParams();
-  const [regionData, setRegionData] = useState<RegionType>();
+  const [regions, setRegions] = useState<regionsType[]>([]);
   const callApi = async () => {
-    const response = await getRegionApi(region as string);
-    setRegionData(response.data);
+    const response = await getRegionApi("");
+    setRegions(response.data.results);
   };
 
   useEffect(() => {
     callApi();
   }, []);
   return (
-    <>
-      <h2>{regionData?.name}</h2>
-      <ul>
-        {regionData?.locations.map((location, index) => (
-          <li key={index}>
-            <Link to={`/dodan9.io/pokemon2/${region}/${location.name}`}>
-              {location.name}
+    <div>
+      {regions.map((region, i) => {
+        return (
+          <div key={i}>
+            <Link to={`/dodan9.io/pokemon2/${region.name}`}>
+              <p>{region.name}</p>
             </Link>
-          </li>
-        ))}
-      </ul>
-    </>
+          </div>
+        );
+      })}
+    </div>
   );
 };
 

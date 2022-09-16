@@ -1,7 +1,7 @@
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
-import Region from "./Region";
 import Location from "./Location";
-import Country from "./Counrty";
+import LocationArea from "./LocationArea";
+import Region from "./Region";
 import styled, { createGlobalStyle } from "styled-components";
 import MyPokemon from "./MyPokemon";
 
@@ -19,9 +19,9 @@ const Pokemon2 = () => {
       </Header>
       <Routes>
         <Route path='/mypokemon' element={<MyPokemon />} />
-        <Route path='/' element={<Country />} />
-        <Route path='/:region' element={<Region />} />
-        <Route path='/:region/:location' element={<Location />} />
+        <Route path='/' element={<Region />} />
+        <Route path='/:region' element={<Location />} />
+        <Route path='/:region/:location' element={<LocationArea />} />
       </Routes>
     </Container>
   );

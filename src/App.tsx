@@ -10,9 +10,6 @@ import Pokemon from "./home/pokemon";
 import DetailDex from "./home/pokemon/DetailDex";
 import MovieDetail from "./home/practice/MovieDetail";
 import Pokemon2 from "./home/pokemon2";
-import Region from "./home/pokemon2/Region";
-import Location from "./home/pokemon2/Location";
-import Country from "./home/pokemon2/Counrty";
 
 const App = () => {
   return (
