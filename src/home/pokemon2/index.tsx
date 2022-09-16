@@ -30,7 +30,7 @@ const Pokemon2 = () => {
 export default Pokemon2;
 
 const GlobalStyle = createGlobalStyle`
-a{
+/* a{
   color: black;
 }
   a:visited{
@@ -39,10 +39,13 @@ a{
   a:hover{
     text-decoration: underline;
     color: blue;
-  }
+  } */
 `;
 const Container = styled.div`
-  margin: 10px;
+  position: relative;
+  width: 1080px;
+  margin: 0 auto;
+  padding: 10px;
 `;
 const Header = styled.div`
   width: 100%;
