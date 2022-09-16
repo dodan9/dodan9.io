@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import useMyPokemonState from "./useMyPokemonState";
 
 const MyPokemon = () => {
@@ -20,16 +21,45 @@ const MyPokemon = () => {
   }, [myPokemonList]);
 
   return (
-    <div>
+    <>
       <h2>My Pokemon Box</h2>
-      {myPokemonList.map((pokemon, index) => (
-        <div key={index}>
-          {pokemon.name} {pokemon.level}LV
-          <button onClick={() => deletePokemon(index)}>bye</button>
-        </div>
-      ))}
-    </div>
+      <Box>
+        {myPokemonList.map((pokemon, index) => (
+          <Pokemon key={index}>
+            <div>
+              <img
+                src={
+                  pokemon.shiny
+                    ? pokemon.sprites.front_shiny
+                    : pokemon.sprites.front_default
+                }
+              />
+            </div>
+            <div>
+              <Name shiny={pokemon.shiny}>{pokemon.name}</Name>
+              <span> {pokemon.level}LV</span>
+            </div>
+            <div>
+              <button onClick={() => deletePokemon(index)}>bye</button>
+            </div>
+          </Pokemon>
+        ))}
+      </Box>
+    </>
   );
 };
 
 export default MyPokemon;
+
+const Box = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+const Pokemon = styled.div`
+  width: 120px;
+  background-color: yellowgreen;
+  margin: 10px;
+`;
+const Name = styled.span<{ shiny: boolean }>`
+  color: ${(prop) => (prop.shiny ? "red" : "black")};
+`;
