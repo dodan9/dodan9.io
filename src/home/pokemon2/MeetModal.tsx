@@ -42,6 +42,8 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   const [pokemonData, setPokemonData] = useState<pokemonDataType | null>(null);
   const [catchOrRun, setCatchOrRun] = useState<string>("");
   const { myPokemonList, setMyPokemonList } = useMyPokemonState();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingImg, setLoadingImg] = useState<boolean>(true);
 
   const getRandomNumber = (max: number, min: number) => {
     if (max == min) return max;
@@ -55,6 +57,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
       method: "get",
     });
     setPokemonEncounterList(response.data);
+    setLoading(false);
   };
 
   const getRandomPokemon = async () => {
@@ -106,19 +109,29 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   return (
     <Modal>
       <div>
-        <AreaName>{pokemonEncounterList?.name}</AreaName>
+        {loading ? (
+          <h2>Loading...</h2>
+        ) : (
+          <AreaName>{pokemonEncounterList?.name}</AreaName>
+        )}
+
         <Pokemon>
           {pokemonData ? (
             <>
-              <Name shiny={pokemonData.shiny}>{pokemonData.name}</Name>
+              <>
+                <Name shiny={pokemonData.shiny}>{pokemonData.name}</Name>
 
-              <img
-                src={
-                  pokemonData.shiny
-                    ? pokemonData.sprites.front_shiny
-                    : pokemonData.sprites.front_default
-                }
-              />
+                <img
+                  src={
+                    pokemonData.shiny
+                      ? pokemonData.sprites.front_shiny
+                      : pokemonData.sprites.front_default
+                  }
+                  // onLoad={() => {
+                  //   setLoadingImg(false);
+                  // }}
+                />
+              </>
               <Detail>
                 <span>{pokemonData.chance}%</span>
                 <button
@@ -150,7 +163,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
 export default MeetModal;
 
 const Modal = styled.div`
-  position: absolute;
+  position: fixed;
   background-color: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;

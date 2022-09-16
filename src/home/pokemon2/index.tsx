@@ -43,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 const Container = styled.div`
   position: relative;
-  width: 1080px;
+  width: 980px;
   margin: 0 auto;
   padding: 10px;
 `;

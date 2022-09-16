@@ -18,10 +18,12 @@ const LocationArea = () => {
   const [locationData, setLocationData] = useState<locationType>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalUrl, setModalUrl] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const callApi = async () => {
     const response = await getLocationApi(location as string);
     setLocationData(response.data);
+    setLoading(false);
   };
   const openMeetModal = (url: string) => {
     setIsModalOpen(true);
@@ -31,6 +33,8 @@ const LocationArea = () => {
   useEffect(() => {
     callApi();
   }, []);
+
+  if (loading) return <h2>Loading...</h2>;
   return (
     <div>
       <h2>{locationData?.name}</h2>

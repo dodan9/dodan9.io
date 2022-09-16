@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { getRegionApi } from "./api";
-const kanto = require("./region_img/kanto.png");
 
 interface regionsType {
   name: string;
@@ -11,9 +10,11 @@ interface regionsType {
 
 const Region = () => {
   const [regions, setRegions] = useState<regionsType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const callApi = async () => {
     const response = await getRegionApi("");
     setRegions(response.data.results);
+    setLoading(false);
   };
   const [regionImgs, setRegionImgs] = useState<string[]>([]);
 
@@ -31,17 +32,20 @@ const Region = () => {
   useEffect(() => {
     callApi();
   }, []);
+
   useEffect(() => {
     setRegionImgList();
   }, [regions]);
+
+  if (loading) return <h2>Loading...</h2>;
   return (
     <RegionList>
       {regions.map((region, i) => {
         return (
           <Link to={`/dodan9.io/pokemon2/${region.name}`} key={i}>
-            <RegionBox url={regionImgs[i]}>
+            <RegionItem url={regionImgs[i]}>
               <p>{region.name}</p>
-            </RegionBox>
+            </RegionItem>
           </Link>
         );
       })}
@@ -57,7 +61,7 @@ const RegionList = styled.div`
   justify-content: space-between;
   padding: 10px 0;
 `;
-const RegionBox = styled.div<{ url: string }>`
+const RegionItem = styled.div<{ url: string }>`
   position: relative;
   width: 320px;
   height: 200px;
