@@ -46,7 +46,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   const [loadingImg, setLoadingImg] = useState<boolean>(true);
 
   const getRandomNumber = (max: number, min: number) => {
-    if (max == min) return max;
+    if (max === min) return max;
     const randomNumber = Math.floor(Math.random() * max - min + 1) + min;
     return randomNumber;
   };
@@ -86,6 +86,8 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   const getWalk = () => {
     setPokemonData(null);
     getRandomPokemon();
+    setLoadingImg(true);
+    setCatchOrRun("");
   };
   const onCatch = (pokemon: pokemonDataType) => {
     if (getRandomNumber(100, 1) <= pokemon.chance) {
@@ -108,54 +110,81 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
 
   return (
     <Modal>
-      <div>
-        {loading ? (
-          <h2>Loading...</h2>
-        ) : (
-          <AreaName>{pokemonEncounterList?.name}</AreaName>
-        )}
+      <PokemonBox>
+        <AreaName>
+          {loading ? "Loading..." : pokemonEncounterList?.name}
+        </AreaName>
 
         <Pokemon>
           {pokemonData ? (
             <>
-              <>
-                <Name shiny={pokemonData.shiny}>{pokemonData.name}</Name>
-
-                <img
-                  src={
-                    pokemonData.shiny
-                      ? pokemonData.sprites.front_shiny
-                      : pokemonData.sprites.front_default
-                  }
-                  // onLoad={() => {
-                  //   setLoadingImg(false);
-                  // }}
-                />
-              </>
               <Detail>
-                <span>{pokemonData.chance}%</span>
-                <button
-                  onClick={() => {
-                    onCatch(pokemonData);
-                  }}
-                >
-                  catch!
-                </button>
+                <Name shiny={pokemonData.shiny}>
+                  <span>{pokemonData.name}</span>
+                  <span>Lv.{pokemonData.level}</span>
+                </Name>
+                <PokemonImgBox>
+                  {loadingImg ? "Loading..." : null}
+                  <PokemonImg
+                    src={
+                      pokemonData.shiny
+                        ? pokemonData.sprites.front_shiny
+                        : pokemonData.sprites.front_default
+                    }
+                    onLoad={() => {
+                      setLoadingImg(false);
+                    }}
+                    loadingImg
+                  />
+                </PokemonImgBox>
               </Detail>
+              <CommandBox>
+                <Command>
+                  <button
+                    onClick={() => {
+                      onCatch(pokemonData);
+                    }}
+                  >
+                    catch!
+                    <span>({pokemonData.chance}%)</span>
+                  </button>
+                </Command>
+                <Command></Command>
+                <Command>
+                  <button
+                    onClick={() => {
+                      closeFunction(false);
+                    }}
+                  >
+                    close
+                  </button>
+                </Command>
+                <Command>
+                  <button
+                    onClick={() => {
+                      setPokemonData(null);
+                      setCatchOrRun("");
+                    }}
+                  >
+                    run
+                  </button>
+                </Command>
+              </CommandBox>
             </>
           ) : (
-            <p>{catchOrRun ? catchOrRun : "walk!"}</p>
+            <>
+              {catchOrRun ? (
+                catchOrRun === "run" ? (
+                  <p>pokemon is {catchOrRun}...</p>
+                ) : (
+                  <p>{catchOrRun} pokemon!</p>
+                )
+              ) : null}
+              <button onClick={getWalk}>walk</button>
+            </>
           )}
         </Pokemon>
-        <button onClick={getWalk}>walk</button>
-        <button
-          onClick={() => {
-            closeFunction(false);
-          }}
-        >
-          close
-        </button>
-      </div>
+      </PokemonBox>
     </Modal>
   );
 };
@@ -174,40 +203,111 @@ const Modal = styled.div`
   align-items: center;
 `;
 
-const Pokemon = styled.div`
-  position: relative;
-  margin: 10px;
-  padding: 14px;
-  width: 200px;
-  height: 140px;
-  background-color: #b1c5f1;
-  text-align: center;
+const Box = styled.div`
+  box-sizing: border-box;
+  border: 5px double black;
   border-radius: 5px;
-  @media screen and (max-width: 500px) {
-    width: 120px;
-    height: 100px;
-    margin: 5px;
-    padding: 8px;
-    & img {
-      width: 70px;
-    }
-  }
 `;
 
-const AreaName = styled.div`
+const ColumnFlexBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const PokemonBox = styled(ColumnFlexBox)`
+  width: 400px;
+  height: 400px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+  border: 5px double black;
+  justify-content: space-between;
+`;
+
+const AreaName = styled(Box)`
+  position: relative;
+  width: 100%;
+  padding: 5px;
   font-size: 20px;
-  color: white;
+`;
+
+const Pokemon = styled(ColumnFlexBox)`
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  justify-content: center;
+`;
+
+const Detail = styled.div`
+  & img {
+    display: block;
+  }
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+`;
+
+const PokemonImgBox = styled.div`
+  height: 180px;
+`;
+
+const PokemonImg = styled.img<{ loadingImg?: boolean }>`
+  width: 180px;
+  display: ${(props) => (props.loadingImg ? "none" : "block")};
 `;
 
 const Name = styled.div<{ shiny: boolean }>`
+  width: 100%;
+  text-transform: capitalize;
+  height: fit-content;
+  padding: 0 15px 5px 5px;
+  border-radius: 6px 0 6px 0;
+  font-size: 18px;
+  border: 5px solid black;
+  border-top: 0;
+  border-right: 0;
   color: ${(props) => (props.shiny ? "red" : "black")};
+  & span:nth-child(1) {
+    float: left;
+  }
+  & span:nth-child(2) {
+    float: right;
+  }
 `;
 
-const Detail = styled.span`
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
+const CommandBox = styled(Box)`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+`;
+
+const Command = styled.div`
+  width: 50%;
+  margin: 18px 0;
+  text-align: center;
   & button {
-    margin-left: 5px;
+    box-sizing: border-box;
+    border: none;
+    background: none;
+    font-family: "DungGeunMo";
+    cursor: pointer;
+    font-size: 18px;
+    &:hover {
+      &::before {
+        content: "";
+        height: 0;
+        width: 0;
+        border-color: transparent black;
+        border-style: solid;
+        border-width: 0.3em 0 0.3em 0.5em;
+        position: relative;
+        display: inline-block;
+        left: -0.5em;
+        top: 0.1em;
+      }
+    }
   }
 `;

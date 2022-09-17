@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getRegionApi } from "./api";
+const ball = require("./location_icon/ball.png");
 const city = require("./location_icon/city.png");
 const route = require("./location_icon/route.png");
+const forest = require("./location_icon/forest.png");
 
 interface RegionType {
   id: number;
@@ -31,22 +33,19 @@ const Location = () => {
     <>
       <h2>{regionData?.name}</h2>
       <Locations>
-        {regionData?.locations.map((location, index) => (
-          <LocationItem
-            key={index}
-            icon={
-              location.name.includes("city")
-                ? city
-                : location.name.includes("route")
-                ? route
-                : null
-            }
-          >
-            <Link to={`/dodan9.io/pokemon2/${region}/${location.name}`}>
-              {location.name}
-            </Link>
-          </LocationItem>
-        ))}
+        {regionData?.locations.map((location, index) => {
+          let icon = ball;
+          if (location.name.includes("city")) icon = city;
+          if (location.name.includes("route")) icon = route;
+          if (location.name.includes("forest")) icon = forest;
+          return (
+            <LocationItem key={index} icon={icon}>
+              <Link to={`/dodan9.io/pokemon2/${region}/${location.name}`}>
+                {location.name}
+              </Link>
+            </LocationItem>
+          );
+        })}
       </Locations>
     </>
   );
@@ -67,5 +66,6 @@ const LocationItem = styled.li<{ icon: string }>`
     margin-right: 3px;
     background-image: url(${(props) => props.icon});
     background-size: cover;
+    background-position: center;
   }
 `;
