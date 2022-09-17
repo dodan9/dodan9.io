@@ -140,39 +140,39 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
               </Detail>
               <CommandBox>
                 <Command>
-                  <button
+                  <CommandBtn
                     onClick={() => {
                       onCatch(pokemonData);
                     }}
                   >
                     catch!
                     <span>({pokemonData.chance}%)</span>
-                  </button>
-                </Command>
-                <Command></Command>
-                <Command>
-                  <button
-                    onClick={() => {
-                      closeFunction(false);
-                    }}
-                  >
-                    close
-                  </button>
+                  </CommandBtn>
                 </Command>
                 <Command>
-                  <button
+                  <CommandBtn
                     onClick={() => {
                       setPokemonData(null);
                       setCatchOrRun("");
                     }}
                   >
                     run
-                  </button>
+                  </CommandBtn>
+                </Command>
+                <Command></Command>
+                <Command>
+                  <CommandBtn
+                    onClick={() => {
+                      closeFunction(false);
+                    }}
+                  >
+                    close
+                  </CommandBtn>
                 </Command>
               </CommandBox>
             </>
           ) : (
-            <>
+            <DefaultBox>
               {catchOrRun ? (
                 catchOrRun === "run" ? (
                   <p>pokemon is {catchOrRun}...</p>
@@ -180,8 +180,8 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
                   <p>{catchOrRun} pokemon!</p>
                 )
               ) : null}
-              <button onClick={getWalk}>walk</button>
-            </>
+              <WalkBtn onClick={getWalk}>walk</WalkBtn>
+            </DefaultBox>
           )}
         </Pokemon>
       </PokemonBox>
@@ -212,6 +212,28 @@ const Box = styled.div`
 const ColumnFlexBox = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const Btn = styled.button`
+  box-sizing: border-box;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 18px;
+  &:hover {
+    &::before {
+      content: "";
+      height: 0;
+      width: 0;
+      border-color: transparent black;
+      border-style: solid;
+      border-width: 0.3em 0 0.3em 0.5em;
+      position: relative;
+      display: inline-block;
+      left: -0.5em;
+      top: 0.1em;
+    }
+  }
 `;
 
 const PokemonBox = styled(ColumnFlexBox)`
@@ -288,26 +310,16 @@ const Command = styled.div`
   width: 50%;
   margin: 18px 0;
   text-align: center;
-  & button {
-    box-sizing: border-box;
-    border: none;
-    background: none;
-    font-family: "DungGeunMo";
-    cursor: pointer;
-    font-size: 18px;
-    &:hover {
-      &::before {
-        content: "";
-        height: 0;
-        width: 0;
-        border-color: transparent black;
-        border-style: solid;
-        border-width: 0.3em 0 0.3em 0.5em;
-        position: relative;
-        display: inline-block;
-        left: -0.5em;
-        top: 0.1em;
-      }
-    }
-  }
+`;
+const CommandBtn = styled(Btn)``;
+
+const DefaultBox = styled.div`
+  align-self: center;
+`;
+
+const WalkBtn = styled(Btn)`
+  width: 200px;
+  padding: 20px 0;
+  border: 5px double black;
+  border-radius: 5px;
 `;
