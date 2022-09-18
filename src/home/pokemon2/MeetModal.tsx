@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import useMyPokemonState from "./useMyPokemonState";
 
@@ -31,7 +32,12 @@ export interface pokemonDataType {
   shiny: boolean;
   id: number;
   name: string;
-  sprites: { front_default: string; front_shiny: string };
+  sprites: {
+    front_default: string;
+    front_shiny: string;
+    other: { home: { front_default: string; front_shiny: string } };
+  };
+  types: [{ type: { name: string } }];
   chance: number;
   level: number;
 }
@@ -43,7 +49,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   const [catchOrRun, setCatchOrRun] = useState<string>("");
   const { myPokemonList, setMyPokemonList } = useMyPokemonState();
   const [loading, setLoading] = useState<boolean>(true);
-  const [loadingImg, setLoadingImg] = useState<boolean>(true);
+  const [loadingImg, setLoadingImg] = useState<boolean>(false);
 
   const getRandomNumber = (max: number, min: number) => {
     if (max === min) return max;
@@ -98,10 +104,15 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
       setPokemonData(null);
       setCatchOrRun("run");
     }
+    setLoadingImg(false);
   };
 
   useEffect(() => {
-    localStorage.setItem("myPokemonList", JSON.stringify(myPokemonList));
+    try {
+      localStorage.setItem("myPokemonList", JSON.stringify(myPokemonList));
+    } catch {
+      setCatchOrRun("err");
+    }
   }, [myPokemonList]);
 
   useEffect(() => {
@@ -176,11 +187,33 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
               {catchOrRun ? (
                 catchOrRun === "run" ? (
                   <p>pokemon is {catchOrRun}...</p>
-                ) : (
+                ) : catchOrRun === "catch" ? (
                   <p>{catchOrRun} pokemon!</p>
+                ) : (
+                  <p>
+                    can't catch more...
+                    <br />
+                    go to{" "}
+                    <Link to='/dodan9.io/pokemon2/mypokemon'>
+                      My PokemonBox!
+                    </Link>
+                  </p>
                 )
               ) : null}
-              <WalkBtn onClick={getWalk}>walk</WalkBtn>
+              {loadingImg ? (
+                <h3>Loading...</h3>
+              ) : (
+                <DefaultCommandBox>
+                  <CommandBtn onClick={getWalk}>walk</CommandBtn>
+                  <CommandBtn
+                    onClick={() => {
+                      closeFunction(false);
+                    }}
+                  >
+                    close
+                  </CommandBtn>
+                </DefaultCommandBox>
+              )}
             </DefaultBox>
           )}
         </Pokemon>
@@ -315,11 +348,16 @@ const CommandBtn = styled(Btn)``;
 
 const DefaultBox = styled.div`
   align-self: center;
+  & a:hover {
+    text-decoration: underline;
+  }
 `;
 
-const WalkBtn = styled(Btn)`
-  width: 200px;
-  padding: 20px 0;
-  border: 5px double black;
-  border-radius: 5px;
+const DefaultCommandBox = styled(CommandBox)`
+  width: 300px;
+  justify-content: space-around;
+  & ${CommandBtn} {
+    width: 145px;
+    padding: 18px 0;
+  }
 `;
