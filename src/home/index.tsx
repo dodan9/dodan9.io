@@ -8,10 +8,10 @@ function Home() {
         <h1>&lt;Dodan9&gt;</h1>
         <div>
           <h2>
-            <Link to='/dodan9.io/pokemon'>&lt;Pokemon /&gt;</Link>
+            {/* <Link to='/dodan9.io/pokemon'>&lt;Pokemon /&gt;</Link> */}
           </h2>
           <h2>
-            <Link to='/dodan9.io/pokemon2/'>&lt;Pokemon2 /&gt;</Link>
+            <Link to='/dodan9.io/pokemon2/'>&lt;Pokemon /&gt;</Link>
           </h2>
           <h2>
             <Link to='/dodan9.io/room'>&lt;Room /&gt;</Link>

@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { pokemonDataType } from "./MeetModal";
 import useMyPokemonState from "./useMyPokemonState";
+import useTypeColor from "./useTypeColor";
 
 const MyPokemon = () => {
   const { myPokemonList, setMyPokemonList } = useMyPokemonState();
+  const { typeColor } = useTypeColor();
   const [currentPokemonList, setCurrentPokemonList] = useState<
     pokemonDataType[]
   >([]);
@@ -14,7 +16,7 @@ const MyPokemon = () => {
   const [boxIndex, setBoxIndex] = useState<number>(1);
   const [maxIndex, setMaxIndex] = useState<number>(1);
   const [isNext, setIsNext] = useState<boolean>(false);
-  const [isImgLoading, setIsImgLoading] = useState<boolean>(false);
+  // const [isImgLoading, setIsImgLoading] = useState<boolean>(false);
   const boxSize = 24;
 
   const deletePokemon = (index: number) => {
@@ -114,7 +116,16 @@ const MyPokemon = () => {
               <Level>Lv.{selectedPokemon.level}</Level>
               <TypeBox>
                 {selectedPokemon.types.map((type, i) => (
-                  <div key={i}>{type.type.name}</div>
+                  <TypeText
+                    key={i}
+                    typeColor={
+                      typeColor.filter(
+                        (typeColor) => typeColor.name === type.type.name
+                      )[0].color
+                    }
+                  >
+                    {type.type.name}
+                  </TypeText>
                 ))}
               </TypeBox>
               <div>
@@ -153,9 +164,15 @@ const BoxContainer = styled.div`
   padding: 10px;
 `;
 
+const BoxPageMove = styled.div<{ canClick?: boolean }>`
+  cursor: ${(prop) => (prop.canClick ? "pointer" : "default")};
+  &:hover {
+    color: ${(prop) => (prop.canClick ? "white" : "black")};
+  }
+`;
 const BoxPage = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   & div {
     padding: 20px 10px;
     background-color: lightgray;
@@ -163,9 +180,6 @@ const BoxPage = styled.div`
     border-radius: 5px;
   }
   margin-bottom: 10px;
-`;
-const BoxPageMove = styled.div<{ canClick?: boolean }>`
-  cursor: ${(prop) => (prop.canClick ? "pointer" : "default")};
 `;
 const BoxNumber = styled.div`
   text-align: center;
@@ -275,8 +289,30 @@ const Level = styled(BorderDetail)`
 
 const TypeBox = styled(BorderDetail)`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  padding: 5px;
   & div {
     padding: 5px;
+  }
+`;
+
+const TypeText = styled.div<{ typeColor: string }>`
+  width: 70px;
+  text-align: center;
+  background-color: ${(props) => props.typeColor};
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: white;
+  border-radius: 3px;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+    display: block;
+    width: 100%;
+    height: calc(100% - 4px);
   }
 `;

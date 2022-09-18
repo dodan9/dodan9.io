@@ -32,21 +32,25 @@ const Location = () => {
   return (
     <>
       <h2>{regionData?.name}</h2>
-      <Locations>
-        {regionData?.locations.map((location, index) => {
-          let icon = ball;
-          if (location.name.includes("city")) icon = city;
-          if (location.name.includes("route")) icon = route;
-          if (location.name.includes("forest")) icon = forest;
-          return (
-            <LocationItem key={index} icon={icon}>
-              <Link to={`/dodan9.io/pokemon2/${region}/${location.name}`}>
-                {location.name}
-              </Link>
-            </LocationItem>
-          );
-        })}
-      </Locations>
+      {regionData?.locations.length ? (
+        <Locations>
+          {regionData?.locations.map((location, index) => {
+            let icon = ball;
+            if (location.name.includes("city")) icon = city;
+            if (location.name.includes("route")) icon = route;
+            if (location.name.includes("forest")) icon = forest;
+            return (
+              <LocationItem key={index} icon={icon}>
+                <Link to={`/dodan9.io/pokemon2/${region}/${location.name}`}>
+                  {location.name}
+                </Link>
+              </LocationItem>
+            );
+          })}
+        </Locations>
+      ) : (
+        <h3>No Location Data...</h3>
+      )}
     </>
   );
 };

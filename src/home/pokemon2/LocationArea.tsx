@@ -38,21 +38,26 @@ const LocationArea = () => {
   return (
     <div>
       <h2>{locationData?.name}</h2>
-      <ul>
-        {locationData?.areas.map((area, index) => {
-          return (
-            <li key={index}>
-              <button
-                onClick={() => {
-                  openMeetModal(area.url);
-                }}
-              >
-                {area.name}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      {locationData?.areas.length ? (
+        <ul>
+          {locationData?.areas.map((area, index) => {
+            return (
+              <li key={index}>
+                <button
+                  onClick={() => {
+                    openMeetModal(area.url);
+                  }}
+                >
+                  {area.name}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <h3>No Pokemon...</h3>
+      )}
+
       {isModalOpen ? (
         <MeetModal url={modalUrl} closeFunction={setIsModalOpen} />
       ) : null}

@@ -188,14 +188,19 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
                 catchOrRun === "run" ? (
                   <p>pokemon is {catchOrRun}...</p>
                 ) : catchOrRun === "catch" ? (
-                  <p>{catchOrRun} pokemon!</p>
+                  <p>
+                    {catchOrRun} pokemon! check{" "}
+                    <Link to='/dodan9.io/pokemon2/mypokemon'>
+                      My Pokemon Box!
+                    </Link>
+                  </p>
                 ) : (
                   <p>
                     can't catch more...
                     <br />
                     go to{" "}
                     <Link to='/dodan9.io/pokemon2/mypokemon'>
-                      My PokemonBox!
+                      My Pokemon Box!
                     </Link>
                   </p>
                 )
