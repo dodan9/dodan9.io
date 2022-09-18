@@ -49,7 +49,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   const [catchOrRun, setCatchOrRun] = useState<string>("");
   const { myPokemonList, setMyPokemonList } = useMyPokemonState();
   const [loading, setLoading] = useState<boolean>(true);
-  const [loadingImg, setLoadingImg] = useState<boolean>(false);
+  const [isImgLoading, setIsImgLoading] = useState<boolean>(false);
 
   const getRandomNumber = (max: number, min: number) => {
     if (max === min) return max;
@@ -92,7 +92,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   const getWalk = () => {
     setPokemonData(null);
     getRandomPokemon();
-    setLoadingImg(true);
+    setIsImgLoading(true);
     setCatchOrRun("");
   };
   const onCatch = (pokemon: pokemonDataType) => {
@@ -104,7 +104,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
       setPokemonData(null);
       setCatchOrRun("run");
     }
-    setLoadingImg(false);
+    setIsImgLoading(false);
   };
 
   useEffect(() => {
@@ -135,7 +135,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
                   <span>Lv.{pokemonData.level}</span>
                 </Name>
                 <PokemonImgBox>
-                  {loadingImg ? "Loading..." : null}
+                  {isImgLoading ? "Loading..." : null}
                   <PokemonImg
                     src={
                       pokemonData.shiny
@@ -143,9 +143,9 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
                         : pokemonData.sprites.front_default
                     }
                     onLoad={() => {
-                      setLoadingImg(false);
+                      setIsImgLoading(false);
                     }}
-                    loadingImg
+                    isImgLoading
                   />
                 </PokemonImgBox>
               </Detail>
@@ -200,7 +200,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
                   </p>
                 )
               ) : null}
-              {loadingImg ? (
+              {isImgLoading ? (
                 <h3>Loading...</h3>
               ) : (
                 <DefaultCommandBox>
@@ -308,9 +308,9 @@ const PokemonImgBox = styled.div`
   height: 180px;
 `;
 
-const PokemonImg = styled.img<{ loadingImg?: boolean }>`
+const PokemonImg = styled.img<{ isImgLoading?: boolean }>`
   width: 180px;
-  display: ${(props) => (props.loadingImg ? "none" : "block")};
+  display: ${(props) => (props.isImgLoading ? "none" : "block")};
 `;
 
 const Name = styled.div<{ shiny: boolean }>`

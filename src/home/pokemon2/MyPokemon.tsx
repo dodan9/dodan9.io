@@ -14,6 +14,7 @@ const MyPokemon = () => {
   const [boxIndex, setBoxIndex] = useState<number>(1);
   const [maxIndex, setMaxIndex] = useState<number>(1);
   const [isNext, setIsNext] = useState<boolean>(false);
+  const [isImgLoading, setIsImgLoading] = useState<boolean>(false);
   const boxSize = 24;
 
   const deletePokemon = (index: number) => {
@@ -53,7 +54,6 @@ const MyPokemon = () => {
   }, [boxIndex]);
 
   useEffect(() => {
-    console.log(myPokemonList);
     localStorage.setItem("myPokemonList", JSON.stringify(myPokemonList));
     BoxPagenation();
     if (myPokemonList) setMaxIndex(Math.ceil(myPokemonList.length / boxSize));
@@ -102,6 +102,7 @@ const MyPokemon = () => {
             <StatusDetail>
               <Name shiny={selectedPokemon.shiny}>{selectedPokemon.name}</Name>
               <SelectImg>
+                {/* {isImgLoading ? "Loading..." : null} */}
                 <img
                   src={
                     selectedPokemon.shiny
@@ -112,8 +113,8 @@ const MyPokemon = () => {
               </SelectImg>
               <Level>Lv.{selectedPokemon.level}</Level>
               <TypeBox>
-                {selectedPokemon.types.map((type) => (
-                  <div>{type.type.name}</div>
+                {selectedPokemon.types.map((type, i) => (
+                  <div key={i}>{type.type.name}</div>
                 ))}
               </TypeBox>
               <div>
