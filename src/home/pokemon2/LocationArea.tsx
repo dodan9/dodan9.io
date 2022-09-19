@@ -21,9 +21,13 @@ const LocationArea = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const callApi = async () => {
-    const response = await getLocationApi(location as string);
-    setLocationData(response.data);
-    setLoading(false);
+    try {
+      const response = await getLocationApi(location as string);
+      setLocationData(response.data);
+      setLoading(false);
+    } catch {
+      return <h2>Get Error</h2>;
+    }
   };
   const openMeetModal = (url: string) => {
     setIsModalOpen(true);

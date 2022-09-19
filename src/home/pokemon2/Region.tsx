@@ -11,10 +11,15 @@ interface regionsType {
 const Region = () => {
   const [regions, setRegions] = useState<regionsType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
   const callApi = async () => {
-    const response = await getRegionApi("");
-    setRegions(response.data.results);
-    setLoading(false);
+    try {
+      const response = await getRegionApi("");
+      setRegions(response.data.results);
+      setLoading(false);
+    } catch {
+      return <h2>Get Error</h2>;
+    }
   };
   const [regionImgs, setRegionImgs] = useState<string[]>([]);
 

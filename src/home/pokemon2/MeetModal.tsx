@@ -58,12 +58,16 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
   };
 
   const getLocationAreaApi = async () => {
-    const response = await axios({
-      url: `${url}`,
-      method: "get",
-    });
-    setPokemonEncounterList(response.data);
-    setLoading(false);
+    try {
+      const response = await axios({
+        url: `${url}`,
+        method: "get",
+      });
+      setPokemonEncounterList(response.data);
+      setLoading(false);
+    } catch {
+      return <h2>Get Error</h2>;
+    }
   };
 
   const getRandomPokemon = async () => {
