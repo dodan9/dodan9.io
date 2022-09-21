@@ -44,22 +44,29 @@ const Region = () => {
 
   if (loading) return <h2>Loading...</h2>;
   return (
-    <RegionList>
-      {regions.map((region, i) => {
-        return (
-          <Link to={`/dodan9.io/pokemon2/${region.name}`} key={i}>
-            <RegionItem url={regionImgs[i]}>
-              <p>{region.name}</p>
-            </RegionItem>
-          </Link>
-        );
-      })}
-    </RegionList>
+    <div>
+      <Header>Select region!</Header>
+      <RegionList>
+        {regions.map((region, i) => {
+          return (
+            <Link to={`/dodan9.io/pokemon2/${region.name}`} key={i}>
+              <RegionItem url={regionImgs[i]}>
+                <p>{region.name}</p>
+              </RegionItem>
+            </Link>
+          );
+        })}
+      </RegionList>
+    </div>
   );
 };
 
 export default Region;
 
+const Header = styled.h2`
+  text-align: center;
+  margin-bottom: 0;
+`;
 const RegionList = styled.div`
   display: flex;
   flex-wrap: wrap;

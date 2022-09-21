@@ -11,7 +11,7 @@ const Pokemon2 = () => {
       <GlobalStyle />
       <Header>
         <h2>
-          <Link to='/dodan9.io/pokemon2/'>Pokemon2</Link>
+          <Link to='/dodan9.io/pokemon2/'>Pokemon</Link>
         </h2>
         <h2>
           <Link to='/dodan9.io/pokemon2/mypokemon'>My Pokemon</Link>

@@ -35,7 +35,12 @@ const Location = () => {
   if (loading) return <h2>Loading...</h2>;
   return (
     <>
-      <h2>{regionData?.name}</h2>
+      <Header>
+        <h2>{regionData?.name}</h2>
+        <span>
+          It will be more pokemon appeared where at <img src={route} />
+        </span>
+      </Header>
       {regionData?.locations.length ? (
         <Locations>
           {regionData?.locations.map((location, index) => {
@@ -61,8 +66,14 @@ const Location = () => {
 
 export default Location;
 
+const Header = styled.div`
+  & span img {
+    width: 16px;
+  }
+`;
 const Locations = styled.ul`
   list-style: none;
+  padding: 0;
 `;
 
 const LocationItem = styled.li<{ icon: string }>`
