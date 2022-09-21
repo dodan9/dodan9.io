@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { getRegionApi } from "./api";
-const ball = require("./location_icon/ball.png");
-const city = require("./location_icon/city.png");
-const route = require("./location_icon/route.png");
-const forest = require("./location_icon/forest.png");
+const ball = require("./img/location_icon/ball.png");
+const city = require("./img/location_icon/city.png");
+const route = require("./img/location_icon/route.png");
+const forest = require("./img/location_icon/forest.png");
 
 interface RegionType {
   id: number;
@@ -38,7 +38,7 @@ const Location = () => {
       <Header>
         <h2>{regionData?.name}</h2>
         <span>
-          It will be more pokemon appeared where at <img src={route} />
+          More Pokémon will appear at <img src={route} />
         </span>
       </Header>
       {regionData?.locations.length ? (

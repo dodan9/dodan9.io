@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { pokemonDataType } from "./MeetModal";
 import useMyPokemonState from "./useMyPokemonState";
 import useTypeColor from "./useTypeColor";
+const loadingBall = require("./img/pokemonBall.png");
 
 const MyPokemon = () => {
   const { myPokemonList, setMyPokemonList } = useMyPokemonState();
@@ -16,7 +17,7 @@ const MyPokemon = () => {
   const [boxIndex, setBoxIndex] = useState<number>(1);
   const [maxIndex, setMaxIndex] = useState<number>(1);
   const [isNext, setIsNext] = useState<boolean>(false);
-  // const [isImgLoading, setIsImgLoading] = useState<boolean>(false);
+  const [isImgLoading, setIsImgLoading] = useState<boolean>(true);
   const boxSize = 24;
 
   const deletePokemon = (index: number) => {
@@ -61,6 +62,10 @@ const MyPokemon = () => {
     if (myPokemonList) setMaxIndex(Math.ceil(myPokemonList.length / boxSize));
   }, [myPokemonList]);
 
+  useEffect(() => {
+    setIsImgLoading(true);
+  }, [selectedIndex]);
+
   return (
     <>
       <h2>My Pokemon Box</h2>
@@ -104,13 +109,17 @@ const MyPokemon = () => {
             <StatusDetail>
               <Name shiny={selectedPokemon.shiny}>{selectedPokemon.name}</Name>
               <SelectImg>
-                {/* {isImgLoading ? "Loading..." : null} */}
                 <img
                   src={
-                    selectedPokemon.shiny
+                    isImgLoading
+                      ? loadingBall
+                      : selectedPokemon.shiny
                       ? selectedPokemon.sprites.other.home.front_shiny
                       : selectedPokemon.sprites.other.home.front_default
                   }
+                  onLoad={() => {
+                    setIsImgLoading(false);
+                  }}
                 />
               </SelectImg>
               <Level>Lv.{selectedPokemon.level}</Level>

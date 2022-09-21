@@ -28,7 +28,7 @@ const Region = () => {
       regions.map((region) => {
         setRegionImgs((current) => [
           ...current,
-          require(`./region_img/${region.name}.png`),
+          require(`./img/region_img/${region.name}.png`),
         ]);
       });
     }
