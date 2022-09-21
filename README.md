@@ -4,7 +4,7 @@
 
 --- 
 ### Pokemon:
-- pokeApi(https://pokeapi.co/)를 활용하였습니다.
+- pokeApi(https://pokeapi.co/) 를 활용하였습니다.
 - 지역에 따라 다른 포켓몬이 나오며, 포켓몬은 api에 명시된 확률로 잡을 수 있습니다.
 - api와 별개로 일정 확률로 색이 다른 포켓몬을 만날 수 있습니다!
 - 잡은 포켓몬들은 My Pokemon에서 확인이 가능합니다.
