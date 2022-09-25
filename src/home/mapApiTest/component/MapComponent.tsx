@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Map, MapProps } from "react-kakao-maps-sdk";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import MapMarkerBox from "./mapMarkerBox";
-import { ADD } from "./store";
+import MapMarkerBox from "./MapMarkerBox";
+import FavoritesStore, { ADD, DELETE } from "../store/store";
+import SelectedPlace from "./SelectedPlace";
+import ListItem from "./ListItem";
 
 const MapComponent = () => {
   const dispatch = useDispatch();
@@ -14,7 +16,8 @@ const MapComponent = () => {
   };
   const [currentLocation, setCurrentLocation] = useState<MapProps>();
   const [geoLocation, setGeoLocation] = useState<MapProps>();
-  const [clickLocation, setClickLocations] = useState<MapProps>();
+  const [clickLocation, setClickLocation] = useState<MapProps | null>();
+
   const [search, setSearch] = useState<string>("");
   const [searchData, setSearchData] =
     useState<kakao.maps.services.PlacesSearchResult>([]);
@@ -24,18 +27,30 @@ const MapComponent = () => {
   const [mapType, setMapType] = useState<kakao.maps.MapTypeId>(1);
   const [mapLevel, setMapLevel] = useState<number>(3);
 
+  const [isFavoriteOpen, setIsFavoriteOpen] = useState<boolean>(false);
+  const favoriteState = FavoritesStore.getState();
+  const [favoriteMarkerData, setFavoriteMarkerData] =
+    useState<kakao.maps.services.PlacesSearchResultItem>();
+
   const getCurrentGeoLocation = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const loction = {
-        center: {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        },
-      };
-      setGeoLocation(loction);
-      setCurrentLocation(loction);
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const loction = {
+          center: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          },
+        };
+        setGeoLocation(loction);
+        setCurrentLocation(loction);
+      },
+      () => {
+        setGeoLocation(startLocation);
+        setCurrentLocation(startLocation);
+      }
+    );
   };
+
   const onClickMap = (mouseEvent: kakao.maps.event.MouseEvent) => {
     const clickPoint = {
       center: {
@@ -43,7 +58,7 @@ const MapComponent = () => {
         lng: mouseEvent.latLng.getLng(),
       },
     };
-    setClickLocations(clickPoint);
+    setClickLocation(clickPoint);
   };
 
   const onSearch = () => {
@@ -103,7 +118,7 @@ const MapComponent = () => {
           center={
             currentLocation ? currentLocation.center : startLocation.center
           }
-          style={{ width: "400px", height: "400px" }}
+          style={{ width: "600px", height: "600px" }}
           onClick={(map, mouseEvent) => onClickMap(mouseEvent)}
           mapTypeId={mapType}
           level={mapLevel}
@@ -119,22 +134,38 @@ const MapComponent = () => {
           ref={mapRef}
         >
           {clickLocation && (
-            <MapMarkerBox location={clickLocation} type={"click"} />
+            <MapMarkerBox
+              location={clickLocation}
+              type={"click"}
+              close={() => setClickLocation(null)}
+            />
           )}
-          {geoLocation && (
-            <MapMarkerBox location={geoLocation} type={"geo_current"} />
-          )}
+          {geoLocation && <MapMarkerBox location={geoLocation} type={"geo"} />}
           {searchData &&
             searchData.map((data) => {
-              return <MapMarkerBox key={data.id} searchData={data} />;
+              return (
+                <MapMarkerBox
+                  key={data.id}
+                  markerData={data}
+                  setSelectedPlace={setSelectedPlace}
+                  type={"search"}
+                  isSelected={selectedPlace === data}
+                />
+              );
             })}
+          {favoriteMarkerData && (
+            <MapMarkerBox markerData={favoriteMarkerData} type={"favorite"} />
+          )}
         </Map>
 
         <MapTypeController>
           <button onClick={() => setMapType(1)}>지도</button>
-          <button onClick={() => setMapType(2)}>스카이뷰</button>
+          <button onClick={() => setMapType(2)}>스카이뷰</button>{" "}
           <button onClick={() => setCurrentLocation(geoLocation)}>
             현재 위치로
+          </button>
+          <button onClick={() => getCurrentGeoLocation()}>
+            현재 위치 다시 가져오기
           </button>
         </MapTypeController>
 
@@ -162,29 +193,67 @@ const MapComponent = () => {
               setSearch(event.target.value);
             }}
           />
-          <button onClick={() => onSearch()}>검</button>
+          <button
+            onClick={() => {
+              onSearch();
+              setIsFavoriteOpen(false);
+            }}
+          >
+            검
+          </button>
+          <button
+            onClick={() => {
+              setIsFavoriteOpen((current) => !current);
+            }}
+          >
+            즐
+          </button>
         </SearchBar>
 
-        {searchData && (
-          <>
-            {selectedPlace && (
-              <SelectedPlace>
-                {selectedPlace.place_name}
-                <button
-                  onClick={() => {
-                    dispatch({
-                      type: ADD,
-                      payload: {
-                        favorite: selectedPlace,
-                        favoriteName: "즐겨찾기",
-                      },
-                    });
-                  }}
-                >
-                  즐겨찾기에 추가
-                </button>
-              </SelectedPlace>
+        {isFavoriteOpen && (
+          <FavoriteList>
+            {favoriteState.length ? (
+              favoriteState.map((favorite) => (
+                <FavoriteItemBox>
+                  <FavoriteItem
+                    key={favorite.favorite.id}
+                    onClick={() => {
+                      setFavoriteMarkerData(favorite.favorite);
+                      setCurrentLocation({
+                        center: {
+                          lat: parseFloat(favorite.favorite.y),
+                          lng: parseFloat(favorite.favorite.x),
+                        },
+                      });
+                      setMapLevel(3);
+                    }}
+                  >
+                    <ListItem data={favorite.favorite} />
+                  </FavoriteItem>
+                  <button
+                    onClick={() => {
+                      dispatch({
+                        type: DELETE,
+                        payload: {
+                          favorite: favorite,
+                          favoriteName: "즐겨찾기",
+                        },
+                      });
+                    }}
+                  >
+                    삭제하기
+                  </button>
+                </FavoriteItemBox>
+              ))
+            ) : (
+              <div>즐겨찾기에 추가한 장소가 없습니다.</div>
             )}
+          </FavoriteList>
+        )}
+
+        {searchData && !isFavoriteOpen && (
+          <>
+            {selectedPlace && <SelectedPlace selectedPlace={selectedPlace} />}
 
             <SearchList>
               {searchData.map((data) => {
@@ -193,19 +262,16 @@ const MapComponent = () => {
                     key={data.id}
                     onClick={() => {
                       setSelectedPlace(data);
+                      setCurrentLocation({
+                        center: {
+                          lat: parseFloat(data.y),
+                          lng: parseFloat(data.x),
+                        },
+                      });
+                      setMapLevel(2);
                     }}
                   >
-                    <PlaceName>
-                      {data.place_name}{" "}
-                      <PlaceInfo>{data.category_group_name}</PlaceInfo>
-                      <br />
-                      <PlaceInfo> {data.distance}m</PlaceInfo>
-                    </PlaceName>
-                    <div>
-                      <PlaceInfo>{data.address_name}</PlaceInfo>
-                      <br />
-                      <PlaceInfo>{data.road_address_name}</PlaceInfo>
-                    </div>
+                    <ListItem data={data} />
                   </SearchItem>
                 );
               })}
@@ -221,16 +287,20 @@ export default MapComponent;
 
 const Container = styled.div`
   position: relative;
-  width: 700px;
+  width: 900px;
   display: flex;
 `;
 
 const MapContainer = styled.div`
   position: relative;
-  width: 400px;
+  width: 600px;
 `;
-
-const MapTypeController = styled.div``;
+const MapTypeController = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 11;
+`;
 const MapLevelController = styled.div`
   position: absolute;
   right: 10px;
@@ -256,7 +326,7 @@ const MapLevelController = styled.div`
 const SearchBox = styled.div`
   box-sizing: border-box;
   width: 300px;
-  height: 400px;
+  height: 600px;
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 5px;
@@ -265,26 +335,32 @@ const SearchBox = styled.div`
 
 const SearchBar = styled.div`
   position: fixed;
+  top: 0;
   box-sizing: border-box;
-  width: 300px;
+  width: 285px;
+  background-color: beige;
+  padding: 5px;
+  margin-left: -5px;
   & input {
-    width: 250px;
+    width: 225px;
     box-sizing: border-box;
+    height: 25px;
+    line-height: 25px;
+    padding: 4px;
+    border: none;
   }
   & button {
     width: 25px;
+    height: 25px;
     box-sizing: border-box;
+    border: none;
+    background-color: white;
+    color: gray;
+    cursor: pointer;
   }
-`;
-
-const SelectedPlace = styled.div`
-  box-sizing: border-box;
-  width: 275px;
-  height: 150px;
-  border: 1px solid black;
-  margin-top: 25px;
-  background-color: white;
-  padding: 10px;
+  & button:hover {
+    color: black;
+  }
 `;
 
 const SearchList = styled.div``;
@@ -300,7 +376,17 @@ const SearchItem = styled.div`
   }
 `;
 
-const PlaceName = styled.div``;
-const PlaceInfo = styled.span`
-  font-size: smaller;
+const FavoriteList = styled.div`
+  position: relative;
+  margin-top: 35px;
 `;
+
+const FavoriteItemBox = styled.div`
+  position: relative;
+  & button {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+  }
+`;
+const FavoriteItem = styled(SearchItem)``;

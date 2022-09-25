@@ -1,7 +1,7 @@
 import { Provider } from "react-redux";
 import { createGlobalStyle } from "styled-components";
-import MapComponent from "./mapComponent";
-import FavoritesStore from "./store";
+import MapComponent from "./component/MapComponent";
+import FavoritesStore from "./store/store";
 
 const MapApiTest = () => {
   return (

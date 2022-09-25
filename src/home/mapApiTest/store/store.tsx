@@ -7,7 +7,7 @@ interface FavoritesState {
 
 interface FavoriteAction {
   type: string;
-  payload?: any;
+  payload: FavoritesState;
 }
 
 export const ADD = "ADD";
@@ -22,7 +22,7 @@ const FavoritesReducer = (
       return [...state, action.payload];
 
     case "DELETE":
-      return state.filter((data) => data !== action.payload);
+      return [...state.filter((data) => data !== action.payload)];
 
     default:
       return state;
