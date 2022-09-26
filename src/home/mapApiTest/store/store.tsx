@@ -1,8 +1,9 @@
 import { createStore } from "redux";
 
-interface FavoritesState {
+export interface FavoritesState {
   favorite: kakao.maps.services.PlacesSearchResultItem;
   favoriteName: string;
+  newName?: string;
 }
 
 interface FavoriteAction {
@@ -12,6 +13,7 @@ interface FavoriteAction {
 
 export const ADD = "ADD";
 export const DELETE = "DELETE";
+export const UPDATE = "UPDATE";
 
 const FavoritesReducer = (
   state: FavoritesState[] = [],
@@ -22,7 +24,22 @@ const FavoritesReducer = (
       return [...state, action.payload];
 
     case "DELETE":
-      return [...state.filter((data) => data !== action.payload)];
+      return [
+        ...state.filter(
+          (data) => data.favoriteName !== action.payload.favoriteName
+        ),
+      ];
+
+    case "UPDATE":
+      const updateIndex = state.findIndex(
+        (data) => data.favoriteName === action.payload.favoriteName
+      );
+      if (action.payload.newName)
+        state[updateIndex] = {
+          favorite: action.payload.favorite,
+          favoriteName: action.payload.newName,
+        };
+      return [...state];
 
     default:
       return state;

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Map, MapProps } from "react-kakao-maps-sdk";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import MapMarkerBox from "./MapMarkerBox";
-import FavoritesStore, { ADD, DELETE } from "../store/store";
+import FavoritesStore, { DELETE } from "../store/store";
 import SelectedPlace from "./SelectedPlace";
 import ListItem from "./ListItem";
 
@@ -28,12 +28,14 @@ const MapComponent = () => {
   const [mapLevel, setMapLevel] = useState<number>(3);
 
   const [isFavoriteOpen, setIsFavoriteOpen] = useState<boolean>(false);
-  const favoriteState = FavoritesStore.getState();
+  const favoriteState = useSelector(() => FavoritesStore.getState());
   const [favoriteMarkerData, setFavoriteMarkerData] =
     useState<kakao.maps.services.PlacesSearchResultItem>();
 
+  //사용자의 현재 휘치를 가져오는 함수
   const getCurrentGeoLocation = () => {
     navigator.geolocation.getCurrentPosition(
+      //success callback
       (position) => {
         const loction = {
           center: {
@@ -44,6 +46,7 @@ const MapComponent = () => {
         setGeoLocation(loction);
         setCurrentLocation(loction);
       },
+      //error callback
       () => {
         setGeoLocation(startLocation);
         setCurrentLocation(startLocation);
@@ -51,6 +54,7 @@ const MapComponent = () => {
     );
   };
 
+  //클릭한 좌표 저장
   const onClickMap = (mouseEvent: kakao.maps.event.MouseEvent) => {
     const clickPoint = {
       center: {
@@ -61,13 +65,15 @@ const MapComponent = () => {
     setClickLocation(clickPoint);
   };
 
+  //키워드 검색 함수
   const onSearch = () => {
-    if (currentLocation) {
+    if (geoLocation) {
       const ps = new kakao.maps.services.Places();
 
+      // 현재 위치 기반 검색
       const searchOptionLocation = new kakao.maps.LatLng(
-        currentLocation.center.lat,
-        currentLocation.center.lng
+        geoLocation.center.lat,
+        geoLocation.center.lng
       );
       const searchOption: kakao.maps.services.PlacesSearchOptions = {
         location: searchOptionLocation,
@@ -78,9 +84,11 @@ const MapComponent = () => {
         search,
         (data, status, _pagination) => {
           if (status === kakao.maps.services.Status.OK) {
+            //거리순으로 정렬
             const searchDataList = data.sort((a, b) => {
               return parseFloat(a.distance) - parseFloat(b.distance);
             });
+            //검색 결과 기반으로 지도 위치 변경
             const bounds = new kakao.maps.LatLngBounds();
             data.map((place) => {
               bounds.extend(
@@ -187,36 +195,44 @@ const MapComponent = () => {
 
       <SearchBox>
         <SearchBar>
-          <input
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              onSearch();
+              setIsFavoriteOpen(false);
             }}
-          />
-          <button
+          >
+            <input
+              value={search}
+              onChange={(event) => {
+                setSearch(event.target.value);
+              }}
+            />
+          </form>
+          <SearchBarBtn
             onClick={() => {
               onSearch();
               setIsFavoriteOpen(false);
             }}
           >
-            검
-          </button>
-          <button
+            🔎
+          </SearchBarBtn>
+          <SearchBarBtn
             onClick={() => {
               setIsFavoriteOpen((current) => !current);
             }}
+            isFavoriteOpen={isFavoriteOpen}
           >
-            즐
-          </button>
+            ⭐️
+          </SearchBarBtn>
         </SearchBar>
 
         {isFavoriteOpen && (
           <FavoriteList>
             {favoriteState.length ? (
               favoriteState.map((favorite) => (
-                <FavoriteItemBox>
+                <FavoriteItemBox key={favorite.favoriteName}>
                   <FavoriteItem
-                    key={favorite.favorite.id}
                     onClick={() => {
                       setFavoriteMarkerData(favorite.favorite);
                       setCurrentLocation({
@@ -228,15 +244,18 @@ const MapComponent = () => {
                       setMapLevel(3);
                     }}
                   >
-                    <ListItem data={favorite.favorite} />
+                    <ListItem
+                      data={favorite.favorite}
+                      name={favorite.favoriteName}
+                    />
                   </FavoriteItem>
                   <button
                     onClick={() => {
                       dispatch({
                         type: DELETE,
                         payload: {
-                          favorite: favorite,
-                          favoriteName: "즐겨찾기",
+                          favorite: favorite.favorite,
+                          favoriteName: favorite.favoriteName,
                         },
                       });
                     }}
@@ -341,6 +360,9 @@ const SearchBar = styled.div`
   background-color: beige;
   padding: 5px;
   margin-left: -5px;
+  & form {
+    display: inline;
+  }
   & input {
     width: 225px;
     box-sizing: border-box;
@@ -363,13 +385,15 @@ const SearchBar = styled.div`
   }
 `;
 
+const SearchBarBtn = styled.button<{ isFavoriteOpen?: boolean }>`
+  &:last-child {
+    background-color: ${(prop) => (prop.isFavoriteOpen ? "yellow" : "white")};
+  }
+`;
+
 const SearchList = styled.div``;
 const SearchItem = styled.div`
   padding: 5px;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
   border-bottom: 1px solid black;
   &:last-child {
     border: none;
