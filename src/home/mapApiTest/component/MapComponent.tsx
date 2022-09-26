@@ -14,11 +14,12 @@ const MapComponent = () => {
   const startLocation = {
     center: { lat: 37.54457800768649, lng: 127.05605793868045 },
   };
-  const [currentLocation, setCurrentLocation] = useState<MapProps>();
-  const [geoLocation, setGeoLocation] = useState<MapProps>();
+  const [currentLocation, setCurrentLocation] =
+    useState<MapProps>(startLocation);
+  const [geoLocation, setGeoLocation] = useState<MapProps>(startLocation);
   const [clickLocation, setClickLocation] = useState<MapProps | null>();
 
-  const [search, setSearch] = useState<string>("");
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [searchData, setSearchData] =
     useState<kakao.maps.services.PlacesSearchResult>([]);
   const [selectedPlace, setSelectedPlace] =
@@ -66,22 +67,22 @@ const MapComponent = () => {
   };
 
   //키워드 검색 함수
-  const onSearch = () => {
-    if (geoLocation) {
+  const onSearch = (searchLocation: MapProps) => {
+    if (searchKeyword) {
       const ps = new kakao.maps.services.Places();
 
       // 현재 위치 기반 검색
       const searchOptionLocation = new kakao.maps.LatLng(
-        geoLocation.center.lat,
-        geoLocation.center.lng
+        searchLocation.center.lat,
+        searchLocation.center.lng
       );
       const searchOption: kakao.maps.services.PlacesSearchOptions = {
         location: searchOptionLocation,
-        radius: 2000,
+        // radius: 5000,
       };
 
       ps.keywordSearch(
-        search,
+        searchKeyword,
         (data, status, _pagination) => {
           if (status === kakao.maps.services.Status.OK) {
             //거리순으로 정렬
@@ -123,13 +124,12 @@ const MapComponent = () => {
     <Container>
       <MapContainer>
         <Map
-          center={
-            currentLocation ? currentLocation.center : startLocation.center
-          }
+          center={currentLocation.center}
           style={{ width: "600px", height: "600px" }}
           onClick={(map, mouseEvent) => onClickMap(mouseEvent)}
           mapTypeId={mapType}
           level={mapLevel}
+          isPanto={true}
           onZoomChanged={(map) => setMapLevel(map.getLevel())}
           onDragEnd={(map) =>
             setCurrentLocation({
@@ -157,7 +157,7 @@ const MapComponent = () => {
                   markerData={data}
                   setSelectedPlace={setSelectedPlace}
                   type={"search"}
-                  isSelected={selectedPlace === data}
+                  // isSelected={data.address_name === selectedPlace?.address_name}
                 />
               );
             })}
@@ -198,33 +198,37 @@ const MapComponent = () => {
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              onSearch();
+              onSearch(geoLocation);
               setIsFavoriteOpen(false);
             }}
           >
             <input
-              value={search}
+              value={searchKeyword}
               onChange={(event) => {
-                setSearch(event.target.value);
+                setSearchKeyword(event.target.value);
               }}
             />
+            <button
+              onClick={() => {
+                onSearch(geoLocation);
+                setIsFavoriteOpen(false);
+              }}
+            >
+              🔎
+            </button>
           </form>
-          <SearchBarBtn
-            onClick={() => {
-              onSearch();
-              setIsFavoriteOpen(false);
-            }}
-          >
-            🔎
-          </SearchBarBtn>
-          <SearchBarBtn
-            onClick={() => {
-              setIsFavoriteOpen((current) => !current);
-            }}
-            isFavoriteOpen={isFavoriteOpen}
-          >
-            ⭐️
-          </SearchBarBtn>
+          <div>
+            <button
+              onClick={() => {
+                setIsFavoriteOpen((current) => !current);
+              }}
+            >
+              즐겨찾기 {isFavoriteOpen ? "닫기" : "열기"}
+            </button>
+            <button onClick={() => onSearch(currentLocation)}>
+              현재 지도 중심으로 검색하기
+            </button>
+          </div>
         </SearchBar>
 
         {isFavoriteOpen && (
@@ -356,37 +360,45 @@ const SearchBar = styled.div`
   top: 0;
   left: 0;
   box-sizing: border-box;
-  width: 300px;
+  width: 285px;
+  height: 80px;
   background-color: beige;
   padding: 5px;
   & form {
-    display: inline;
-  }
-  & input {
-    width: 225px;
     box-sizing: border-box;
-    height: 25px;
-    line-height: 25px;
-    padding: 4px;
-    border: none;
+    border: 1px solid black;
+    height: fit-content;
+    display: flex;
+    border-radius: 3px;
+    & button {
+      padding: 0;
+      text-align: center;
+      width: 40px;
+      height: 40px;
+      box-sizing: border-box;
+      border: none;
+      background-color: white;
+      color: gray;
+      cursor: pointer;
+    }
+    & input {
+      box-sizing: border-box;
+      width: 235px;
+      height: 40px;
+      font-size: 16px;
+      padding: 4px;
+      border: none;
+      outline: none;
+      color: #555;
+    }
+    & input:focus {
+      color: black;
+    }
   }
-  & button {
-    width: 25px;
-    height: 25px;
-    box-sizing: border-box;
-    border: none;
-    background-color: white;
-    color: gray;
-    cursor: pointer;
-  }
-  & button:hover {
-    color: black;
-  }
-`;
-
-const SearchBarBtn = styled.button<{ isFavoriteOpen?: boolean }>`
-  &:last-child {
-    background-color: ${(prop) => (prop.isFavoriteOpen ? "yellow" : "white")};
+  & div {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
   }
 `;
 

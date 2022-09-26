@@ -49,7 +49,6 @@ const SelectedPlace = ({ selectedPlace }: props) => {
           바로가기
         </a>
       </PlaceInfo>
-      <br />
       <button
         onClick={() => {
           setIsModalOpen(true);
@@ -88,11 +87,15 @@ const SelectedPlace = ({ selectedPlace }: props) => {
 export default SelectedPlace;
 
 const Container = styled.div`
+  position: sticky;
+  top: 80px;
+  left: 0;
   box-sizing: border-box;
   width: 275px;
-  height: 150px;
-  border: 1px solid black;
   background-color: white;
   padding: 10px;
-  margin: 5px 5px 0 5px;
+  margin: 0 5px;
+  & div {
+    line-height: 18px;
+  }
 `;

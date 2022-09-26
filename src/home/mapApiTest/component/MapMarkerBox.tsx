@@ -10,7 +10,7 @@ interface MapMarkerBoxProps {
     SetStateAction<kakao.maps.services.PlacesSearchResultItem | undefined>
   >;
   close?: () => void;
-  isSelected?: boolean;
+  // isSelected?: boolean;
 }
 const MapMarkerBox = ({
   location,
@@ -18,13 +18,13 @@ const MapMarkerBox = ({
   type,
   setSelectedPlace,
   close,
-  isSelected,
-}: MapMarkerBoxProps) => {
+}: // isSelected,
+MapMarkerBoxProps) => {
   const [isInfoWindowOpen, setIsWindowOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (type === "favorite") setIsWindowOpen(true);
-    if (isSelected) setIsWindowOpen(true);
+    // if (isSelected) setIsWindowOpen(true);
   }, []);
 
   if (location) {
