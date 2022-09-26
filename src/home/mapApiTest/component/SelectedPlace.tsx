@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import FavoritesStore, { ADD } from "../store/store";
-import { Modal, PlaceInfo } from "./ListItem";
+import { Modal, ModalContainer, PlaceInfo } from "./ListItem";
 
 interface props {
   selectedPlace: kakao.maps.services.PlacesSearchResultItem;
@@ -25,11 +25,13 @@ const SelectedPlace = ({ selectedPlace }: props) => {
       });
     }
     setIsModalOpen(false);
+    setSaveName("");
     alert("추가되었습니다.");
   };
 
   useEffect(() => {
     setIsModalOpen(false);
+    setSaveName(selectedPlace.place_name);
   }, [selectedPlace]);
   return (
     <Container>
@@ -42,6 +44,10 @@ const SelectedPlace = ({ selectedPlace }: props) => {
         <br />
         {selectedPlace.road_address_name}
         {selectedPlace.phone}
+        <br />
+        <a href={selectedPlace.place_url} target='_blank'>
+          바로가기
+        </a>
       </PlaceInfo>
       <br />
       <button
@@ -52,25 +58,28 @@ const SelectedPlace = ({ selectedPlace }: props) => {
         즐겨찾기에 추가
       </button>
       {isModalOpen && (
-        <Modal>
-          <label htmlFor='name'>이름</label>
-          <input
-            id='name'
-            value={saveName}
-            onChange={(event) => {
-              setSaveName(event.target.value);
-            }}
-            placeholder='즐겨찾기에 저장할 이름'
-          />
-          <button onClick={addFavorite}>추가</button>
-          <button
-            onClick={() => {
-              setIsModalOpen(false);
-            }}
-          >
-            닫기
-          </button>
-        </Modal>
+        <ModalContainer>
+          <Modal>
+            <label htmlFor='name'>이름</label>
+            <input
+              id='name'
+              value={saveName}
+              onChange={(event) => {
+                setSaveName(event.target.value);
+              }}
+              placeholder='즐겨찾기에 저장할 이름'
+            />
+            <button onClick={addFavorite}>추가</button>
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+                setSaveName("");
+              }}
+            >
+              닫기
+            </button>
+          </Modal>
+        </ModalContainer>
       )}
     </Container>
   );
@@ -83,7 +92,7 @@ const Container = styled.div`
   width: 275px;
   height: 150px;
   border: 1px solid black;
-  margin-top: 35px;
   background-color: white;
   padding: 10px;
+  margin: 5px 5px 0 5px;
 `;

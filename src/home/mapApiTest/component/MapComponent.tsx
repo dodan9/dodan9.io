@@ -348,18 +348,17 @@ const SearchBox = styled.div`
   height: 600px;
   overflow-y: scroll;
   overflow-x: hidden;
-  padding: 5px;
-  background-color: moccasin;
+  background-color: beige;
 `;
 
 const SearchBar = styled.div`
-  position: fixed;
+  position: sticky;
   top: 0;
+  left: 0;
   box-sizing: border-box;
-  width: 285px;
+  width: 300px;
   background-color: beige;
   padding: 5px;
-  margin-left: -5px;
   & form {
     display: inline;
   }
@@ -391,7 +390,9 @@ const SearchBarBtn = styled.button<{ isFavoriteOpen?: boolean }>`
   }
 `;
 
-const SearchList = styled.div``;
+const SearchList = styled.div`
+  padding: 5px;
+`;
 const SearchItem = styled.div`
   padding: 5px;
   border-bottom: 1px solid black;
@@ -402,7 +403,7 @@ const SearchItem = styled.div`
 
 const FavoriteList = styled.div`
   position: relative;
-  margin-top: 35px;
+  padding: 5px;
 `;
 
 const FavoriteItemBox = styled.div`

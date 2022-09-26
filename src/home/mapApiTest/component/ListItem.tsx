@@ -27,6 +27,7 @@ const ListItem = ({ data, name }: props) => {
       });
     }
     setIsModalOpen(false);
+    setSaveName("");
   };
 
   return (
@@ -45,24 +46,27 @@ const ListItem = ({ data, name }: props) => {
         </PlaceName>
       )}
       {isModalOpen && (
-        <Modal onClick={(event) => event.stopPropagation()}>
-          <input
-            id='name'
-            value={saveName}
-            onChange={(event) => {
-              setSaveName(event.target.value);
-            }}
-            placeholder='수정할 이름'
-          />
-          <ModalBtn onClick={updateFavorite}>수정</ModalBtn>
-          <ModalBtn
-            onClick={() => {
-              setIsModalOpen(false);
-            }}
-          >
-            취소
-          </ModalBtn>
-        </Modal>
+        <ModalContainer>
+          <Modal onClick={(event) => event.stopPropagation()}>
+            <input
+              id='name'
+              value={saveName}
+              onChange={(event) => {
+                setSaveName(event.target.value);
+              }}
+              placeholder='수정할 이름'
+            />
+            <ModalBtn onClick={updateFavorite}>수정</ModalBtn>
+            <ModalBtn
+              onClick={() => {
+                setIsModalOpen(false);
+                setSaveName("");
+              }}
+            >
+              취소
+            </ModalBtn>
+          </Modal>
+        </ModalContainer>
       )}
       <InfoBox>
         <PlaceName>
@@ -84,10 +88,24 @@ const ListItem = ({ data, name }: props) => {
 
 export default ListItem;
 
-export const Modal = styled.div`
+export const ModalContainer = styled.div`
   position: fixed;
+  width: 900px;
+  height: 600px;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.3);
+`;
+export const Modal = styled.div`
+  position: absolute;
   width: 200px;
   height: 120px;
+  margin: auto auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   background-color: white;
   padding: 5px;
   border: 1px solid black;
