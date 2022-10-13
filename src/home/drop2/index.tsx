@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import { Children, MouseEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const Drop2 = () => {
@@ -14,7 +14,8 @@ const Drop2 = () => {
     setCurrentDragItem(null);
   };
 
-  const dragOverToBox = () => {
+  const dragOverToBox = (event: MouseEvent) => {
+    event.preventDefault();
     if (boxRef.current) {
       const current = boxRef.current as HTMLDivElement;
       switch (currentDragItem?.id) {
@@ -29,7 +30,8 @@ const Drop2 = () => {
       }
     }
   };
-  const dropInBox = () => {
+  const dropInBox = (event: MouseEvent) => {
+    event.preventDefault();
     if (boxRef.current) {
       const current = boxRef.current as HTMLDivElement;
 
@@ -66,12 +68,9 @@ const Drop2 = () => {
       >
         drag?
       </Target>
-      <DropBox
-        ref={boxRef}
-        onDragOver={dragOverToBox}
-        onDrop={dropInBox}
-        onDragLeave={dropInBox}
-      ></DropBox>
+      <DropBox ref={boxRef} onDragOver={dragOverToBox} onDrop={dropInBox}>
+        Drop here
+      </DropBox>
     </div>
   );
 };
