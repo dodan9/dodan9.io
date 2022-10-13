@@ -6,6 +6,7 @@ const Drop2 = () => {
   const boxRef = useRef(null);
   const [currentDragItem, setCurrentDragItem] =
     useState<HTMLDivElement | null>();
+  const [additionalItems, setAdditionalItems] = useState<string[]>([]);
 
   const targetDragStart = (event: MouseEvent<HTMLDivElement>) => {
     setCurrentDragItem(event.currentTarget);
@@ -18,34 +19,25 @@ const Drop2 = () => {
     event.preventDefault();
     if (boxRef.current) {
       const current = boxRef.current as HTMLDivElement;
-      switch (currentDragItem?.id) {
-        case "test1":
-          current.classList.add("over1");
-          break;
-        case "test2":
-          current.classList.add("over2");
-          break;
-        default:
-          break;
-      }
+      if (currentDragItem) current.classList.add(currentDragItem.id);
     }
   };
   const dropInBox = (event: MouseEvent) => {
     event.preventDefault();
     if (boxRef.current) {
       const current = boxRef.current as HTMLDivElement;
-
-      switch (currentDragItem?.id) {
-        case "test1":
-          current.classList.remove("over1");
-          break;
-        case "test2":
-          current.classList.remove("over2");
-          break;
-        default:
-          break;
+      if (currentDragItem) {
+        current.classList.remove(currentDragItem.id);
+        setAdditionalItems((currentList) => [
+          ...currentList,
+          currentDragItem.id,
+        ]);
       }
     }
+  };
+
+  const onClear = () => {
+    setAdditionalItems([]);
   };
 
   return (
@@ -70,7 +62,10 @@ const Drop2 = () => {
       </Target>
       <DropBox ref={boxRef} onDragOver={dragOverToBox} onDrop={dropInBox}>
         Drop here
+        {additionalItems &&
+          additionalItems.map((item, index) => <div key={index}>{item}</div>)}
       </DropBox>
+      <div onClick={onClear}>clear</div>
     </div>
   );
 };
@@ -90,10 +85,10 @@ const DropBox = styled.div`
   width: 100px;
   height: 100px;
   border: 5px dashed black;
-  &.over1 {
+  &.test1 {
     border: 5px dashed red;
   }
-  &.over2 {
+  &.test2 {
     border: 5px dashed blue;
   }
 `;
