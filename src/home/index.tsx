@@ -8,6 +8,9 @@ function Home() {
         <h1>&lt;Dodan9&gt;</h1>
         <div>
           <h2>
+            <Link to='/dodan9.io/drag_n_drop2'>&lt;Drag & drop 2 /&gt;</Link>
+          </h2>
+          <h2>
             <Link to='/dodan9.io/mapapitest/'>&lt;Map /&gt;</Link>
           </h2>
           <h2>

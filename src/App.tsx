@@ -11,6 +11,7 @@ import DetailDex from "./home/pokemon/DetailDex";
 import MovieDetail from "./home/practice/MovieDetail";
 import Pokemon2 from "./home/pokemon2";
 import MapApiTest from "./home/mapApiTest";
+import Drop2 from "./home/drop2";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
         <Route path='/dodan9.io/pokemon/:id' element={<DetailDex />} />
         <Route path='/dodan9.io/pokemon2/*' element={<Pokemon2 />} />
         <Route path='/dodan9.io/mapapitest' element={<MapApiTest />} />
+        <Route path='/dodan9.io/drag_n_drop2' element={<Drop2 />} />
       </Routes>
     </BrowserRouter>
   );
