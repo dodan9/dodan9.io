@@ -21,7 +21,9 @@ const Drop2 = () => {
     event.preventDefault();
     if (boxRef.current) {
       const current = boxRef.current as HTMLDivElement;
-      if (currentDragItem) current.classList.add(currentDragItem.id);
+      if (currentDragItem) {
+        current.classList.add(currentDragItem.id);
+      }
     }
   };
   const dropInBox = (event: MouseEvent) => {
@@ -30,10 +32,12 @@ const Drop2 = () => {
       const current = boxRef.current as HTMLDivElement;
       if (currentDragItem) {
         current.classList.remove(currentDragItem.id);
-        setAdditionalItems((currentList) => [
-          ...currentList,
-          currentDragItem.id,
-        ]);
+        if (!additionalItems.includes(currentDragItem.id)) {
+          setAdditionalItems((currentList) => [
+            ...currentList,
+            currentDragItem.id,
+          ]);
+        }
       }
     }
   };
