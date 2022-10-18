@@ -1,14 +1,16 @@
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import { MouseEvent, useRef, useState } from "react";
 import styled from "styled-components";
-const glass = require("./img/glass.png");
-const cocktail1 = require("./img/cocktail1.png");
+const highball_glass = require("./img/highball_glass.png");
+const highball_jagerbomb = require("./img/highball_jagerbomb.png");
+const trashcan = require("./img/trashcan.png");
 
 const Drop2 = () => {
   const targetRef = useRef(null);
   const boxRef = useRef(null);
   const [currentDragItem, setCurrentDragItem] =
     useState<HTMLDivElement | null>();
-  const [additionalItems, setAdditionalItems] = useState<string[]>([]);
+  const [ingredients, setIngredients] = useState<string[]>([]);
+  const jagerbomb = ["jagermeifter", "energydrink"];
 
   const targetDragStart = (event: MouseEvent<HTMLDivElement>) => {
     setCurrentDragItem(event.currentTarget);
@@ -20,63 +22,71 @@ const Drop2 = () => {
   const dragOverToBox = (event: MouseEvent) => {
     event.preventDefault();
     if (boxRef.current) {
-      const current = boxRef.current as HTMLDivElement;
+      // const current = boxRef.current as HTMLDivElement;
       if (currentDragItem) {
-        current.classList.add(currentDragItem.id);
+        // current.classList.add(currentDragItem.id);
       }
     }
   };
   const dropInBox = (event: MouseEvent) => {
     event.preventDefault();
     if (boxRef.current) {
-      const current = boxRef.current as HTMLDivElement;
+      // const current = boxRef.current as HTMLDivElement;
       if (currentDragItem) {
-        current.classList.remove(currentDragItem.id);
-        if (!additionalItems.includes(currentDragItem.id)) {
-          setAdditionalItems((currentList) => [
-            ...currentList,
-            currentDragItem.id,
-          ]);
+        // current.classList.remove(currentDragItem.id);
+        if (!ingredients.includes(currentDragItem.id)) {
+          setIngredients((currentList) => [...currentList, currentDragItem.id]);
         }
       }
     }
   };
 
   const onClear = () => {
-    setAdditionalItems([]);
+    setIngredients([]);
   };
 
   return (
     <Container>
-      <Targets>
-        <Target
-          ref={targetRef}
-          id='test1'
-          draggable
-          onDragStart={targetDragStart}
-          onDragEnd={targetDragEnd}
-        >
-          drag!
-        </Target>
-        <Target
-          ref={targetRef}
-          id='test2'
-          draggable
-          onDragStart={targetDragStart}
-          onDragEnd={targetDragEnd}
-        >
-          drag?
-        </Target>
-      </Targets>
-      <DropBox ref={boxRef} onDragOver={dragOverToBox} onDrop={dropInBox}>
-        Drop here
-        <img src={additionalItems.includes("test1") ? cocktail1 : glass} />
-        {additionalItems &&
-          additionalItems.map((item, index) => (
-            <AddedItem key={index}>{item}</AddedItem>
-          ))}
-      </DropBox>
-      <ClearBtn onClick={onClear}>clear</ClearBtn>
+      <IngredientBox>
+        {jagerbomb.map((item, index) => (
+          <Ingredeint
+            ref={targetRef}
+            id={item}
+            draggable
+            key={index}
+            onDragStart={targetDragStart}
+            onDragEnd={targetDragEnd}
+          >
+            <img src={require(`./img/${item}.png`)} />
+          </Ingredeint>
+        ))}
+      </IngredientBox>
+      <MakeCocktailBox>
+        <h1>Make Cocktail</h1>
+        <DropBox ref={boxRef} onDragOver={dragOverToBox} onDrop={dropInBox}>
+          <Cocktail>
+            {ingredients &&
+              (JSON.stringify(ingredients.sort()) ===
+              JSON.stringify(jagerbomb.sort()) ? (
+                <>
+                  Jagermeifter!
+                  <img src={highball_jagerbomb} />
+                </>
+              ) : (
+                ingredients.map((item, index) => (
+                  <img
+                    key={index}
+                    src={require(`./img/highball_${item}.png`)}
+                  />
+                ))
+              ))}
+            <img src={highball_glass} />
+          </Cocktail>
+        </DropBox>
+        <ClearBtn onClick={onClear}>
+          Clear <img src={trashcan} />
+        </ClearBtn>
+      </MakeCocktailBox>
     </Container>
   );
 };
@@ -87,6 +97,7 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   color: white;
+  display: flex;
   background-color: #464646;
   & * {
     box-sizing: border-box;
@@ -94,43 +105,67 @@ const Container = styled.div`
   }
 `;
 
-const Targets = styled.div`
+const IngredientBox = styled.div`
   display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 5px dashed white;
+  overflow-y: auto;
 `;
 
-const Target = styled.div`
-  width: 50px;
-  height: 50px;
+const Ingredeint = styled.div`
   margin: 5px;
   text-align: center;
-  line-height: 35px;
-  border: 5px dashed white;
+  padding: 5px;
   cursor: grab;
+  & img {
+    width: 50px;
+  }
+  border-bottom: 2px solid white;
+`;
+
+const MakeCocktailBox = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border: 5px dashed white;
+  border-left: 0;
+  align-items: center;
+  text-align: center;
 `;
 
 const DropBox = styled.div`
   width: 200px;
+  height: 300px;
   margin: 5px;
   border: 5px dashed black;
-  text-align: center;
-  &.test1 {
+  /* &.test1 {
     border: 5px dashed red;
   }
   &.test2 {
     border: 5px dashed blue;
-  }
+  } */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Cocktail = styled.div`
+  width: 136px;
+  height: 256px;
   & img {
-    width: 130px;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 `;
 
-const AddedItem = styled.div`
-  margin: 2px 0;
-`;
-
-const ClearBtn = styled.span`
+const ClearBtn = styled.div`
+  height: fit-content;
   cursor: pointer;
-  display: inline-block;
-  border: dashed darkgray 5px;
-  margin: 5px;
+  font-size: 18px;
+  & img {
+    vertical-align: bottom;
+    height: 20px;
+  }
 `;
