@@ -1,17 +1,38 @@
-import { MouseEvent, useRef, useState } from "react";
+import { MouseEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 const highball_glass = require("./img/highball_glass.png");
 const highball_jagerbomb = require("./img/highball_jagerbomb.png");
 const trashcan = require("./img/trashcan.png");
 
+interface cocktailType {
+  name: string;
+  ingredients: string[];
+  glass: string;
+}
+
 const Drop2 = () => {
   const targetRef = useRef(null);
   const boxRef = useRef(null);
+  const [selectedCocktail, setSelectedCocktail] = useState<cocktailType>();
   const [currentDragItem, setCurrentDragItem] =
     useState<HTMLDivElement | null>();
   const [ingredients, setIngredients] = useState<string[]>([]);
-  const jagerbomb = ["jagermeifter", "energydrink"];
+  const [isComplete, setIsComplete] = useState<boolean>(false);
+  const jagerbomb: cocktailType = {
+    name: "jagerbomb",
+    ingredients: ["jagermeifter", "energydrink"],
+    glass: "highball",
+  };
+  const kahluamilk: cocktailType = {
+    name: "kahluamilk",
+    ingredients: ["kahlua", "milk"],
+    glass: "highball",
+  };
+  const cocktailMenu: cocktailType[] = [jagerbomb, kahluamilk];
 
+  const onClickMenu = (item: cocktailType) => {
+    setSelectedCocktail(item);
+  };
   const targetDragStart = (event: MouseEvent<HTMLDivElement>) => {
     setCurrentDragItem(event.currentTarget);
   };
@@ -43,46 +64,75 @@ const Drop2 = () => {
 
   const onClear = () => {
     setIngredients([]);
+    setIsComplete(false);
   };
+
+  useEffect(() => {
+    if (
+      JSON.stringify(ingredients.sort()) ===
+      JSON.stringify(jagerbomb.ingredients.sort())
+    )
+      setIsComplete(true);
+  }, [ingredients]);
 
   return (
     <Container>
       <IngredientArea>
-        {jagerbomb.map((item, index) => (
-          <Ingredeint
-            ref={targetRef}
-            id={item}
-            draggable
-            key={index}
-            onDragStart={targetDragStart}
-            onDragEnd={targetDragEnd}
-          >
-            <img src={require(`./img/${item}.png`)} />
-          </Ingredeint>
-        ))}
+        {selectedCocktail &&
+          selectedCocktail.ingredients.map((item, index) => (
+            <Ingredeint
+              ref={targetRef}
+              id={item}
+              draggable
+              key={index}
+              onDragStart={targetDragStart}
+              onDragEnd={targetDragEnd}
+            >
+              <img src={require(`./img/${item}.png`)} />
+            </Ingredeint>
+          ))}
       </IngredientArea>
       <BarArea>
         <MenuArea>
           <h4>Menu</h4>
+          <ul>
+            {cocktailMenu.map((item, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  onClickMenu(item);
+                }}
+              >
+                {item.name}
+              </li>
+            ))}
+          </ul>
         </MenuArea>
         <MakeCocktailArea>
           <h1>Make Cocktail</h1>
           <DropArea ref={boxRef} onDragOver={dragOverToBox} onDrop={dropInBox}>
-            <Cocktail>
-              {ingredients &&
-                (JSON.stringify(ingredients.sort()) ===
-                JSON.stringify(jagerbomb.sort()) ? (
-                  <img src={highball_jagerbomb} />
-                ) : (
-                  ingredients.map((item, index) => (
+            {selectedCocktail ? (
+              <Cocktail>
+                {ingredients &&
+                  (isComplete ? (
                     <img
-                      key={index}
-                      src={require(`./img/highball_${item}.png`)}
+                      src={require(`./img/highball_${selectedCocktail?.name}.png`)}
                     />
-                  ))
-                ))}
-              <img src={highball_glass} />
-            </Cocktail>
+                  ) : (
+                    ingredients.map((item, index) => (
+                      <img
+                        key={index}
+                        src={require(`./img/${selectedCocktail?.glass}_${item}.png`)}
+                      />
+                    ))
+                  ))}
+                <img
+                  src={require(`./img/${selectedCocktail?.glass}_glass.png`)}
+                />
+              </Cocktail>
+            ) : (
+              <h4>Select Cocktail!</h4>
+            )}
           </DropArea>
           <ClearBtn onClick={onClear}>
             Clear <img src={trashcan} />
@@ -158,9 +208,9 @@ const DropArea = styled.div`
 
 const Cocktail = styled.div`
   width: 80px;
-  height: 150.6px;
+  height: 150px;
   & img {
-    width: 80px;
+    height: 150px;
     position: absolute;
     top: 0;
     left: 0;
