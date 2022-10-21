@@ -68,9 +68,13 @@ const Drop2 = () => {
   };
 
   useEffect(() => {
+    onClear();
+  }, [selectedCocktail]);
+
+  useEffect(() => {
     if (
       JSON.stringify(ingredients.sort()) ===
-      JSON.stringify(jagerbomb.ingredients.sort())
+      JSON.stringify(selectedCocktail?.ingredients.sort())
     )
       setIsComplete(true);
   }, [ingredients]);
@@ -110,6 +114,7 @@ const Drop2 = () => {
         </MenuArea>
         <MakeCocktailArea>
           <h1>Make Cocktail</h1>
+          {isComplete && <h3>{selectedCocktail?.name}!</h3>}
           <DropArea ref={boxRef} onDragOver={dragOverToBox} onDrop={dropInBox}>
             {selectedCocktail ? (
               <Cocktail>
@@ -139,6 +144,7 @@ const Drop2 = () => {
           </ClearBtn>
         </MakeCocktailArea>
       </BarArea>
+      <Footer></Footer>
     </Container>
   );
 };
@@ -161,7 +167,9 @@ const Container = styled.div`
 const IngredientArea = styled.div`
   display: flex;
   align-items: baseline;
-  border: 5px solid #825826;
+  border: 5px inset #58330dff;
+  background-color: #724210ff;
+  min-height: 100px;
 `;
 
 const Ingredeint = styled.div`
@@ -180,14 +188,25 @@ const BarArea = styled.div`
 
 const MenuArea = styled.div`
   flex-grow: 1;
-  border: 5px solid #825826;
+  border: 5px solid black;
+  padding: 10px;
+  margin: 10px;
+  & ul {
+    padding-left: 1em;
+  }
+  & li {
+    cursor: pointer;
+    margin-bottom: 5px;
+  }
+  & li:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 const MakeCocktailArea = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 4;
-  border: 5px solid #825826;
   align-items: center;
   text-align: center;
 `;
@@ -226,4 +245,9 @@ const ClearBtn = styled.div`
     vertical-align: bottom;
     height: 20px;
   }
+`;
+
+const Footer = styled.div`
+  flex-grow: 1;
+  background-color: #825826;
 `;
