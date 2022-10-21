@@ -47,7 +47,7 @@ const Drop2 = () => {
 
   return (
     <Container>
-      <IngredientBox>
+      <IngredientArea>
         {jagerbomb.map((item, index) => (
           <Ingredeint
             ref={targetRef}
@@ -60,33 +60,35 @@ const Drop2 = () => {
             <img src={require(`./img/${item}.png`)} />
           </Ingredeint>
         ))}
-      </IngredientBox>
-      <MakeCocktailBox>
-        <h1>Make Cocktail</h1>
-        <DropBox ref={boxRef} onDragOver={dragOverToBox} onDrop={dropInBox}>
-          <Cocktail>
-            {ingredients &&
-              (JSON.stringify(ingredients.sort()) ===
-              JSON.stringify(jagerbomb.sort()) ? (
-                <>
-                  Jagermeifter!
+      </IngredientArea>
+      <BarArea>
+        <MenuArea>
+          <h4>Menu</h4>
+        </MenuArea>
+        <MakeCocktailArea>
+          <h1>Make Cocktail</h1>
+          <DropArea ref={boxRef} onDragOver={dragOverToBox} onDrop={dropInBox}>
+            <Cocktail>
+              {ingredients &&
+                (JSON.stringify(ingredients.sort()) ===
+                JSON.stringify(jagerbomb.sort()) ? (
                   <img src={highball_jagerbomb} />
-                </>
-              ) : (
-                ingredients.map((item, index) => (
-                  <img
-                    key={index}
-                    src={require(`./img/highball_${item}.png`)}
-                  />
-                ))
-              ))}
-            <img src={highball_glass} />
-          </Cocktail>
-        </DropBox>
-        <ClearBtn onClick={onClear}>
-          Clear <img src={trashcan} />
-        </ClearBtn>
-      </MakeCocktailBox>
+                ) : (
+                  ingredients.map((item, index) => (
+                    <img
+                      key={index}
+                      src={require(`./img/highball_${item}.png`)}
+                    />
+                  ))
+                ))}
+              <img src={highball_glass} />
+            </Cocktail>
+          </DropArea>
+          <ClearBtn onClick={onClear}>
+            Clear <img src={trashcan} />
+          </ClearBtn>
+        </MakeCocktailArea>
+      </BarArea>
     </Container>
   );
 };
@@ -98,6 +100,7 @@ const Container = styled.div`
   height: 100vh;
   color: white;
   display: flex;
+  flex-direction: column;
   background-color: #464646;
   & * {
     box-sizing: border-box;
@@ -105,12 +108,10 @@ const Container = styled.div`
   }
 `;
 
-const IngredientBox = styled.div`
+const IngredientArea = styled.div`
   display: flex;
-  flex-direction: column;
-  height: 100%;
-  border: 5px dashed white;
-  overflow-y: auto;
+  align-items: baseline;
+  border: 5px solid #825826;
 `;
 
 const Ingredeint = styled.div`
@@ -121,23 +122,28 @@ const Ingredeint = styled.div`
   & img {
     width: 50px;
   }
-  border-bottom: 2px solid white;
 `;
 
-const MakeCocktailBox = styled.div`
+const BarArea = styled.div`
+  display: flex;
+`;
+
+const MenuArea = styled.div`
   flex-grow: 1;
+  border: 5px solid #825826;
+`;
+
+const MakeCocktailArea = styled.div`
   display: flex;
   flex-direction: column;
-  border: 5px dashed white;
-  border-left: 0;
+  flex-grow: 4;
+  border: 5px solid #825826;
   align-items: center;
   text-align: center;
 `;
 
-const DropBox = styled.div`
-  width: 200px;
-  height: 300px;
-  margin: 5px;
+const DropArea = styled.div`
+  padding: 20px;
   border: 5px dashed black;
   /* &.test1 {
     border: 5px dashed red;
@@ -151,9 +157,10 @@ const DropBox = styled.div`
 `;
 
 const Cocktail = styled.div`
-  width: 136px;
-  height: 256px;
+  width: 80px;
+  height: 150.6px;
   & img {
+    width: 80px;
     position: absolute;
     top: 0;
     left: 0;
@@ -164,6 +171,7 @@ const ClearBtn = styled.div`
   height: fit-content;
   cursor: pointer;
   font-size: 18px;
+  margin: 10px 0;
   & img {
     vertical-align: bottom;
     height: 20px;
