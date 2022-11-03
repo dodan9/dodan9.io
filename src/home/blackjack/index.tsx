@@ -1,5 +1,5 @@
 import { current } from "@reduxjs/toolkit";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import CardGroup from "./cardGroup";
 
@@ -10,14 +10,13 @@ export interface Card {
   isForward: boolean;
 }
 const Blackjack = () => {
-  const simbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
   const [isGameStart, setIsGameStart] = useState<boolean>(false);
   const [publicDeck, setPublicDeck] = useState<Card[]>([]);
-  const [remainNum, setRemainNum] = useState<number[]>([]);
   const [dealerDeck, setDealerDeck] = useState<Card[]>([]);
   const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
 
   const makePublicDeck = () => {
+    const simbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
     simbols.forEach((simbol) => {
       setPublicDeck((deck) => [
         ...deck,
@@ -42,8 +41,6 @@ const Blackjack = () => {
         { id: deck.length, simbol: simbol, number: "K", isForward: false },
       ]);
     });
-
-    for (let i = 0; i < 52; i++) setRemainNum((current) => [...current, i]);
   };
 
   const getRandomNumber = (max: number, min: number) => {
@@ -65,41 +62,38 @@ const Blackjack = () => {
     const randomNum = getRandomNumber(51, 0);
     console.log(randomNum);
 
+    const remainNum: number[] = publicDeck.map((deck) => deck.id);
+
     if (remainNum.includes(randomNum)) {
-      setRemainNum((current) => [
-        ...current.filter((item) => item !== randomNum),
-      ]);
+      const card = getRandomCard(
+        remainNum[remainNum.indexOf(randomNum)],
+        isForward
+      );
+
+      if (who === "player") {
+        setPlayerDeck((current) => [...current, card]);
+      }
+      if (who === "dealer") {
+        setDealerDeck((current) => [...current, card]);
+      }
     } else {
       console.log("duplicate!!");
       selectCard(who, isForward);
     }
     console.log(remainNum);
-
-    const card = getRandomCard(
-      remainNum[remainNum.indexOf(randomNum)],
-      isForward
-    );
-
-    if (who === "player") {
-      setPlayerDeck((current) => [...current, card]);
-    }
-    if (who === "dealer") {
-      setDealerDeck((current) => [...current, card]);
-    }
   };
 
   const startGame = () => {
+    setIsGameStart(true);
     selectCard("dealer", true);
     selectCard("player", true);
     selectCard("dealer", false);
     selectCard("player", true);
-    setIsGameStart(true);
   };
 
   const resetGame = () => {
     setDealerDeck([]);
     setPlayerDeck([]);
-    setRemainNum([]);
     setPublicDeck([]);
     makePublicDeck();
     setIsGameStart(false);
