@@ -52,16 +52,16 @@ const Blackjack = () => {
   const getRandomCard = (randomNum: number, isForward: boolean) => {
     let randomCard = publicDeck.find((card) => card.id === randomNum) as Card;
     randomCard.isForward = isForward;
-    setPublicDeck((current) => [
-      ...current.filter((value) => value.id !== randomNum),
-    ]);
+
+    const updateDeck = publicDeck;
+    updateDeck.splice(updateDeck.indexOf(randomCard), 1);
+    setPublicDeck(updateDeck);
+
     return randomCard;
   };
 
   const selectCard = (who: string, isForward: boolean) => {
     const randomNum = getRandomNumber(51, 0);
-    console.log(randomNum);
-
     const remainNum: number[] = publicDeck.map((deck) => deck.id);
 
     if (remainNum.includes(randomNum)) {
@@ -69,7 +69,7 @@ const Blackjack = () => {
         remainNum[remainNum.indexOf(randomNum)],
         isForward
       );
-
+      console.log(card);
       if (who === "player") {
         setPlayerDeck((current) => [...current, card]);
       }
@@ -80,10 +80,9 @@ const Blackjack = () => {
       console.log("duplicate!!");
       selectCard(who, isForward);
     }
-    console.log(remainNum);
   };
 
-  const startGame = () => {
+  const startGame = async () => {
     setIsGameStart(true);
     selectCard("dealer", true);
     selectCard("player", true);
@@ -113,15 +112,19 @@ const Blackjack = () => {
       >
         public deck
       </Deck>
-      <DealerArea>
-        dealer deck
-        <CardGroup deck={dealerDeck} />
-      </DealerArea>
 
-      <PlayerArea>
-        player deck
-        <CardGroup deck={playerDeck} />
-      </PlayerArea>
+      {isGameStart && (
+        <>
+          <DealerArea>
+            dealer deck
+            <CardGroup deck={dealerDeck} />
+          </DealerArea>
+          <PlayerArea>
+            player deck
+            <CardGroup deck={playerDeck} />
+          </PlayerArea>
+        </>
+      )}
       <CommandArea>
         {isGameStart ? (
           <>
