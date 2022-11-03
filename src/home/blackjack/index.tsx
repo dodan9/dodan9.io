@@ -1,8 +1,10 @@
+import { current } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CardGroup from "./cardGroup";
 
 export interface Card {
+  id: number;
   simbol: string;
   number: number | string;
   isForward: boolean;
@@ -11,71 +13,93 @@ const Blackjack = () => {
   const simbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
   const [isGameStart, setIsGameStart] = useState<boolean>(false);
   const [publicDeck, setPublicDeck] = useState<Card[]>([]);
+  const [remainNum, setRemainNum] = useState<number[]>([]);
   const [dealerDeck, setDealerDeck] = useState<Card[]>([]);
   const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
+
+  const makePublicDeck = () => {
+    simbols.forEach((simbol) => {
+      setPublicDeck((deck) => [
+        ...deck,
+        { id: deck.length, simbol: simbol, number: "A", isForward: false },
+      ]);
+      for (let i = 2; i < 11; i++) {
+        setPublicDeck((deck) => [
+          ...deck,
+          { id: deck.length, simbol: simbol, number: i, isForward: false },
+        ]);
+      }
+      setPublicDeck((deck) => [
+        ...deck,
+        { id: deck.length, simbol: simbol, number: "J", isForward: false },
+      ]);
+      setPublicDeck((deck) => [
+        ...deck,
+        { id: deck.length, simbol: simbol, number: "Q", isForward: false },
+      ]);
+      setPublicDeck((deck) => [
+        ...deck,
+        { id: deck.length, simbol: simbol, number: "K", isForward: false },
+      ]);
+    });
+
+    for (let i = 0; i < 52; i++) setRemainNum((current) => [...current, i]);
+  };
 
   const getRandomNumber = (max: number, min: number) => {
     if (max === min) return max;
     const randomNumber = Math.floor(Math.random() * max - min + 1) + min;
     return randomNumber;
   };
-  const getRandomCard = (isForward: boolean) => {
-    const randomNum = getRandomNumber(publicDeck.length, 1) - 1;
-    let randomCard: Card = publicDeck[randomNum];
+
+  const getRandomCard = (randomNum: number, isForward: boolean) => {
+    let randomCard = publicDeck.find((card) => card.id === randomNum) as Card;
     randomCard.isForward = isForward;
-    console.log(randomCard);
     setPublicDeck((current) => [
-      ...current.slice(0, randomNum),
-      ...current.slice(randomNum + 1, current.length),
+      ...current.filter((value) => value.id !== randomNum),
     ]);
     return randomCard;
   };
 
-  const makePublicDeck = () => {
-    simbols.forEach((simbol) => {
-      setPublicDeck((deck) => [
-        ...deck,
-        { simbol: simbol, number: "A", isForward: false },
-      ]);
-      for (let i = 2; i < 11; i++) {
-        setPublicDeck((deck) => [
-          ...deck,
-          { simbol: simbol, number: i, isForward: false },
-        ]);
-      }
-      setPublicDeck((deck) => [
-        ...deck,
-        { simbol: simbol, number: "J", isForward: false },
-      ]);
-      setPublicDeck((deck) => [
-        ...deck,
-        { simbol: simbol, number: "Q", isForward: false },
-      ]);
-      setPublicDeck((deck) => [
-        ...deck,
-        { simbol: simbol, number: "K", isForward: false },
-      ]);
-    });
-  };
-
   const selectCard = (who: string, isForward: boolean) => {
-    if (who === "player")
-      setPlayerDeck((current) => [...current, getRandomCard(isForward)]);
-    if (who === "dealer")
-      setDealerDeck((current) => [...current, getRandomCard(isForward)]);
+    const randomNum = getRandomNumber(51, 0);
+    console.log(randomNum);
+
+    if (remainNum.includes(randomNum)) {
+      setRemainNum((current) => [
+        ...current.filter((item) => item !== randomNum),
+      ]);
+    } else {
+      console.log("duplicate!!");
+      selectCard(who, isForward);
+    }
+    console.log(remainNum);
+
+    const card = getRandomCard(
+      remainNum[remainNum.indexOf(randomNum)],
+      isForward
+    );
+
+    if (who === "player") {
+      setPlayerDeck((current) => [...current, card]);
+    }
+    if (who === "dealer") {
+      setDealerDeck((current) => [...current, card]);
+    }
   };
 
-  const startGame = async () => {
-    await selectCard("dealer", true);
-    await selectCard("player", true);
-    await selectCard("dealer", false);
-    await selectCard("player", true);
+  const startGame = () => {
+    selectCard("dealer", true);
+    selectCard("player", true);
+    selectCard("dealer", false);
+    selectCard("player", true);
     setIsGameStart(true);
   };
 
   const resetGame = () => {
     setDealerDeck([]);
     setPlayerDeck([]);
+    setRemainNum([]);
     setPublicDeck([]);
     makePublicDeck();
     setIsGameStart(false);
@@ -107,7 +131,13 @@ const Blackjack = () => {
       <CommandArea>
         {isGameStart ? (
           <>
-            <Command>hit</Command>
+            <Command
+              onClick={() => {
+                selectCard("player", true);
+              }}
+            >
+              hit
+            </Command>
             <Command>stand</Command>
             <Command onClick={resetGame}>reset</Command>
           </>
