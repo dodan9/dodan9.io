@@ -1,8 +1,8 @@
-import { current } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import CardGroup from "./cardGroup";
 
-interface Card {
+export interface Card {
   simbol: string;
   number: number | string;
   isForward: boolean;
@@ -65,11 +65,11 @@ const Blackjack = () => {
       setDealerDeck((current) => [...current, getRandomCard(isForward)]);
   };
 
-  const startGame = () => {
-    selectCard("dealer", true);
-    selectCard("player", true);
-    selectCard("dealer", false);
-    selectCard("player", true);
+  const startGame = async () => {
+    await selectCard("dealer", true);
+    await selectCard("player", true);
+    await selectCard("dealer", false);
+    await selectCard("player", true);
     setIsGameStart(true);
   };
 
@@ -85,12 +85,9 @@ const Blackjack = () => {
     makePublicDeck();
   }, []);
 
-  useEffect(() => {
-    console.log(dealerDeck);
-  }, [dealerDeck]);
-
   return (
     <Container>
+      <Title>Blackjack</Title>
       <Deck
         onClick={() => {
           console.log(publicDeck);
@@ -100,26 +97,12 @@ const Blackjack = () => {
       </Deck>
       <DealerArea>
         dealer deck
-        {dealerDeck.map((card) => (
-          <PlayingCard>
-            {card.simbol}
-            {card.number}
-            <br />
-            {card.isForward ? "forward" : "behind"}
-          </PlayingCard>
-        ))}
+        <CardGroup deck={dealerDeck} />
       </DealerArea>
 
       <PlayerArea>
         player deck
-        {playerDeck.map((card) => (
-          <PlayingCard>
-            {card.simbol}
-            {card.number}
-            <br />
-            {card.isForward ? "forward" : "behind"}
-          </PlayingCard>
-        ))}
+        <CardGroup deck={playerDeck} />
       </PlayerArea>
       <CommandArea>
         {isGameStart ? (
@@ -146,21 +129,19 @@ const Container = styled.div`
   padding: 10px;
   background-color: #486548;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 `;
+
+const Title = styled.h1``;
 
 const Deck = styled.div`
   width: 64px;
   height: 89px;
   border-radius: 3px;
   background-color: white;
-`;
-
-const PlayingCard = styled.div`
-  width: 64px;
-  height: 89px;
-  border-radius: 3px;
-  background-color: white;
-  margin: 5px;
 `;
 
 const Area = styled.div`
@@ -175,4 +156,7 @@ const Command = styled.div`
   background-color: #afd3af;
   width: 100px;
   margin: 0 10px;
+  :first-child {
+    margin-left: 0;
+  }
 `;
