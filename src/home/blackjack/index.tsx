@@ -1,5 +1,4 @@
-import { current } from "@reduxjs/toolkit";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CardGroup from "./cardGroup";
 
@@ -14,6 +13,9 @@ const Blackjack = () => {
   const [publicDeck, setPublicDeck] = useState<Card[]>([]);
   const [dealerDeck, setDealerDeck] = useState<Card[]>([]);
   const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
+  const [dealerScore, setDealerScore] = useState<number>(0);
+  const [playerScore, setPlayerScore] = useState<number>(0);
+  const [isWin, setIsWin] = useState<boolean | null>(null);
 
   const makePublicDeck = () => {
     const simbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
@@ -82,7 +84,7 @@ const Blackjack = () => {
     }
   };
 
-  const startGame = async () => {
+  const startGame = () => {
     setIsGameStart(true);
     selectCard("dealer", true);
     selectCard("player", true);
@@ -94,8 +96,15 @@ const Blackjack = () => {
     setDealerDeck([]);
     setPlayerDeck([]);
     setPublicDeck([]);
+    setDealerScore(0);
+    setPlayerScore(0);
+    setIsWin(null);
     makePublicDeck();
     setIsGameStart(false);
+  };
+
+  const hitCard = () => {
+    selectCard("player", true);
   };
 
   useEffect(() => {
@@ -128,14 +137,10 @@ const Blackjack = () => {
       <CommandArea>
         {isGameStart ? (
           <>
-            <Command
-              onClick={() => {
-                selectCard("player", true);
-              }}
-            >
+            <Command disabled={isWin === true} onClick={hitCard}>
               hit
             </Command>
-            <Command>stand</Command>
+            <Command disabled={isWin === true}>stand</Command>
             <Command onClick={resetGame}>reset</Command>
           </>
         ) : (
@@ -179,11 +184,15 @@ const DealerArea = styled(Area)``;
 const PlayerArea = styled(Area)``;
 const CommandArea = styled(Area)``;
 
-const Command = styled.div`
+const Command = styled.button`
   background-color: #afd3af;
   width: 100px;
   margin: 0 10px;
+  border: none;
   :first-child {
     margin-left: 0;
+  }
+  :only-child {
+    margin: 0;
   }
 `;
