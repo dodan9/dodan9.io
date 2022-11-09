@@ -5,24 +5,32 @@ import CardGroup from "./cardGroup";
 export interface Card {
   id: number;
   simbol: string;
-  number: number | string;
+  number: number;
   isForward: boolean;
+  string?: string;
 }
+
 const Blackjack = () => {
   const [isGameStart, setIsGameStart] = useState<boolean>(false);
+  const [isWin, setIsWin] = useState<boolean | null>(null);
   const [publicDeck, setPublicDeck] = useState<Card[]>([]);
   const [dealerDeck, setDealerDeck] = useState<Card[]>([]);
   const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
   const [dealerScore, setDealerScore] = useState<number>(0);
   const [playerScore, setPlayerScore] = useState<number>(0);
-  const [isWin, setIsWin] = useState<boolean | null>(null);
 
   const makePublicDeck = () => {
     const simbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
     simbols.forEach((simbol) => {
       setPublicDeck((deck) => [
         ...deck,
-        { id: deck.length, simbol: simbol, number: "A", isForward: false },
+        {
+          id: deck.length,
+          simbol: simbol,
+          number: 11,
+          isForward: false,
+          string: "A",
+        },
       ]);
       for (let i = 2; i < 11; i++) {
         setPublicDeck((deck) => [
@@ -32,15 +40,33 @@ const Blackjack = () => {
       }
       setPublicDeck((deck) => [
         ...deck,
-        { id: deck.length, simbol: simbol, number: "J", isForward: false },
+        {
+          id: deck.length,
+          simbol: simbol,
+          number: 10,
+          isForward: false,
+          string: "J",
+        },
       ]);
       setPublicDeck((deck) => [
         ...deck,
-        { id: deck.length, simbol: simbol, number: "Q", isForward: false },
+        {
+          id: deck.length,
+          simbol: simbol,
+          number: 10,
+          isForward: false,
+          string: "Q",
+        },
       ]);
       setPublicDeck((deck) => [
         ...deck,
-        { id: deck.length, simbol: simbol, number: "K", isForward: false },
+        {
+          id: deck.length,
+          simbol: simbol,
+          number: 10,
+          isForward: false,
+          string: "K",
+        },
       ]);
     });
   };
@@ -71,7 +97,6 @@ const Blackjack = () => {
         remainNum[remainNum.indexOf(randomNum)],
         isForward
       );
-      console.log(card);
       if (who === "player") {
         setPlayerDeck((current) => [...current, card]);
       }
@@ -79,9 +104,17 @@ const Blackjack = () => {
         setDealerDeck((current) => [...current, card]);
       }
     } else {
-      console.log("duplicate!!");
       selectCard(who, isForward);
     }
+  };
+
+  const countScore = (deck: Card[]) => {
+    let score = 0;
+    deck.forEach((card) => {
+      score += card.number;
+      if (card.number === 11 && score > 21) score -= 10;
+    });
+    return score;
   };
 
   const startGame = () => {
@@ -111,6 +144,14 @@ const Blackjack = () => {
     makePublicDeck();
   }, []);
 
+  useEffect(() => {
+    setPlayerScore(countScore(playerDeck));
+  }, [playerDeck]);
+
+  useEffect(() => {
+    setDealerScore(countScore(dealerDeck));
+  }, [dealerDeck]);
+
   return (
     <Container>
       <Title>Blackjack</Title>
@@ -122,17 +163,29 @@ const Blackjack = () => {
         public deck
       </Deck>
 
-      {isGameStart && (
-        <>
-          <DealerArea>
-            dealer deck
-            <CardGroup deck={dealerDeck} />
-          </DealerArea>
-          <PlayerArea>
-            player deck
-            <CardGroup deck={playerDeck} />
-          </PlayerArea>
-        </>
+      {isWin === null ? (
+        isGameStart && (
+          <>
+            <DealerArea>
+              <div>
+                <div>dealer deck</div>
+                <div>score: {dealerScore}</div>
+              </div>
+              <CardGroup deck={dealerDeck} />
+            </DealerArea>
+            <PlayerArea>
+              <div>
+                <div>player deck</div>
+                <div>score: {playerScore}</div>
+              </div>
+              <CardGroup deck={playerDeck} />
+            </PlayerArea>
+          </>
+        )
+      ) : isWin ? (
+        <div>Win!</div>
+      ) : (
+        <div>Lose...</div>
       )}
       <CommandArea>
         {isGameStart ? (

@@ -11,7 +11,7 @@ const CardGroup = ({ deck }: CardGroupType) => {
       {deck.map((card, index) => (
         <PlayingCard key={index}>
           {card.simbol}
-          {card.number}
+          {card.string ? card.string : card.number}
           <br />
           {card.isForward ? "forward" : "behind"}
         </PlayingCard>
