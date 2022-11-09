@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import CardGroup from "./cardGroup";
+import DeckArea from "./deckArea";
 
 export interface Card {
   id: number;
@@ -16,8 +17,8 @@ const Blackjack = () => {
   const [publicDeck, setPublicDeck] = useState<Card[]>([]);
   const [dealerDeck, setDealerDeck] = useState<Card[]>([]);
   const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
-  const [dealerScore, setDealerScore] = useState<number>(0);
   const [playerScore, setPlayerScore] = useState<number>(0);
+  const [dealerScore, setDealerScore] = useState<number>(0);
 
   const makePublicDeck = () => {
     const simbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
@@ -125,12 +126,17 @@ const Blackjack = () => {
     selectCard("player", true);
   };
 
+  const restartGame = () => {
+    setDealerDeck([]);
+    setPlayerDeck([]);
+    setIsWin(null);
+    startGame();
+  };
+
   const resetGame = () => {
     setDealerDeck([]);
     setPlayerDeck([]);
     setPublicDeck([]);
-    setDealerScore(0);
-    setPlayerScore(0);
     setIsWin(null);
     makePublicDeck();
     setIsGameStart(false);
@@ -145,41 +151,29 @@ const Blackjack = () => {
   }, []);
 
   useEffect(() => {
-    setPlayerScore(countScore(playerDeck));
-  }, [playerDeck]);
-
-  useEffect(() => {
     setDealerScore(countScore(dealerDeck));
   }, [dealerDeck]);
+
+  useEffect(() => {
+    setPlayerScore(countScore(playerDeck));
+  }, [playerDeck]);
 
   return (
     <Container>
       <Title>Blackjack</Title>
-      <Deck
+      <PublicDeck
         onClick={() => {
           console.log(publicDeck);
         }}
       >
         public deck
-      </Deck>
+      </PublicDeck>
 
       {isWin === null ? (
         isGameStart && (
           <>
-            <DealerArea>
-              <div>
-                <div>dealer deck</div>
-                <div>score: {dealerScore}</div>
-              </div>
-              <CardGroup deck={dealerDeck} />
-            </DealerArea>
-            <PlayerArea>
-              <div>
-                <div>player deck</div>
-                <div>score: {playerScore}</div>
-              </div>
-              <CardGroup deck={playerDeck} />
-            </PlayerArea>
+            <DeckArea name='dealer' deck={dealerDeck} score={dealerScore} />
+            <DeckArea name='player' deck={playerDeck} score={playerScore} />
           </>
         )
       ) : isWin ? (
@@ -222,20 +216,17 @@ const Container = styled.div`
 
 const Title = styled.h1``;
 
-const Deck = styled.div`
+const PublicDeck = styled.div`
   width: 64px;
   height: 89px;
   border-radius: 3px;
   background-color: white;
 `;
 
-const Area = styled.div`
+const CommandArea = styled.div`
   display: flex;
   margin: 10px;
 `;
-const DealerArea = styled(Area)``;
-const PlayerArea = styled(Area)``;
-const CommandArea = styled(Area)``;
 
 const Command = styled.button`
   background-color: #afd3af;
