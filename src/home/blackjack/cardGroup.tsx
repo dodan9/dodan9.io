@@ -10,10 +10,14 @@ const CardGroup = ({ deck }: CardGroupType) => {
     <>
       {deck.map((card, index) => (
         <PlayingCard key={index}>
-          {card.simbol}
-          {card.string ? card.string : card.number}
-          <br />
-          {card.isForward ? "forward" : "behind"}
+          <div>
+            {card.isForward && (
+              <>
+                {card.simbol}
+                {card.string ? card.string : card.number}
+              </>
+            )}
+          </div>
         </PlayingCard>
       ))}
     </>
@@ -28,4 +32,7 @@ const PlayingCard = styled.div`
   border-radius: 3px;
   background-color: white;
   margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

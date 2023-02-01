@@ -13,7 +13,9 @@ const DeckArea = ({ name, deck, score }: Props) => {
     <Area>
       <div>
         <div>{name} deck</div>
-        <div>score: {score}</div>
+        {deck.findIndex((card) => card.isForward === false) === -1 && (
+          <div>score: {score}</div>
+        )}
       </div>
       <CardGroup deck={deck} />
     </Area>

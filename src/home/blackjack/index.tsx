@@ -13,7 +13,7 @@ export interface Card {
 
 const Blackjack = () => {
   const [isGameStart, setIsGameStart] = useState<boolean>(false);
-  const [isWin, setIsWin] = useState<boolean | null>(null);
+  const [isWin, setIsWin] = useState<number>(0); // 0:notihing, 1:win, 2:lose
   const [publicDeck, setPublicDeck] = useState<Card[]>([]);
   const [dealerDeck, setDealerDeck] = useState<Card[]>([]);
   const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
@@ -129,7 +129,7 @@ const Blackjack = () => {
   const restartGame = () => {
     setDealerDeck([]);
     setPlayerDeck([]);
-    setIsWin(null);
+    setIsWin(0);
     startGame();
   };
 
@@ -137,13 +137,35 @@ const Blackjack = () => {
     setDealerDeck([]);
     setPlayerDeck([]);
     setPublicDeck([]);
-    setIsWin(null);
+    setIsWin(0);
     makePublicDeck();
     setIsGameStart(false);
   };
 
   const hitCard = () => {
     selectCard("player", true);
+  };
+
+  const flipCard = () => {
+    const copyArray = dealerDeck;
+    const behindCardIndex = dealerDeck.findIndex(
+      (card) => card.isForward === false
+    );
+    if (behindCardIndex != -1) copyArray[behindCardIndex].isForward = true;
+    setDealerDeck(copyArray);
+  };
+
+  const dealerHit = () => {
+    flipCard();
+    if (dealerScore < 16) selectCard("dealer", true);
+
+    if (dealerScore < playerScore) setIsWin(1);
+    else if (dealerScore > playerScore) setIsWin(2);
+  };
+
+  const playerStand = () => {
+    dealerHit();
+    if (dealerScore < 16) playerStand();
   };
 
   useEffect(() => {
@@ -158,6 +180,17 @@ const Blackjack = () => {
     setPlayerScore(countScore(playerDeck));
   }, [playerDeck]);
 
+  useEffect(() => {
+    if (playerScore > 21) {
+      flipCard();
+      setIsWin(2);
+    }
+  }, [playerScore]);
+
+  useEffect(() => {
+    if (dealerScore > 21) setIsWin(1);
+  }, [dealerScore]);
+
   return (
     <Container>
       <Title>Blackjack</Title>
@@ -167,28 +200,36 @@ const Blackjack = () => {
         }}
       >
         public deck
+        <br />
+        count:{publicDeck.length}
       </PublicDeck>
 
-      {isWin === null ? (
-        isGameStart && (
-          <>
-            <DeckArea name='dealer' deck={dealerDeck} score={dealerScore} />
-            <DeckArea name='player' deck={playerDeck} score={playerScore} />
-          </>
-        )
-      ) : isWin ? (
-        <div>Win!</div>
-      ) : (
-        <div>Lose...</div>
+      {isGameStart && (
+        <>
+          <DeckArea name='dealer' deck={dealerDeck} score={dealerScore} />
+          <DeckArea name='player' deck={playerDeck} score={playerScore} />
+        </>
       )}
       <CommandArea>
         {isGameStart ? (
           <>
-            <Command disabled={isWin === true} onClick={hitCard}>
-              hit
-            </Command>
-            <Command disabled={isWin === true}>stand</Command>
-            <Command onClick={resetGame}>reset</Command>
+            {isWin === 0 && (
+              <>
+                <Command onClick={hitCard}>hit</Command>
+                <Command onClick={playerStand}>stand</Command>
+                <Command onClick={resetGame}>reset</Command>
+              </>
+            )}
+            {isWin > 0 && (
+              <>
+                <WinOrLose>
+                  {isWin === 1 && "Win!"}
+                  {isWin === 2 && "Lose..."}
+                </WinOrLose>
+                <Command onClick={restartGame}>restart</Command>
+                <Command onClick={resetGame}>reset</Command>
+              </>
+            )}
           </>
         ) : (
           <Command onClick={startGame}>start</Command>
@@ -239,4 +280,8 @@ const Command = styled.button`
   :only-child {
     margin: 0;
   }
+`;
+
+const WinOrLose = styled.div`
+  color: white;
 `;
