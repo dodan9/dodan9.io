@@ -156,16 +156,23 @@ const Blackjack = () => {
   };
 
   const dealerHit = () => {
-    flipCard();
-    if (dealerScore < 16) selectCard("dealer", true);
+    selectCard("dealer", true);
+  };
 
-    if (dealerScore < playerScore) setIsWin(1);
-    else if (dealerScore > playerScore) setIsWin(2);
+  const dealerPlay = () => {
+    if (dealerScore > playerScore) setIsWin(2);
+    else {
+      if (dealerScore < 16) {
+        dealerHit();
+      } else {
+        if (dealerScore <= playerScore) setIsWin(1);
+      }
+    }
   };
 
   const playerStand = () => {
-    dealerHit();
-    if (dealerScore < 16) playerStand();
+    flipCard();
+    dealerPlay();
   };
 
   useEffect(() => {
