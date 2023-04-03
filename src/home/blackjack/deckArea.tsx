@@ -6,15 +6,19 @@ interface Props {
   name: string;
   deck: Card[];
   score: number;
+  isWin?: number;
 }
 
-const DeckArea = ({ name, deck, score }: Props) => {
+const DeckArea = ({ name, deck, score, isWin }: Props) => {
   return (
     <Area>
       <div>
         <div>{name} deck</div>
         {/* {deck.findIndex((card) => card.isForward === false) === -1 && ( */}
-        <div>score: {score}</div>
+        {name === "player" && <div>score: {score}</div>}
+        {name === "dealer" && isWin
+          ? isWin > 0 && <div>score: {score}</div>
+          : null}
         {/* )} */}
       </div>
       <CardGroup deck={deck} />

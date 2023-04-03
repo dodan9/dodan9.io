@@ -213,7 +213,12 @@ const Blackjack = () => {
 
       {isGameStart && (
         <>
-          <DeckArea name='dealer' deck={dealerDeck} score={dealerScore} />
+          <DeckArea
+            name='dealer'
+            deck={dealerDeck}
+            score={dealerScore}
+            isWin={isWin}
+          />
           <DeckArea name='player' deck={playerDeck} score={playerScore} />
         </>
       )}
