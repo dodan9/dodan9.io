@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/dodan9.io/static/js/main.0a813036.js",
+    "main.js": "/dodan9.io/static/js/main.837ca52a.js",
     "static/media/hisui.png": "/dodan9.io/static/media/hisui.f4f61ff09db496e015c5.png",
     "static/media/unova.png": "/dodan9.io/static/media/unova.1c5a8c54f1e032d2866e.png",
     "static/media/sinnoh.png": "/dodan9.io/static/media/sinnoh.3562b530a55a04a07fbc.png",
@@ -14,9 +14,9 @@
     "static/media/alola.png": "/dodan9.io/static/media/alola.9a63a4134f952bd8f6f1.png",
     "static/media/room1.png": "/dodan9.io/static/media/room1.8f27a2976f1569993f56.png",
     "index.html": "/dodan9.io/index.html",
-    "main.0a813036.js.map": "/dodan9.io/static/js/main.0a813036.js.map"
+    "main.837ca52a.js.map": "/dodan9.io/static/js/main.837ca52a.js.map"
   },
   "entrypoints": [
-    "static/js/main.0a813036.js"
+    "static/js/main.837ca52a.js"
   ]
 }
