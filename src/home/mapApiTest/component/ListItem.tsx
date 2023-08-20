@@ -94,16 +94,15 @@ export const ModalContainer = styled.div`
   height: 600px;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: 1000;
   background-color: rgba(0, 0, 0, 0.3);
 `;
 export const Modal = styled.div`
   position: absolute;
   width: 200px;
   height: 120px;
-  margin: auto auto;
-  left: 0;
-  right: 0;
+  margin: auto 0;
+  right: 50px;
   top: 0;
   bottom: 0;
   background-color: white;

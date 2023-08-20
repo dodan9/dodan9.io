@@ -83,7 +83,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
         url: randomPkm.pokemon.url,
         method: "get",
       });
-      response.data.shiny = getRandomNumber(100, 1) > 95 ? true : false;
+      response.data.shiny = getRandomNumber(100, 1) > 98 ? true : false;
       response.data.chance = randomPkmEncounterDetail.chance;
       response.data.level = getRandomNumber(
         randomPkmEncounterDetail.max_level,

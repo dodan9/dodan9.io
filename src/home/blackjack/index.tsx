@@ -164,6 +164,8 @@ const Blackjack = () => {
     else {
       if (dealerScore < 16) {
         dealerHit();
+        // } else if (dealerScore >= 16 && dealerScore <= 21) {
+        //   playerStand();
       } else {
         if (dealerScore <= playerScore) setIsWin(1);
       }
@@ -195,7 +197,10 @@ const Blackjack = () => {
   }, [playerScore]);
 
   useEffect(() => {
-    if (dealerScore > 21) setIsWin(1);
+    if (dealerDeck.length > 0) {
+      if (dealerScore > 21) setIsWin(1);
+      else if (dealerDeck.length > 2) dealerPlay();
+    }
   }, [dealerScore]);
 
   return (
@@ -238,7 +243,9 @@ const Blackjack = () => {
                   {isWin === 1 && "Win!"}
                   {isWin === 2 && "Lose..."}
                 </WinOrLose>
-                <Command onClick={restartGame}>restart</Command>
+                {publicDeck.length > 6 && (
+                  <Command onClick={restartGame}>restart</Command>
+                )}
                 <Command onClick={resetGame}>reset</Command>
               </>
             )}
