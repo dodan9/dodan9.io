@@ -23,7 +23,7 @@ const Blackjack = () => {
   const makePublicDeck = () => {
     const simbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
     simbols.forEach((simbol) => {
-      setPublicDeck((deck) => [
+      setPublicDeck((deck: Card[]) => [
         ...deck,
         {
           id: deck.length,
@@ -34,12 +34,12 @@ const Blackjack = () => {
         },
       ]);
       for (let i = 2; i < 11; i++) {
-        setPublicDeck((deck) => [
+        setPublicDeck((deck: Card[]) => [
           ...deck,
           { id: deck.length, simbol: simbol, number: i, isForward: false },
         ]);
       }
-      setPublicDeck((deck) => [
+      setPublicDeck((deck: Card[]) => [
         ...deck,
         {
           id: deck.length,
@@ -49,7 +49,7 @@ const Blackjack = () => {
           string: "J",
         },
       ]);
-      setPublicDeck((deck) => [
+      setPublicDeck((deck: Card[]) => [
         ...deck,
         {
           id: deck.length,
@@ -59,7 +59,7 @@ const Blackjack = () => {
           string: "Q",
         },
       ]);
-      setPublicDeck((deck) => [
+      setPublicDeck((deck: Card[]) => [
         ...deck,
         {
           id: deck.length,
@@ -79,7 +79,9 @@ const Blackjack = () => {
   };
 
   const getRandomCard = (randomNum: number, isForward: boolean) => {
-    let randomCard = publicDeck.find((card) => card.id === randomNum) as Card;
+    let randomCard = publicDeck.find(
+      (card: Card) => card.id === randomNum
+    ) as Card;
     randomCard.isForward = isForward;
 
     const updateDeck = publicDeck;
@@ -91,7 +93,7 @@ const Blackjack = () => {
 
   const selectCard = (who: string, isForward: boolean) => {
     const randomNum = getRandomNumber(51, 0);
-    const remainNum: number[] = publicDeck.map((deck) => deck.id);
+    const remainNum: number[] = publicDeck.map((deck: Card[]) => deck.id);
 
     if (remainNum.includes(randomNum)) {
       const card = getRandomCard(
@@ -99,10 +101,10 @@ const Blackjack = () => {
         isForward
       );
       if (who === "player") {
-        setPlayerDeck((current) => [...current, card]);
+        setPlayerDeck((current: Card[]) => [...current, card]);
       }
       if (who === "dealer") {
-        setDealerDeck((current) => [...current, card]);
+        setDealerDeck((current: Card[]) => [...current, card]);
       }
     } else {
       selectCard(who, isForward);
@@ -149,7 +151,7 @@ const Blackjack = () => {
   const flipCard = () => {
     const copyArray = dealerDeck;
     const behindCardIndex = dealerDeck.findIndex(
-      (card) => card.isForward === false
+      (card: Card) => card.isForward === false
     );
     if (behindCardIndex != -1) copyArray[behindCardIndex].isForward = true;
     setDealerDeck(copyArray);
@@ -219,12 +221,12 @@ const Blackjack = () => {
       {isGameStart && (
         <>
           <DeckArea
-            name='dealer'
+            name="dealer"
             deck={dealerDeck}
             score={dealerScore}
             isWin={isWin}
           />
-          <DeckArea name='player' deck={playerDeck} score={playerScore} />
+          <DeckArea name="player" deck={playerDeck} score={playerScore} />
         </>
       )}
       <CommandArea>
