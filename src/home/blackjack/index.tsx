@@ -93,7 +93,7 @@ const Blackjack = () => {
 
   const selectCard = (who: string, isForward: boolean) => {
     const randomNum = getRandomNumber(51, 0);
-    const remainNum: number[] = publicDeck.map((deck: Card[]) => deck.id);
+    const remainNum: number[] = publicDeck.map((deck: Card) => deck.id);
 
     if (remainNum.includes(randomNum)) {
       const card = getRandomCard(
