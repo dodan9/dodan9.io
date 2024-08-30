@@ -68,7 +68,7 @@ const MapComponent = () => {
 
   //키워드 검색 함수
   const onSearch = (searchLocation: MapProps) => {
-    if (searchKeyword) {
+    if (searchKeyword && "lat" in searchLocation.center) {
       const ps = new kakao.maps.services.Places();
 
       // 현재 위치 기반 검색
@@ -180,14 +180,14 @@ const MapComponent = () => {
         <MapLevelController>
           <div onClick={() => setMapLevel((currentLevel) => currentLevel - 1)}>
             <img
-              src='https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png'
-              alt='확대'
+              src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png"
+              alt="확대"
             />
           </div>
           <div onClick={() => setMapLevel((currentLevel) => currentLevel + 1)}>
             <img
-              src='https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png'
-              alt='축소'
+              src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png"
+              alt="축소"
             />
           </div>
         </MapLevelController>
