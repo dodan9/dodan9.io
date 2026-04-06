@@ -2,17 +2,17 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="./favicon.ico" type="image/x-ion" />
+    <link rel="icon" href="/dodan9.io/assets/favicon-BRiRpJiH.ico" type="image/x-ion" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="dodan9.io" />
-    <link rel="apple-touch-icon" href="./logo192.png" />
-    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="/dodan9.io/assets/logo192-Cw5HMvxU.png" />
+    <link rel="manifest" href="/dodan9.io/assets/manifest-BDxwKPDX.json" />
     <title>Dodan9</title>
     <style>
       @font-face {
         font-family: "DungGeunMo";
-        src: url("./DungGeunMo.ttf");
+        src: url("/dodan9.io/assets/DungGeunMo-D_OZQTp4.ttf");
       }
       body {
         margin: 0;
@@ -26,7 +26,15 @@
       type="text/javascript"
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_DEVELOPER_JS_KEY%&libraries=services,clusterer"
     ></script>
-    <script type="module" crossorigin src="/dodan9.io/assets/index-Btajj888.js"></script>
+    <script>
+      /** SPA Refresh */
+      const redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+      }
+    </script>
+    <script type="module" crossorigin src="/dodan9.io/assets/index-nAgG_Hds.js"></script>
     <link rel="stylesheet" crossorigin href="/dodan9.io/assets/index-DzQfkwVb.css">
   </head>
   <body>
