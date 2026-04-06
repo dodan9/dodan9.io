@@ -20,7 +20,7 @@ function Mix() {
     <Content ref={ref}>
       <Container>
         <h2>
-          <Link to="/dodan9.io/">home</Link>
+          <Link to="/">home</Link>
         </h2>
         <Slide>
           <div>text</div>

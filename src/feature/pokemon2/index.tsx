@@ -11,10 +11,10 @@ const Pokemon2 = () => {
       <GlobalStyle />
       <Header>
         <h2>
-          <Link to="/dodan9.io/pokemon2/">Pokemon</Link>
+          <Link to="/pokemon2/">Pokemon</Link>
         </h2>
         <h2>
-          <Link to="/dodan9.io/pokemon2/mypokemon">My Pokemon</Link>
+          <Link to="/pokemon2/mypokemon">My Pokemon</Link>
         </h2>
       </Header>
       <Routes>

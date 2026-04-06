@@ -59,8 +59,8 @@ const Movies = () => {
           </div>
           <div>
             <h4>
-              <Link to={`/dodan9.io/practice/${movie.id}`}>{movie.title}</Link>{" "}
-              ({movie.language})
+              <Link to={`/practice/${movie.id}`}>{movie.title}</Link> (
+              {movie.language})
             </h4>
             <h5>
               {movie.genres

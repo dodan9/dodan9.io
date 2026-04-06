@@ -49,7 +49,7 @@ const Location = () => {
             if (location.name.includes("forest")) icon = forest;
             return (
               <LocationItem key={index} icon={icon}>
-                <Link to={`/dodan9.io/pokemon2/${region}/${location.name}`}>
+                <Link to={`/pokemon2/${region}/${location.name}`}>
                   {location.name}
                 </Link>
               </LocationItem>

@@ -4,7 +4,7 @@ import MainRoutes from "./routes";
 
 function App() {
   return (
-    <BrowserRouter basename="/">
+    <BrowserRouter basename="/dodan9.io">
       <GlobalStyle />
       <MainRoutes />
     </BrowserRouter>

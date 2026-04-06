@@ -48,7 +48,7 @@ const Region = () => {
       <RegionList>
         {regions.map((region, i) => {
           return (
-            <Link to={`/dodan9.io/pokemon2/${region.name}`} key={i}>
+            <Link to={`/pokemon2/${region.name}`} key={i}>
               <RegionItem url={regionImgs[i]}>
                 <p>{region.name}</p>
               </RegionItem>
