@@ -4,7 +4,7 @@ import DeckArea from "./deckArea";
 
 export interface Card {
   id: number;
-  simbol: string;
+  symbol: string;
   number: number;
   isForward: boolean;
   string?: string;
@@ -20,13 +20,13 @@ const Blackjack = () => {
   const [dealerScore, setDealerScore] = useState<number>(0);
 
   const makePublicDeck = () => {
-    const simbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
-    simbols.forEach((simbol) => {
+    const symbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
+    symbols.forEach((symbol) => {
       setPublicDeck((deck: Card[]) => [
         ...deck,
         {
           id: deck.length,
-          simbol: simbol,
+          symbol: symbol,
           number: 11,
           isForward: false,
           string: "A",
@@ -35,14 +35,14 @@ const Blackjack = () => {
       for (let i = 2; i < 11; i++) {
         setPublicDeck((deck: Card[]) => [
           ...deck,
-          { id: deck.length, simbol: simbol, number: i, isForward: false },
+          { id: deck.length, symbol: symbol, number: i, isForward: false },
         ]);
       }
       setPublicDeck((deck: Card[]) => [
         ...deck,
         {
           id: deck.length,
-          simbol: simbol,
+          symbol: symbol,
           number: 10,
           isForward: false,
           string: "J",
@@ -52,7 +52,7 @@ const Blackjack = () => {
         ...deck,
         {
           id: deck.length,
-          simbol: simbol,
+          symbol: symbol,
           number: 10,
           isForward: false,
           string: "Q",
@@ -62,7 +62,7 @@ const Blackjack = () => {
         ...deck,
         {
           id: deck.length,
-          simbol: simbol,
+          symbol: symbol,
           number: 10,
           isForward: false,
           string: "K",
@@ -135,10 +135,13 @@ const Blackjack = () => {
   };
 
   const resetGame = () => {
+    setPlayerScore(0);
+    setDealerScore(0);
     setDealerDeck([]);
     setPlayerDeck([]);
     setPublicDeck([]);
     setIsWin(0);
+
     makePublicDeck();
     setIsGameStart(false);
   };
@@ -183,11 +186,15 @@ const Blackjack = () => {
   }, []);
 
   useEffect(() => {
-    setDealerScore(countScore(dealerDeck));
+    setTimeout(() => {
+      setDealerScore(countScore(dealerDeck));
+    }, 500);
   }, [dealerDeck]);
 
   useEffect(() => {
-    setPlayerScore(countScore(playerDeck));
+    setTimeout(() => {
+      setPlayerScore(countScore(playerDeck));
+    }, 500);
   }, [playerDeck]);
 
   useEffect(() => {
@@ -212,9 +219,12 @@ const Blackjack = () => {
           console.log(publicDeck);
         }}
       >
-        public deck
-        <br />
-        count:{publicDeck.length}
+        <div>
+          public deck
+          <br />
+          <br />
+          {publicDeck.length}
+        </div>
       </PublicDeck>
 
       {isGameStart && (
@@ -281,6 +291,9 @@ const PublicDeck = styled.div`
   height: 89px;
   border-radius: 3px;
   background-color: white;
+  display: flex;
+  align-items: center;
+  border: 5px solid #afd3af;
 `;
 
 const CommandArea = styled.div`

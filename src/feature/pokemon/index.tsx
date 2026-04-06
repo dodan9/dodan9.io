@@ -149,7 +149,7 @@ const Pokemon = () => {
               }
             />
             <Detail>
-              <Link to={`/dodan9.io/pokemon/${pokemon.id}`}>
+              <Link to={`/pokemon/${pokemon.id}`}>
                 <span>pokedex</span>
               </Link>
               <button>details</button>
