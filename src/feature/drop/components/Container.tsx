@@ -94,8 +94,8 @@ export const Container = () => {
 };
 
 const Wrap = styled.div`
-  width: calc(100vw - 40px);
-  height: calc(100vh - 40px);
+  width: 100%;
+  height: 100vh;
   padding: 20px;
   position: relative;
   background-color: #ababab;

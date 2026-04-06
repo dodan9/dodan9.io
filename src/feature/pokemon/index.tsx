@@ -112,7 +112,7 @@ const Pokemon = () => {
         {pokemonData.map((pokemon, index) => {
           return (
             <PokemonCard key={index}>
-              <Name shiny={pokemon.shiny}>{pokemon.name}</Name>
+              <Name $shiny={pokemon.shiny}>{pokemon.name}</Name>
 
               <img
                 src={
@@ -140,7 +140,7 @@ const Pokemon = () => {
       <MyPokemonBox>
         {myPokemon.map((pokemon, index) => (
           <PokemonCard key={index}>
-            <Name shiny={pokemon.shiny}>{pokemon.name}</Name>
+            <Name $shiny={pokemon.shiny}>{pokemon.name}</Name>
             <img
               src={
                 pokemon.shiny
@@ -210,8 +210,8 @@ const PokemonCard = styled.div`
   }
 `;
 
-const Name = styled.div<{ shiny: boolean }>`
-  color: ${(props) => (props.shiny ? "red" : "black")};
+const Name = styled.div<{ $shiny: boolean }>`
+  color: ${(props) => (props.$shiny ? "red" : "black")};
 `;
 
 const Detail = styled.span`

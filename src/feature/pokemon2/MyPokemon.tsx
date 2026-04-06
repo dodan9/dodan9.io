@@ -90,21 +90,25 @@ const MyPokemon = () => {
           <BoxPage>
             <BoxPageMove
               onClick={() => MovePage(-1)}
-              canClick={maxIndex === 1 ? false : true}
+              $canClick={maxIndex === 1 ? false : true}
             >
               prev
             </BoxPageMove>
             <BoxNumber>Box {boxIndex}</BoxNumber>
             <BoxPageMove
               onClick={() => (isNext ? MovePage(1) : null)}
-              canClick={isNext}
+              $canClick={isNext}
             >
               next
             </BoxPageMove>
           </BoxPage>
           <PokemonBox>
             {currentPokemonList.map((pokemon, index) => (
-              <Pokemon key={index} index={index} selectedIndex={selectedIndex}>
+              <Pokemon
+                key={index}
+                $index={index}
+                $selectedIndex={selectedIndex}
+              >
                 <img
                   src={
                     pokemon.shiny
@@ -123,7 +127,7 @@ const MyPokemon = () => {
         <PokemonStatus>
           {selectedPokemon ? (
             <StatusDetail>
-              <Name shiny={selectedPokemon.shiny}>{selectedPokemon.name}</Name>
+              <Name $shiny={selectedPokemon.shiny}>{selectedPokemon.name}</Name>
               <SelectImg>
                 <img
                   src={
@@ -143,7 +147,7 @@ const MyPokemon = () => {
                 {selectedPokemon.types.map((type, i) => (
                   <TypeText
                     key={i}
-                    typeColor={
+                    $typeColor={
                       typeColor.filter(
                         (typeColor) => typeColor.name === type.type.name,
                       )[0].color
@@ -189,10 +193,10 @@ const BoxContainer = styled.div`
   padding: 10px;
 `;
 
-const BoxPageMove = styled.div<{ canClick?: boolean }>`
-  cursor: ${(prop) => (prop.canClick ? "pointer" : "default")};
+const BoxPageMove = styled.div<{ $canClick?: boolean }>`
+  cursor: ${(prop) => (prop.$canClick ? "pointer" : "default")};
   &:hover {
-    color: ${(prop) => (prop.canClick ? "white" : "black")};
+    color: ${(prop) => (prop.$canClick ? "white" : "black")};
   }
 `;
 const BoxPage = styled.div`
@@ -251,7 +255,7 @@ const PokemonBox = styled.div`
     border-radius: 3px;
   }
 `;
-const Pokemon = styled.div<{ index: number; selectedIndex: number }>`
+const Pokemon = styled.div<{ $index: number; $selectedIndex: number }>`
   width: 100px;
   height: 100px;
   & img {
@@ -263,7 +267,7 @@ const Pokemon = styled.div<{ index: number; selectedIndex: number }>`
     border: 1px black dotted;
   }
   border: ${(prop) =>
-    prop.index === prop.selectedIndex ? "1px black dotted" : "none"};
+    prop.$index === prop.$selectedIndex ? "1px black dotted" : "none"};
 `;
 
 const BorderDetail = styled.div`
@@ -294,10 +298,10 @@ const StatusDetail = styled.div`
   padding: 5px;
 `;
 
-const Name = styled(BorderDetail)<{ shiny: boolean }>`
+const Name = styled(BorderDetail)<{ $shiny: boolean }>`
   padding: 14px;
   font-size: 20px;
-  color: ${(prop) => (prop.shiny ? "red" : "black")};
+  color: ${(prop) => (prop.$shiny ? "red" : "black")};
   text-transform: capitalize;
 `;
 
@@ -321,10 +325,10 @@ const TypeBox = styled(BorderDetail)`
   }
 `;
 
-const TypeText = styled.div<{ typeColor: string }>`
+const TypeText = styled.div<{ $typeColor: string }>`
   width: 70px;
   text-align: center;
-  background-color: ${(props) => props.typeColor};
+  background-color: ${(props) => props.$typeColor};
   text-transform: uppercase;
   letter-spacing: -1px;
   color: white;

@@ -130,7 +130,7 @@ const Canvas = () => {
       <Title>Click to Grow</Title>
       <Selects>
         <Select
-          treeCount={treeCount === 1 ? true : false}
+          $treeCount={treeCount === 1 ? true : false}
           onClick={() => {
             setTreeCount(1);
           }}
@@ -138,7 +138,7 @@ const Canvas = () => {
           1 tree
         </Select>
         <Select
-          treeCount={treeCount === 4 ? true : false}
+          $treeCount={treeCount === 4 ? true : false}
           onClick={() => {
             setTreeCount(4);
           }}
@@ -146,7 +146,7 @@ const Canvas = () => {
           4 tree
         </Select>
         <Select
-          treeCount={treeCount === 100 ? true : false}
+          $treeCount={treeCount === 100 ? true : false}
           onClick={() => {
             setTreeCount(100);
           }}
@@ -154,7 +154,7 @@ const Canvas = () => {
           100 tree
         </Select>
       </Selects>
-      <Refresh treeCount={false} onClick={refresh}>
+      <Refresh $treeCount={false} onClick={refresh}>
         refresh
       </Refresh>
       <StyledCanvas ref={canvasRef} onClick={handleClick}></StyledCanvas>
@@ -184,15 +184,15 @@ const Selects = styled.div`
   align-items: center;
   justify-content: center;
 `;
-const Select = styled.div<{ treeCount: boolean }>`
+const Select = styled.div<{ $treeCount: boolean }>`
   width: 200px;
   padding: 10px;
   margin: 10px;
   text-align: center;
   border-radius: 5px;
-  border: ${(props) => (props.treeCount ? "3px solid transparent" : "none")};
+  border: ${(props) => (props.$treeCount ? "3px solid transparent" : "none")};
   background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
-  color: ${(props) => (props.treeCount ? "white" : "whitesmoke")};
+  color: ${(props) => (props.$treeCount ? "white" : "whitesmoke")};
   cursor: pointer;
   &:hover {
     color: yellow;

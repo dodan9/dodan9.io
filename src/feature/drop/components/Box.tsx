@@ -40,9 +40,9 @@ export const Box = ({
     <DragBox
       ref={drag as unknown as Ref<HTMLDivElement>}
       style={{ left, top }}
-      isDragging={isDragging}
+      $isDragging={isDragging}
     >
-      <BoxContent backgroundColor={backgroundColor}>
+      <BoxContent $backgroundColor={backgroundColor}>
         {src && <img src={src} alt={src} />}
         {children}
       </BoxContent>
@@ -50,7 +50,7 @@ export const Box = ({
   );
 };
 
-const DragBox = styled.div<{ isDragging: boolean }>`
+const DragBox = styled.div<{ $isDragging: boolean }>`
   && {
     position: absolute;
     border-radius: 10px;
@@ -60,16 +60,16 @@ const DragBox = styled.div<{ isDragging: boolean }>`
       height: 200px;
       border-radius: 3px;
     }
-    opacity: ${(props) => (props.isDragging ? 0 : 1)};
+    opacity: ${(props) => (props.$isDragging ? 0 : 1)};
     z-index: 30;
     box-shadow: 5px 5px 8px 4px rgb(0 0 0 / 30%);
     padding: 12px;
   }
 `;
 
-const BoxContent = styled.div<{ backgroundColor?: string }>`
+const BoxContent = styled.div<{ $backgroundColor?: string }>`
   background-color: ${(props) =>
-    props.backgroundColor ? props.backgroundColor : "#6a8baa"};
+    props.$backgroundColor ? props.$backgroundColor : "#6a8baa"};
   border: 5px solid #666666;
   padding: 10px;
   min-width: 50px;

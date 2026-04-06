@@ -143,7 +143,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
           {pokemonData ? (
             <>
               <Detail>
-                <Name shiny={pokemonData.shiny}>
+                <Name $shiny={pokemonData.shiny}>
                   <span>{pokemonData.name}</span>
                   <span>Lv.{pokemonData.level}</span>
                 </Name>
@@ -158,7 +158,7 @@ const MeetModal = ({ url, closeFunction }: propsType) => {
                     onLoad={() => {
                       setIsImgLoading(false);
                     }}
-                    isImgLoading
+                    $isImgLoading={isImgLoading}
                   />
                 </PokemonImgBox>
               </Detail>
@@ -321,12 +321,12 @@ const PokemonImgBox = styled.div`
   height: 180px;
 `;
 
-const PokemonImg = styled.img<{ isImgLoading?: boolean }>`
+const PokemonImg = styled.img<{ $isImgLoading?: boolean }>`
   width: 180px;
-  display: ${(props) => (props.isImgLoading ? "none" : "block")};
+  display: ${(props) => (props.$isImgLoading ? "none" : "block")};
 `;
 
-const Name = styled.div<{ shiny: boolean }>`
+const Name = styled.div<{ $shiny: boolean }>`
   width: 100%;
   text-transform: capitalize;
   height: fit-content;
@@ -336,7 +336,7 @@ const Name = styled.div<{ shiny: boolean }>`
   border: 5px solid black;
   border-top: 0;
   border-right: 0;
-  color: ${(props) => (props.shiny ? "red" : "black")};
+  color: ${(props) => (props.$shiny ? "red" : "black")};
   & span:nth-child(1) {
     float: left;
   }

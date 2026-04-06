@@ -49,7 +49,7 @@ const Region = () => {
         {regions.map((region, i) => {
           return (
             <Link to={`/pokemon2/${region.name}`} key={i}>
-              <RegionItem url={regionImgs[i]}>
+              <RegionItem $url={regionImgs[i]}>
                 <p>{region.name}</p>
               </RegionItem>
             </Link>
@@ -72,7 +72,7 @@ const RegionList = styled.div`
   justify-content: space-between;
   padding: 10px 0;
 `;
-const RegionItem = styled.div<{ url: string }>`
+const RegionItem = styled.div<{ $url: string }>`
   position: relative;
   width: 320px;
   height: 200px;
@@ -80,7 +80,7 @@ const RegionItem = styled.div<{ url: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url(${(props) => props.url});
+  background-image: url(${(props) => props.$url});
   background-color: rgba(0, 0, 0, 0.6);
   background-size: cover;
   background-position: center;

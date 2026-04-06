@@ -47,7 +47,7 @@ const Room = () => {
           onClick={() => {
             setIsDoorOpen(true);
           }}
-          isDoorOpen={isDoorOpen}
+          $isDoorOpen={isDoorOpen}
         >
           {isDoorOpen && (
             <RoomContainer>
@@ -116,7 +116,7 @@ const Room = () => {
           )}
         </Door>
         {mouse.x && mouse.y && cursorSrc ? (
-          <FollowCursor x={xPosition} y={yPosition}>
+          <FollowCursor $x={xPosition} $y={yPosition}>
             <CursorImg src={cursorSrc} />
           </FollowCursor>
         ) : null}
@@ -151,15 +151,15 @@ const Container = styled.div`
   overflow: hidden;
 `;
 
-const Door = styled.div<{ isDoorOpen: boolean }>`
-  width: ${(props) => (props.isDoorOpen ? "100%" : "200px")};
-  height: ${(props) => (props.isDoorOpen ? "100%" : "300px")};
+const Door = styled.div<{ $isDoorOpen: boolean }>`
+  width: ${(props) => (props.$isDoorOpen ? "100%" : "200px")};
+  height: ${(props) => (props.$isDoorOpen ? "100%" : "300px")};
   transition: 1s;
   background-image: url(${stars});
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: ${(props) => (props.isDoorOpen ? "default" : "pointer")};
+  cursor: ${(props) => (props.$isDoorOpen ? "default" : "pointer")};
 `;
 
 const RoomContainerOpen = keyframes`
@@ -371,10 +371,10 @@ const Close = styled.img`
   }
 `;
 
-const FollowCursor = styled.div<{ x: number; y: number }>`
+const FollowCursor = styled.div<{ $x: number; $y: number }>`
   position: fixed;
-  top: ${(props) => props.y}px;
-  left: ${(props) => props.x}px;
+  top: ${(props) => props.$y}px;
+  left: ${(props) => props.$x}px;
   transition: 0.1s ease-out;
   color: aqua;
   z-index: 100;

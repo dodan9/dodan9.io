@@ -6,7 +6,7 @@ interface propType {
 }
 const Alert = ({ state, setShowAlert }: propType) => {
   return (
-    <MessageBox state={state}>
+    <MessageBox $state={state}>
       <span>
         {state === "run" ? "pokemon is run..." : null}
         {state === "catch" ? "catch pokemon!" : null}
@@ -24,11 +24,11 @@ const Alert = ({ state, setShowAlert }: propType) => {
 
 export default Alert;
 
-const MessageBox = styled.p<{ state: string }>`
+const MessageBox = styled.p<{ $state: string }>`
   box-sizing: border-box;
   position: fixed;
   color: white;
-  background-color: ${(props) => (props.state === "run" ? "orange" : "green")};
+  background-color: ${(props) => (props.$state === "run" ? "orange" : "green")};
   width: 200px;
   padding: 10px;
   top: 20px;

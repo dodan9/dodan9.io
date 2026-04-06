@@ -49,7 +49,7 @@ function Mix() {
         </Slide2>
         <Star />
         {mouse.x && mouse.y ? (
-          <FollowCursor x={xPosition} y={yPosition}></FollowCursor>
+          <FollowCursor $x={xPosition} $y={yPosition}></FollowCursor>
         ) : null}
       </Container>
     </Content>
@@ -162,10 +162,10 @@ const Star = styled.div`
   z-index: 100;
 `;
 
-const FollowCursor = styled.div<{ x: number; y: number }>`
+const FollowCursor = styled.div<{ $x: number; $y: number }>`
   position: fixed;
-  top: ${(props) => props.y}px;
-  left: ${(props) => props.x}px;
+  top: ${(props) => props.$y}px;
+  left: ${(props) => props.$x}px;
   transition: 0.1s ease-out;
   background-color: red;
   mix-blend-mode: exclusion;

@@ -67,7 +67,7 @@ const DetailDex = () => {
                 <h4>Abilities</h4>
                 {dexData.abilities.map((ability, index) => {
                   return (
-                    <Ability key={index} is_hidden={ability.is_hidden}>
+                    <Ability key={index} $is_hidden={ability.is_hidden}>
                       {ability.ability.name}
                       {ability.is_hidden ? " (hidden)" : null}
                     </Ability>
@@ -113,9 +113,9 @@ const AbilityList = styled.ul`
     margin-bottom: 5px;
   }
 `;
-const Ability = styled.li<{ is_hidden: boolean }>`
+const Ability = styled.li<{ $is_hidden: boolean }>`
   margin-left: 15px;
-  color: ${(props) => (props.is_hidden ? "red" : "black")};
+  color: ${(props) => (props.$is_hidden ? "red" : "black")};
 `;
 
 const Sprites = styled.div`

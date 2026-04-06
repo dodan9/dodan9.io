@@ -48,7 +48,7 @@ const Location = () => {
             if (location.name.includes("route")) icon = route;
             if (location.name.includes("forest")) icon = forest;
             return (
-              <LocationItem key={index} icon={icon}>
+              <LocationItem key={index} $icon={icon}>
                 <Link to={`/pokemon2/${region}/${location.name}`}>
                   {location.name}
                 </Link>
@@ -75,14 +75,14 @@ const Locations = styled.ul`
   padding: 0;
 `;
 
-const LocationItem = styled.li<{ icon: string }>`
+const LocationItem = styled.li<{ $icon: string }>`
   &::before {
     content: "";
     display: inline-block;
     width: 16px;
     height: 14px;
     margin-right: 3px;
-    background-image: url(${(props) => props.icon});
+    background-image: url(${(props) => props.$icon});
     background-size: cover;
     background-position: center;
   }
