@@ -32,4 +32,5 @@ const Area = styled.div`
   color: #afd3af;
   display: flex;
   align-items: center;
+  height: 99px;
 `;

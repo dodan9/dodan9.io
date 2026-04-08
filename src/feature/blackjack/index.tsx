@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DeckArea from "./deckArea";
 
@@ -18,6 +18,9 @@ const Blackjack = () => {
   const [playerDeck, setPlayerDeck] = useState<Card[]>([]);
   const [playerScore, setPlayerScore] = useState<number>(0);
   const [dealerScore, setDealerScore] = useState<number>(0);
+
+  const time1 = useRef(0);
+  const time2 = useRef(0);
 
   const makePublicDeck = () => {
     const symbols = ["♠︎", "♣︎", "♥︎", "♦︎"];
@@ -121,27 +124,38 @@ const Blackjack = () => {
 
   const startGame = () => {
     setIsGameStart(true);
-    selectCard("dealer", true);
-    selectCard("player", true);
-    selectCard("dealer", false);
-    selectCard("player", true);
+    setTimeout(() => {
+      selectCard("dealer", true);
+    }, 125);
+    setTimeout(() => {
+      selectCard("player", true);
+    }, 250);
+    setTimeout(() => {
+      selectCard("dealer", false);
+    }, 375);
+    setTimeout(() => {
+      selectCard("player", true);
+    }, 500);
   };
 
-  const restartGame = () => {
-    setDealerDeck([]);
-    setPlayerDeck([]);
-    setIsWin(0);
-    startGame();
-  };
-
-  const resetGame = () => {
+  const initGame = () => {
     setPlayerScore(0);
     setDealerScore(0);
     setDealerDeck([]);
     setPlayerDeck([]);
-    setPublicDeck([]);
     setIsWin(0);
+  };
 
+  const restartGame = () => {
+    initGame();
+
+    startGame();
+  };
+
+  const resetGame = () => {
+    initGame();
+
+    setPublicDeck([]);
     makePublicDeck();
     setIsGameStart(false);
   };
@@ -151,12 +165,12 @@ const Blackjack = () => {
   };
 
   const flipCard = () => {
-    const copyArray = dealerDeck;
-    const behindCardIndex = dealerDeck.findIndex(
+    const copyArray = [...dealerDeck];
+    const behindCardIndex = copyArray.findIndex(
       (card: Card) => card.isForward === false,
     );
     if (behindCardIndex != -1) copyArray[behindCardIndex].isForward = true;
-    setDealerDeck(copyArray);
+    setDealerDeck(() => copyArray);
   };
 
   const dealerHit = () => {
@@ -167,7 +181,8 @@ const Blackjack = () => {
     if (dealerScore > playerScore) setIsWin(2);
     else {
       if (dealerScore < 16) {
-        dealerHit();
+        setTimeout(() => dealerHit(), 500);
+
         // } else if (dealerScore >= 16 && dealerScore <= 21) {
         //   playerStand();
       } else {
@@ -176,7 +191,7 @@ const Blackjack = () => {
     }
   };
 
-  const playerStand = () => {
+  const playerStand = async () => {
     flipCard();
     dealerPlay();
   };
@@ -186,15 +201,18 @@ const Blackjack = () => {
   }, []);
 
   useEffect(() => {
-    setTimeout(() => {
+    time1.current = setTimeout(() => {
       setDealerScore(countScore(dealerDeck));
     }, 500);
+
+    return () => clearTimeout(time1.current);
   }, [dealerDeck]);
 
   useEffect(() => {
-    setTimeout(() => {
+    time2.current = setTimeout(() => {
       setPlayerScore(countScore(playerDeck));
     }, 500);
+    return () => clearTimeout(time2.current);
   }, [playerDeck]);
 
   useEffect(() => {
