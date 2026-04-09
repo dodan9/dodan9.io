@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import type { Card } from ".";
+import type { Card } from "..";
 import CardGroup from "./cardGroup";
+import { CARD_W_NUMBER, LIGHT_GREEN, LIGHT_TEXT } from "../constant";
 
 interface Props {
   name: string;
@@ -27,10 +28,10 @@ const DeckArea = ({ name, deck, score, isWin }: Props) => {
 export default DeckArea;
 
 const Area = styled.div`
-  display: flex;
+  & > div {
+    color: ${LIGHT_TEXT};
+  }
   margin: 10px;
-  color: #afd3af;
-  display: flex;
-  align-items: center;
-  height: 99px;
+  color: ${LIGHT_GREEN};
+  height: ${CARD_W_NUMBER * 2}px;
 `;

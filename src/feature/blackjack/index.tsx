@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import DeckArea from "./deckArea";
+import DeckArea from "./components/deckArea";
+import { DARK_GREEN, LIGHT_GREEN, LIGHT_TEXT, RADIUS } from "./constant";
+import { CardBase } from "./styles";
 
 export interface Card {
   id: number;
@@ -294,24 +296,27 @@ const Container = styled.div`
   box-sizing: border-box;
   margin: 0 auto;
   padding: 10px;
-  background-color: #486548;
+  background-color: ${DARK_GREEN};
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  & :not(h1) {
+    font-size: 16px;
+    background-clip: padding-box;
+  }
 `;
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  color: ${LIGHT_GREEN};
+`;
 
-const PublicDeck = styled.div`
-  width: 64px;
-  height: 89px;
-  border-radius: 3px;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  border: 5px solid #afd3af;
+const PublicDeck = styled(CardBase)`
+  background-color: ${LIGHT_GREEN};
+  border-color: ${LIGHT_TEXT};
+  color: ${DARK_GREEN};
+  font-weight: bold;
 `;
 
 const CommandArea = styled.div`
@@ -320,8 +325,9 @@ const CommandArea = styled.div`
 `;
 
 const Command = styled.button`
-  background-color: #afd3af;
-  width: 100px;
+  background-color: ${LIGHT_GREEN};
+  font-weight: bold;
+  padding: 0.6rem 1rem;
   margin: 0 10px;
   border: none;
   :first-child {
@@ -330,8 +336,9 @@ const Command = styled.button`
   :only-child {
     margin: 0;
   }
+  border-radius: ${RADIUS};
 `;
 
 const WinOrLose = styled.div`
-  color: white;
+  color: ${LIGHT_TEXT};
 `;
