@@ -19,19 +19,18 @@ const CardGroup = ({ deck }: CardGroupType) => {
       {deck.map((card, index) => {
         if (!card.isForward)
           return (
-            <PlayingCard key={index} $isForward={card.isForward}>
-              <div className="forward" />
-              <div className="back" />
-            </PlayingCard>
+            <PlayingCardWrap key={index} $isForward={card.isForward}>
+              <PlayingCard $isForward={card.isForward} className="forward" />
+              <PlayingCard $isForward={card.isForward} className="back" />
+            </PlayingCardWrap>
           );
         return (
-          <PlayingCard
+          <PlayingCardWrap
             key={index}
             $isForward={card.isForward}
             $isRed={["♥︎", "♦︎"].includes(card.symbol)}
-            $isOverFour={deck.length > 4}
           >
-            <div className="forward">
+            <PlayingCard $isForward={card.isForward} className="forward">
               {card.isForward && (
                 <>
                   <div className="card-symbol">{card.symbol}</div>
@@ -45,9 +44,9 @@ const CardGroup = ({ deck }: CardGroupType) => {
                   </div>
                 </>
               )}
-            </div>
-            <div className="back" />
-          </PlayingCard>
+            </PlayingCard>
+            <PlayingCard $isForward={card.isForward} className="back" />
+          </PlayingCardWrap>
         );
       })}
     </CardArea>
@@ -59,8 +58,12 @@ export default CardGroup;
 const CardArea = styled.div`
   display: flex;
   min-width: 148px;
-  max-width: ${CARD_W_NUMBER * 2.6}px;
+  max-width: ${CARD_W_NUMBER * 2.5}px;
+  gap: 5px;
+
   perspective: 1000px;
+  justify-content: center;
+  height: max-content;
 `;
 
 const flip = keyframes`
@@ -80,35 +83,29 @@ const backflip = keyframes`
   }
 `;
 
-const PlayingCard = styled(CardBase)<{
+const PlayingCardWrap = styled.div<{
   $isForward: boolean;
   $isRed?: boolean;
-  $isOverFour?: boolean;
 }>`
+  width: ${CARD_W};
+  aspect-ratio: 1 / 1.618;
   color: ${({ $isRed }) => ($isRed ? "red" : "black")};
   animation: ${({ $isForward }) => ($isForward ? flip : backflip)}
     ${({ $isForward }) => ($isForward ? "0.5s" : "0")} linear;
   perspective-origin: center;
   transform-style: preserve-3d;
+`;
 
-  /* &:last-child {
-    .forward {
-      padding-right: 0;
-    }
-  } */
+const PlayingCard = styled(CardBase)<{
+  $isForward: boolean;
+}>`
+  display: block;
+  position: absolute;
+  width: ${CARD_W};
+  aspect-ratio: 1 / 1.618;
+  border-radius: ${RADIUS};
 
-  & > div {
-    /* padding-right: ${({ $isOverFour }) => ($isOverFour ? "20px" : "0")}; */
-    padding: 8px;
-    position: absolute;
-    width: ${CARD_W};
-    aspect-ratio: 1 / 1.618;
-    left: -5px;
-    top: -5px;
-    border-radius: ${RADIUS};
-  }
-
-  .forward {
+  &.forward {
     background-color: ${({ $isForward }) =>
       $isForward ? LIGHT_TEXT : LIGHT_GREEN};
     border: 5px solid
@@ -126,17 +123,19 @@ const PlayingCard = styled(CardBase)<{
         left: calc(50% - 1.5rem);
       }
       &.corner {
+        padding: 8px;
+
         width: fit-content;
         &:last-child {
           transform: rotateZ(180deg);
           position: absolute;
-          bottom: 8px;
-          right: 8px;
+          bottom: 0px;
+          right: 0px;
         }
       }
     }
   }
-  .back {
+  &.back {
     background-color: ${({ $isForward }) =>
       !$isForward ? LIGHT_TEXT : LIGHT_GREEN};
     border: 5px solid

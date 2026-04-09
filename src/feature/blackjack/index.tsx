@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import DeckArea from "./components/deckArea";
 import { DARK_GREEN, LIGHT_GREEN, LIGHT_TEXT, RADIUS } from "./constant";
 import { CardBase } from "./styles";
@@ -270,10 +270,6 @@ const Blackjack = () => {
             )}
             {isWin > 0 && (
               <>
-                <WinOrLose>
-                  {isWin === 1 && "Win!"}
-                  {isWin === 2 && "Lose..."}
-                </WinOrLose>
                 {publicDeck.length > 6 && (
                   <Command onClick={restartGame}>restart</Command>
                 )}
@@ -283,6 +279,12 @@ const Blackjack = () => {
           </>
         ) : (
           <Command onClick={startGame}>start</Command>
+        )}
+        {isWin !== 0 && (
+          <WinOrLose>
+            {isWin === 1 && "Win!"}
+            {isWin === 2 && "Lose..."}
+          </WinOrLose>
         )}
       </CommandArea>
     </Container>
@@ -339,6 +341,32 @@ const Command = styled.button`
   border-radius: ${RADIUS};
 `;
 
+const Pop = keyframes`
+  from{
+    display: flex;
+    opacity: 1;
+  }
+  50%{
+    opacity: 1;
+  }
+  to{
+    display: none;
+    opacity: 0;
+  }
+`;
 const WinOrLose = styled.div`
-  color: ${LIGHT_TEXT};
+  color: ${DARK_GREEN};
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: calc(50% - 25px);
+  left: calc(50% - 50px);
+  z-index: 10000;
+  font-size: 3rem;
+  background-color: ${LIGHT_GREEN};
+  animation: ${Pop} 1s linear;
+  animation-fill-mode: forwards;
 `;
